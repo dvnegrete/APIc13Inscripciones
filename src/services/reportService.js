@@ -1,29 +1,45 @@
-const { conexionGoogleSheet } = require("../spreedsheet");
-
-// const reportService = async () => {
-    //     //const register = report.curp;    
-    //     const rows = await sheet.getRows()
-    //     console.log(rows.length)
-    //     //return report
-    // }
+const { getSpreedSheat } = require("../spreedsheet");
     
 class Report {
-    constructor(){}
+    constructor(){
+    }
+
+    async getInfo() {
+        const sheet = await getSpreedSheat("inscripciones");
+        const rows = await sheet.getRows();
+        const data = [];
+        //forma para  pedir info => rows[0].campo
+        rows.forEach(column => {
+            const register = {
+                matricula: column.matricula,
+                curp: column.curp,
+                email: column.email,
+                alumno: column.a_paterno + " " + 
+                        column.a_materno + " " +
+                        column.nombre,
+                curso: column.curso
+            }
+            data.push(register);
+        });
+        return data;
+    }
     
     async countBD(){
-        const sheet = await conexionGoogleSheet();
-        const countRows = await sheet.getRows().length
+        const sheet = await getSpreedSheat("inscripciones");
+        const rows = await sheet.getRows();
+        const countRows = rows.length
         return countRows;
     }
     
     async getCURP(){
-        const sheet = await conexionGoogleSheet();
+        const sheet = await getSpreedSheat("inscripciones");
         const rows = await sheet.getRows()
-        rows.forEach(element => {
-            console.log(element.curp)            
+        const data = [];
+        rows.forEach(column => {
+            data.push(column.curp)
         });
-}
-
+        return data;
+    }    
 }
 
 module.exports = Report;
