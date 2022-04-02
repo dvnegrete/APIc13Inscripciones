@@ -1,16 +1,13 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-
-const credentials = require("./json/keysGoogle.json");
-const config = require("../config/config");
-//credenciales en JSON como variables de entorno a implementar mas adelante
-//const credentials = config.credentialGoogle;
-const idGoogleSheet = config.idGoogleSheet;
+const config = require("../../../config/config");
+const { idGoogleSheetServicesAccount, credentialGoogle } = config;
 
 async function conexionGoogleSheet(sheetName) {
     //creando nueva instancia de Googlesheet
-    const doc = new GoogleSpreadsheet(idGoogleSheet);
-    await doc.useServiceAccountAuth(credentials);
+    const doc = new GoogleSpreadsheet(idGoogleSheetServicesAccount);
+    await doc.useServiceAccountAuth(credentialGoogle);
     await doc.loadInfo();
+    //seleccionando hoja a trabajar
     const sheet = doc.sheetsByTitle[sheetName];
     return sheet;
 }
@@ -27,5 +24,5 @@ async function postSpreedSheat(objInscription) {
 
 module.exports = {
     getSpreedSheat: getSpreedSheat,
-    postSpreedSheat: postSpreedSheat,    
+    postSpreedSheat: postSpreedSheat,
 }

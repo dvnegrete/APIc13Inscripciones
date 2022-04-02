@@ -10,7 +10,7 @@ router.post("/", async (req, res)=>{
         //puede llegar matricula o curp, se evaluara primero matricula si llega
         const { matricula, curp } = req.body;
         if (matricula!= undefined ) {
-            const studentControlNumber = await service.findForControlNumber(matricula)            
+            const studentControlNumber = await service.findForControlNumber(matricula);
             res.json(studentControlNumber);
         }
         else if (curp != undefined ) {

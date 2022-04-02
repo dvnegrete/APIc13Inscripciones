@@ -1,4 +1,4 @@
-const { postSpreedSheat, getSpreedSheat } = require("../spreedsheet");
+const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
 
 class Students {
     constructor(){}

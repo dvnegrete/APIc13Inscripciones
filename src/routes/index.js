@@ -2,6 +2,7 @@ const express = require("express");
 const report = require("./reportRouter")
 const inscription = require("./inscriptionRouter");
 const students = require("./studentsRouter");
+const frontendURL = require("./frontendURL");
 
 function routerAPI (app) {    
     const router = express.Router();
@@ -13,6 +14,7 @@ function routerAPI (app) {
     router.use("/report", report);
     router.use("/inscription", inscription);
     router.use("/students", students)
+    router.use("/frontendURL", frontendURL)
 }
 
 module.exports = routerAPI;
