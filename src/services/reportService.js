@@ -1,14 +1,15 @@
 const { getSpreedSheat } = require("../utils/libs/spreedsheet");
-    
+const sheetGoogle = "registro_inscripciones";
+
 class Report {
     constructor(){
     }
 
     async getInfo() {
-        const sheet = await getSpreedSheat("inscripciones");
-        const rows = await sheet.getRows();
+        const rows = await getSpreedSheat(sheetGoogle);      
         const data = [];
         //forma para  pedir info => rows[0].campo
+        //falta definir los models segun la hoja que este trabajando
         rows.forEach(column => {
             const register = {
                 matricula: column.matricula,
@@ -25,14 +26,14 @@ class Report {
     }
     
     async countBD(){
-        const sheet = await getSpreedSheat("inscripciones");
+        const sheet = await getSpreedSheat(sheetGoogle);
         const rows = await sheet.getRows();
         const countRows = rows.length
         return countRows;
     }
     
     async getCURP(){
-        const sheet = await getSpreedSheat("inscripciones");
+        const sheet = await getSpreedSheat(sheetGoogle);
         const rows = await sheet.getRows()
         const data = [];
         rows.forEach(column => {

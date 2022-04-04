@@ -7,8 +7,8 @@ const router = express.Router();
 router.get("/:id", async (req, res)=>{
     try {
         const { id } = req.params;        
-        const urlfrontend = service(parseInt(id));
-        res.json({message: urlfrontend})
+        const urlfrontend = await service(parseInt(id));        
+        res.json(urlfrontend)
         
     } catch (error) {
         console.log(error);

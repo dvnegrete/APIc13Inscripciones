@@ -2,7 +2,7 @@ const express = require("express");
 const report = require("./reportRouter")
 const inscription = require("./inscriptionRouter");
 const students = require("./studentsRouter");
-const frontendURL = require("./frontendURL");
+const frontendURL = require("./frontendURLRouter");
 
 function routerAPI (app) {    
     const router = express.Router();
