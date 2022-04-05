@@ -1,12 +1,12 @@
 const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
-const sheetGoogle = "matricula&curp";
+const { sheetCurpNumberControl } = require("../models/namesSheet");
 
 class Students {
+    sheet = sheetCurpNumberControl;
     constructor(){}
 
     async findForCurp(stringCURP){
-        const sheet = await getSpreedSheat(sheetGoogle);
-        const rows = await sheet.getRows();        
+        const rows = await getSpreedSheat(this.sheet);        
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
         })
@@ -21,8 +21,7 @@ class Students {
     }
 
     async findForControlNumber(StringNumber){        
-        const sheet = await getSpreedSheat(sheetGoogle);
-        const rows = await sheet.getRows();
+        const rows = await getSpreedSheat(this.sheet);        
         const data = rows.filter( column => {
             return column.matricula.includes(StringNumber)
         })

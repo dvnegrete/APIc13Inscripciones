@@ -1,18 +1,21 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const config = require("../../../config/config");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
+const nameSheet = require("../../models/namesSheet");
 
 function GSheetID(sheetName){
     let idSheet = ""
     switch (sheetName) {
-        //nombre de GSheets: Registro Inscripción
-        //nombres de hojas en GSheets:
-        case "registro_inscripciones" || "matricula&curp":            
-            idSheet = idGoogleRegisterInscription
-            break;    
+        //nombres de GSheets en Registro Inscripción    
+        case nameSheet.sheetInscriptions:
+            idSheet = idGoogleRegisterInscription            
+            break;
+        case nameSheet.sheetCurpNumberControl:
+            idSheet = idGoogleRegisterInscription            
+            break;
+        //Termina nombres de GSheets en Registro Inscripción
         default:
-            //nombre de GSheets: Oferta Educativa
-            //nombres de hojas: Cursos, inscripciones, preguntas            
+            //GSheets en Oferta Educativa
             idSheet = idSheetCourses
             break;
     }
@@ -38,7 +41,7 @@ async function getSpreedSheat(sheetName){
 }
 
 async function postSpreedSheat(objInscription) {
-    const sheet = await conexionGoogleSheet("inscripciones");
+    const sheet = await conexionGoogleSheet(objInscription.sheet);
     await sheet.addRow(objInscription);
 }
 

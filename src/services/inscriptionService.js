@@ -1,13 +1,21 @@
 const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
-const curp = require("curp")
+const curp = require("curp");
+const nameSheet = require("../models/namesSheet");
+
 
 class Inscriptions {
+    sheet = nameSheet.sheetInscriptions;
+
     constructor(){}   
 
     async addRegistration(obj){        
-        const CURP = await this.validateCURP(obj.curp);        
+        const CURP = await this.validateCURP(obj.curp);
         if (CURP) {
-            const sheet = await postSpreedSheat(obj);
+            const newObj = {
+                ...obj,
+                sheet: this.sheet
+            }
+            const sheet = await postSpreedSheat(newObj);
             const result = this.lastRegistration();
             return result
         } else {
@@ -19,8 +27,7 @@ class Inscriptions {
     }
 
     async lastRegistration() {        
-        const sheet = await getSpreedSheat("inscripciones");
-        const rows = await sheet.getRows();
+        const rows = await getSpreedSheat(this.sheet);        
         const countRows = rows.length        
         const lastInscription = rows[countRows-1].matricula;        
         const objInscription= {

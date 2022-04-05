@@ -1,61 +1,55 @@
 const fetchURLs = require("../utils/libs/fetchURLs")
 //const conexionGSheet = require("../utils/libs/conexionGSheet.js")
-const { getSpreedSheat } = require("../utils/libs/spreedsheet")
+const { getSpreedSheat } = require("../utils/libs/spreedsheet");
+
+const nameSheet = require("../models/namesSheet");
+const coursesModel = require("../models/sheetCoursesModel");
+const inscriptionModel = require("../models/sheetInscriptionModel");
+const questionsModel = require("../models/sheetQuestionsModel");;
 
 async function frontendURLService (id){
     const sheetName =  selectIdGSheet(id);
-    const rows = await getSpreedSheat(sheetName);    
-    const data = rowsGSheet(rows);
+    const rows = await getSpreedSheat(sheetName);
+    const data = selectModel(id, rows)
     const infoResult = {...data};    
     return infoResult;
 }
 
-function rowsGSheet(rows){
-    const data = [];
-        //forma para  pedir info => rows[0].campo
-        //falta definir los models segun la hoja que este trabajando
-        rows.forEach(column => {
-            const register = {
-                inscritos: column.inscritos,
-                curso: column.curso,
-                especialidad: column.especialidad,
-                hora_inicio: column.hora_inicio,
-                hora_fin: column.hora_fin,
-                fecha_inicio: column.fecha_inicio,
-                fecha_termino: column.fecha_termino,
-                dias_de_clases: column.dias_de_clases,
-                profesor: column.profesor,
-                horas: column.horas,
-                tipo_de_curso: column.tipo_de_curso,
-                modalidad_curso: column.modalidad_curso,
-                observaciones: column.observaciones,
-                imagenURL: column.imagenURL
-            }
-            data.push(register);
-        });
+function selectModel(id, rows) {
+    if (id === 10) {
+        const data = coursesModel(rows);
         return data;
+    } 
+    if (id === 20) {
+        const data = inscriptionModel(rows);
+        return data;
+    } 
+    if (id === 30) {
+        const data = questionsModel(rows);
+        return data;
+    }
 }
 
-function selectIdGSheet (id){
-    let sheetName = ""
+function selectIdGSheet (id){    
+    let sheetName = "";    
     switch (id) {
-        //10: courses
+        //id 10: courses
         case 10:
-            sheetName = "Cursos";
+            sheetName = nameSheet.sheetCourses;            
             break;
-        //20: inscription
+        //id 20: inscription
         case 20:
-            sheetName =  "inscripcion";
+            sheetName =  nameSheet.sheetLinkInscription;            
             break;
-        //30: questions
+        //id 30: questions
         case 30:
-            sheetName = "preguntas"
+            sheetName = nameSheet.sheetQuestions;            
             break;
         default:
             sheetName =  ""
             break;
     }     
-    return sheetName;
+    return sheetName;    
 }
 
 module.exports = frontendURLService;

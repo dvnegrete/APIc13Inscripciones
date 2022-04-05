@@ -8,7 +8,7 @@ const service = new Inscriptions();
 router.post("/", async (req, res)=>{
     try {
         const { body } = req;
-        const inscription =  await service.addRegistration(body);        
+        const inscription =  await service.addRegistration(body);
         res.json(inscription)
     } catch (error) {
         console.log(error);
