@@ -13,8 +13,8 @@ function routerAPI (app) {
     });
     router.use("/report", report);
     router.use("/inscription", inscription);
-    router.use("/students", students)
-    router.use("/frontendURL", frontendURL)
+    router.use("/students", students);
+    router.use("/frontendURL", frontendURL);
 }
 
 module.exports = routerAPI;

@@ -3,7 +3,8 @@ const nameSheet = {
     sheetCurpNumberControl: "matricula&curp",
     sheetCourses: "Cursos",
     sheetQuestions: "preguntas",
-    sheetLinkInscription: "inscripcion"
+    sheetLinkInscription: "inscripcion",
+    sheetImage: "imagenes"
 }
 
 module.exports = nameSheet;
