@@ -4,8 +4,9 @@ const coursesModel = require("./sheetGoogle/coursesModel");
 const inscriptionModel = require("./sheetGoogle/inscriptionModel");
 const questionsModel = require("./sheetGoogle/questionsModel");
 const imageModel = require("./sheetGoogle/imageModel");
+const homePageModel = require("./sheetGoogle/homePageModel");
 
-function selectModel(id, rows) {
+function selectModel(id, rows, size) {
     if (id === 10) {
         const data = coursesModel(rows);
         return data;
@@ -19,7 +20,11 @@ function selectModel(id, rows) {
         return data;
     }
     if (id === 40) {
-        const data = imageModel(rows);
+        const data = imageModel(rows, size);
+        return data;
+    }
+    if (id === 50) {
+        const data = homePageModel(rows);
         return data;
     }
 }
@@ -43,8 +48,8 @@ function selectIdGSheet (id){
         case 40:
             sheetName = nameSheet.sheetImage;            
             break;
-        default:
-            sheetName =  ""
+        case 50:
+            sheetName =  nameSheet.sheetHomePage;
             break;
     }     
     return sheetName;    

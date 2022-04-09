@@ -1,4 +1,4 @@
-function coursesModel(rows){
+function imageModel(rows, size){
     const data = [];        
         rows.forEach(column => {
             const register = {
@@ -10,7 +10,13 @@ function coursesModel(rows){
             }
             data.push(register);
         });
+        //validación para regresar solo el tamaño solicitado desde el Frontend
+        if (size != undefined) {
+            while (size < data.length) {
+                data.pop();
+            }
+        }
         return data;
 }
 
-module.exports = coursesModel;
+module.exports = imageModel;
