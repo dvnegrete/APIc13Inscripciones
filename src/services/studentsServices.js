@@ -1,40 +1,38 @@
 const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
 const { sheetCurpNumberControl } = require("../models/namesSheet");
+const JSONResponse = require("../models/JSONResponse");
 
 class Students {
     sheet = sheetCurpNumberControl;
     constructor(){}
 
-    async findForCurp(stringCURP){
+    async findForCurp(stringCURP){      
         const rows = await getSpreedSheat(this.sheet);        
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
-        })
-        const info = {
-            curp: data[0].curp,
-            matricula: data[0].matricula,
-            a_paterno: data[0].a_paterno,
-            a_materno: data[0].a_materno,
-            nombre: data[0].nombre,
-        }        
-        return info;
+        })        
+        if (data.length > 0) {            
+            const info = JSONResponse(data);
+            return info;            
+        } else {
+            const notFound = { error: "CURP"}            
+            return notFound;
+        }
     }
 
-    async findForControlNumber(StringNumber){        
-        const rows = await getSpreedSheat(this.sheet);        
-        const data = rows.filter( column => {
-            return column.matricula.includes(StringNumber)
+    async findForControlNumber(StringNumber){
+        const rows = await getSpreedSheat(this.sheet);
+        const data = rows.filter(column => {
+            return column.matricula === StringNumber
         })
-        const info = {
-            curp: data[0].curp,
-            matricula: data[0].matricula,
-            a_paterno: data[0].a_paterno,
-            a_materno: data[0].a_materno,
-            nombre: data[0].nombre,
+        if (data.length > 0) {
+            const info = JSONResponse(data);        
+            return info;            
+        } else {
+            const notFound = { error: "MATRICULA"}            
+            return notFound;
         }        
-        return info;
-        
-    }    
+    }        
 }
 
 module.exports = Students;
