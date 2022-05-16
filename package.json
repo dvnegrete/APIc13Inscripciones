@@ -19,6 +19,7 @@
     "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "firebase-admin": "^10.2.0",
     "google-spreadsheet": "^3.2.0",
     "mongodb": "^4.5.0",
     "multer": "^1.4.4",
