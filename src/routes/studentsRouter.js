@@ -9,11 +9,11 @@ const service = new Students();
 router.post("/", async (req, res)=>{
     try {
         //puede llegar matricula o curp, se evaluara primero matricula si llega
-        const { matricula, curp } = req.body;        
-        if (matricula!= undefined && matricula != "") {
-            const studentControlNumber = await service.findForControlNumber(matricula);
-            res.json(studentControlNumber);
-        }
+        const { curp } = req.body;        
+        // if (matricula!= undefined && matricula != "") {
+        //     const studentControlNumber = await service.findForControlNumber(matricula);
+        //     res.json(studentControlNumber);
+        // }
         if (CURP.validar(curp)) {           
             const studentCURP = await service.findForCurp(curp);            
             res.json(studentCURP);
