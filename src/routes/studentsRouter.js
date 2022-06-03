@@ -7,14 +7,10 @@ const CURP = require("curp");
 const service = new Students();
 
 router.post("/", async (req, res)=>{
-    try {
-        //puede llegar matricula o curp, se evaluara primero matricula si llega
+    try {        
         const { curp } = req.body;        
-        // if (matricula!= undefined && matricula != "") {
-        //     const studentControlNumber = await service.findForControlNumber(matricula);
-        //     res.json(studentControlNumber);
-        // }
-        if (CURP.validar(curp)) {           
+        if (CURP.validar(curp)) {
+            console.log("curp de router a servicio")  
             const studentCURP = await service.findForCurp(curp);            
             res.json(studentCURP);
         }        
@@ -24,6 +20,20 @@ router.post("/", async (req, res)=>{
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "internal server error"});
+    }
+})
+
+router.post("/newStudent/dataGeneral", async (req, res)=> {
+    try {
+        const { body } = req;
+        console.log(body)
+        //const inscription =  await service.addFirestore(body);
+        //res.json(inscription);
+        res.json({"message": "saliendo de endpoint de prueba"})
+        //si pasa todas las validaciones anteriores entonces se registra en 
+        //registrar en GSheets preinscripcion    
+    } catch (error) {
+        console.log(error)
     }
 })
 

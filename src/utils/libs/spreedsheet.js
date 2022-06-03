@@ -4,6 +4,7 @@ const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config
 const nameSheet = require("../../models/namesSheet");
 
 function GSheetID(sheetName){
+    //console.log("GetSpreedSheet id : ", sheetName) 
     let idSheet = ""
     switch (sheetName) {
         //nombres de GSheets en Registro Inscripción    
@@ -18,7 +19,7 @@ function GSheetID(sheetName){
             //GSheets en Oferta Educativa
             idSheet = idSheetCourses
             break;
-    }
+    }    
     return idSheet
 }
 
@@ -26,9 +27,10 @@ async function conexionGoogleSheet(sheetName) {
     //creando nueva instancia de Googlesheet    
     const idSheet = GSheetID(sheetName);    
     const doc = new GoogleSpreadsheet(idSheet);
+    //console.log("doc SpreedSheet: ", doc)
     await doc.useServiceAccountAuth(credentialGoogle);
     await doc.loadInfo();
-   
+    
     //seleccionando hoja a trabajar
     const sheet = doc.sheetsByTitle[sheetName];    
     return sheet;

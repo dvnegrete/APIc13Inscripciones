@@ -5,7 +5,7 @@ const router = express.Router();
 const service = new Inscriptions();
 
 router.post("/isStudent", async (req, res, next)=> {
-    try {        
+    try {      
         const { curp } = req;
         const inscription =  await service.getStudentForCURP(curp);
         res.json(inscription)
@@ -16,20 +16,21 @@ router.post("/isStudent", async (req, res, next)=> {
     }
 })
 
-
-router.post("/preregister/newStudent", async (req, res)=> {
+router.post("/newStudent/dataGeneral", async (req, res)=> {
     try {
         const { body } = req;
-        const inscription =  await service.addFirestore(body);
-        res.json(inscription);
+        console.log(body)
+        //const inscription =  await service.addFirestore(body);
+        //res.json(inscription);
+        res.json({"message": "saliendo de endpoint de prueba"})
         //si pasa todas las validaciones anteriores entonces se registra en 
         //registrar en GSheets preinscripcion    
     } catch (error) {
-        
+        console.log(error)
     }
 })
 
-router.post("/preregister/dbStudent", async (req, res)=> {
+router.post("/dbStudent", async (req, res)=> {
     try {
         const { body } = req;
         const inscription =  await service.addFirestore(body);

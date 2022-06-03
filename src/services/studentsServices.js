@@ -7,7 +7,7 @@ class Students {
     constructor(){}
 
     async findForCurp(stringCURP){      
-        const rows = await getSpreedSheat(this.sheet);        
+        const rows = await getSpreedSheat(this.sheet);              
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
         })        
