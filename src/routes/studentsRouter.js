@@ -2,6 +2,7 @@ const express = require("express");
 const Students = require("../services/studentsServices.js");
 const router = express.Router();
 const CURP = require("curp");
+const upload = require("../middlewares/multer")
 
 
 const service = new Students();
@@ -21,6 +22,19 @@ router.post("/", async (req, res)=>{
         console.log(error);
         res.status(500).json({message: "internal server error"});
     }
+})
+
+router.post(
+    "/newStudent/dataGeneral/birthCertificate", 
+    //upload.single("BirthCertificateUpload"), (req, res) => {
+    upload.single("birthCertificate"), (req, res) => {
+        console.log("req.body:", req.body)
+        console.log("req.file:", req.file)
+    const time = format(new Date(), 'dd/MMM/yyyy HH:mm:ss');
+    res.send(`El archivo ha sido recibido. ${time}`)
+    // const messageDate = "BirthCertificate almacenado: " + time;
+    // console.log(messageDate)
+    
 })
 
 router.post("/newStudent/dataGeneral", async (req, res)=> {
