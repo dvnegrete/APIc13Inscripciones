@@ -1,7 +1,8 @@
 const multer= require("multer");
+const docsRoute = require("../utils/docs")
 
 const storage = multer.diskStorage({
-  destination : "/bin/actas",
+  destination : docsRoute,
   //la propiedad filename recibe una funcion
   //los parametros son req: informacion de la peticion, file: archivo que se esta subiendo y un CB
   filename: function(req, file, cb){
@@ -18,5 +19,9 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage  
 });
+
+// const upload = multer({
+//   dest: docsRoute
+// });
 
 module.exports = upload

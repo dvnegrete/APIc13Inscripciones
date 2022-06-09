@@ -1,4 +1,5 @@
 const curp = require("curp");
+const { format }= require("date-fns")
 
 function validar(string){
     if(curp.validar(string)){
@@ -20,17 +21,27 @@ validar(curpString)
 // console.log( curp.generar(persona) ); 
 
 function generateCURP (obj) {
-    let persona = curp.getPersona();    
+    const date = new Date(obj.fechaNacimiento);
+    const formatDate = (date)=>{
+        let formatted_date = (date.getDate() + 1) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
+        return formatted_date;
+    }
+    const fecha = formatDate(date)
+    console.log(fecha)
+    const gender = obj.genero;
+    const estado = obj.estado;
+    let persona = curp.getPersona();
     persona.nombre = obj.nombre;
     persona.apellidoPaterno = obj.a_paterno;
     persona.apellidoMaterno = obj.a_materno;
-    persona.generar =  obj.genero;
+    persona.genero =  curp.GENERO[gender];
     //Formato: FEMENINO o MASCULINO
-    persona.fechaNacimiento =  obj.fechaNacimiento;
+    persona.fechaNacimiento =  fecha;
     //Formato '22-03-1988';
-    persona.estado = obj.estado;
+    persona.estado = curp.ESTADO[estado];
+    console.log(persona)
     const string = curp.generar(persona);
-    return string    
+    return string
 }
 
 function validateCURP (property) {

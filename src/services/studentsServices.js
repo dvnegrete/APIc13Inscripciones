@@ -1,10 +1,23 @@
 const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
 const { sheetCurpNumberControl } = require("../models/namesSheet");
 const JSONResponse = require("../models/JSONResponse");
+const { generateCURP } =require("../middlewares/validateCURP")
 
 class Students {
     sheet = sheetCurpNumberControl;
     constructor(){}
+
+    isCURPValidate(obj) {
+        const createCURP = generateCURP(obj);
+        console.log("createCURP", createCURP)
+        const userCURP = obj.curp;
+        console.log("userCURP", userCURP)
+        if (createCURP === userCURP) {
+            console.log("CURP VALIDADA, continuar inscripcion")
+        } else {
+            console.log("Error. Datos no validos en CURP")
+        }
+    }
 
     async findForCurp(stringCURP){      
         const rows = await getSpreedSheat(this.sheet);              

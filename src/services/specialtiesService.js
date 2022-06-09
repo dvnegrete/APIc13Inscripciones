@@ -4,9 +4,8 @@ const { Database } = require("../database/index");
 const COLLECTION = "specialties"
 
 class Specialtie {
-  constructor(){
-    console.log("modulo de servicios-Specialties");
-  }
+  constructor(){}
+  
   async getAll(){
     const specialities = await Database(COLLECTION);
     const allCollections = await specialities.find({}).toArray();

@@ -5,9 +5,7 @@ const students = require("./studentsRouter");
 const frontendURL = require("./frontendURLRouter");
 const specialtie = require("./specialitieRouter");
 
-function routerAPI (app) {
-    console.log("el dirname:", __dirname)
-    console.log("el dirname:", __filename)
+function routerAPI (app) {  
     const router = express.Router();
     app.use("/API/v1", router)
 
