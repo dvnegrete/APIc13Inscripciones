@@ -10,6 +10,7 @@ function coursesModel(rows){
                 fecha_inicio: column.fecha_inicio,
                 fecha_termino: column.fecha_termino,
                 dias_de_clases: column.dias_de_clases,
+                costo: column.costo,
                 profesor: column.profesor,
                 horas: column.horas,
                 tipo_de_curso: column.tipo_de_curso,
