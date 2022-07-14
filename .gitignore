@@ -1,5 +1,10 @@
-#config googleSheets
+#files pdf and image in src/utils/docs/
+/src/utils/docs/
+!/src/utils/docs/index.js
+
+#config googleSheets and Firebase
 keysGoogle.json
+keysFirebase.json
 
 #config App Engine GCP
 app.yaml

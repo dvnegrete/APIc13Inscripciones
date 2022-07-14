@@ -12,13 +12,13 @@ const curpString = "VAND870419HDFLGM01";
 validar(curpString)
 
 // let persona = curp.getPersona();
-// persona.nombre = 'Claudia Noemí';
-// persona.apellidoPaterno = 'Hernández';
-// persona.apellidoMaterno = 'Rodriguez';
-// persona.genero = "FEMENINO";
-// persona.fechaNacimiento = '22-03-1988';
-// persona.estado = curp.ESTADO.DISTRITO_FEDERAL;
-// console.log( curp.generar(persona) ); 
+// persona.nombre = 'Andrés Manuel';
+// persona.apellidoPaterno = 'López';
+// persona.apellidoMaterno = 'Obrador';
+// persona.genero = curp.GENERO.MASCULINO;
+// persona.fechaNacimiento = '13-11-1953';
+// persona.estado = curp.ESTADO.TABASCO;
+// console.log( curp.generar(persona) );
 
 function generateCURP (obj) {
     const date = new Date(obj.fechaNacimiento);

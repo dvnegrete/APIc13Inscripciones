@@ -20,7 +20,7 @@ class Inscriptions {
         const newStudent = studentDocument(obj);
         if (obj.isStudent) {
             //si ya es estudiante, usar metodo merge: true
-            const docRefStudent = database.collection(students).doc(newStudent);            
+            const docRefStudent = database.collection(students).doc(newStudent);
         } else {
             //si no existe creara un nuevo documento con la CURP del estudiante y los datos usar metodo apropiado
         }
@@ -35,24 +35,28 @@ class Inscriptions {
     }
 
     async getStudentForCURP (stringCurp) {
-        const CURP = await this.validateCURP(stringCurp);
-        if (CURP) {
-            //buscar primero una preinscripcion en Gsheets
-            //Si no se encuentra en preinscripcion, buscar en BD FIRESTORE            
-            const findcurp = database.collection()
-            const docRef = database.collection(collection).doc(obj.curp);
-            await docRef.set(newObj)
-            return { message : "Pre-inscripción guardada" }
-            
-        } else {
-            const objInscription= {
-                matricula: "Tu CURP es invalida, revisa la información"
-            }
-            return objInscription;
+        try {
+            const CURP = await this.validateCURP(stringCurp);
+            if (CURP) {
+                //buscar primero una preinscripcion en Gsheets
+                //Si no se encuentra en preinscripcion, buscar en BD FIRESTORE            
+                const findcurp = database.collection()
+                const docRef = database.collection(collection).doc(obj.curp);
+                await docRef.set(newObj)
+                return { message : "Pre-inscripción guardada" }
+                
+            } else {
+                const objInscription= {
+                    matricula: "Tu CURP es invalida, revisa la información"
+                }
+                return objInscription;
+            }            
+        } catch (error) {
+            console.log(error)
         }
     }
     
-    async addRegistration(obj){        
+    async addRegistration(obj){
         const CURP = await this.validateCURP(obj.curp);
         if (CURP) {
             const newObj = {
