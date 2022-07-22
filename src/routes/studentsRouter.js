@@ -77,6 +77,7 @@ router.post("/newStudent/inscription",
             //registrar en GSheets preinscripcion    
         } catch (error) {
             console.log(error)
+            console.log("error catch en router Student")
         }
     }
 )

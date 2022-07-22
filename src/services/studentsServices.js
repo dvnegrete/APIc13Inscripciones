@@ -4,8 +4,8 @@ const JSONResponse = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
 const storageCloud = require("../models/storageCloud")
 //const { uploadFirebase } = require("../database/firestore")
-//const { uploadStorage } = require("../database/firebaseStorage")
-const { uploadStorage } = require("../database/gcloudStorage")
+const { uploadStorage } = require("../database/firebaseStorage")
+//const { uploadStorage } = require("../database/gcloudStorage")
 
 class Students {
     sheet = sheetCurpNumberControl;
