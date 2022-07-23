@@ -16,7 +16,8 @@ function coursesModel(rows){
                 tipo_de_curso: column.tipo_de_curso,
                 modalidad_curso: column.modalidad_curso,
                 observaciones: column.observaciones,
-                imagenURL: column.imagenURL
+                imagenURL: column.imagenURL,
+                ficha_informacion: column.ficha_informacion
             }
             data.push(register);
         });
