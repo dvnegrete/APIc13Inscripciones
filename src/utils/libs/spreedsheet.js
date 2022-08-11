@@ -26,10 +26,9 @@ function GSheetID(sheetName){
 async function conexionGoogleSheet(sheetName) {
     //creando nueva instancia de Googlesheet    
     const idSheet = GSheetID(sheetName);    
-    const doc = new GoogleSpreadsheet(idSheet);
-    //console.log("doc SpreedSheet: ", doc)
+    const doc = new GoogleSpreadsheet(idSheet);    
     await doc.useServiceAccountAuth(credentialGoogle);
-    await doc.loadInfo();
+    await doc.loadInfo();    
     
     //seleccionando hoja a trabajar
     const sheet = doc.sheetsByTitle[sheetName];    
@@ -43,7 +42,7 @@ async function getSpreedSheat(sheetName){
 }
 
 async function postSpreedSheat(objInscription) {
-    const sheet = await conexionGoogleSheet(objInscription.sheet);
+    const sheet = await conexionGoogleSheet(objInscription.sheet);    
     await sheet.addRow(objInscription);
 }
 

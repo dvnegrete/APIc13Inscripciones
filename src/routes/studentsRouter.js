@@ -68,13 +68,15 @@ router.post("/newStudent/inscription",
     upload.fields(filesUpload),
     async (req, res)=> {
         try {
+            const { body } = req;
             // console.log("files", req.files)
             // console.log("curp", req.body.curp)
             console.log(" en /newStudent/inscription")
-            const inscription =  await service.uploadStorage(req.files, req.body);            
-            res.json(inscription);
+            const inscriptionFiles =  await service.uploadStorage(req.files, req.body);
             //si pasa todas las validaciones anteriores entonces se registra en 
             //registrar en GSheets preinscripcion    
+            const inscriptionData = await service.addRegistration(body);
+            res.json(inscriptionData);            
         } catch (error) {
             console.log(error)
             console.log("error catch en router Student")

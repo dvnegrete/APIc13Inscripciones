@@ -1,5 +1,5 @@
 const nameSheet = {
-    sheetInscriptions: "registro_inscripciones",
+    sheetInscriptions: "preinscripciones",
     sheetCurpNumberControl: "matricula&curp",
     sheetCourses: "Cursos",
     sheetQuestions: "preguntas",
