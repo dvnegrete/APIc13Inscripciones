@@ -1,6 +1,7 @@
 const nameSheet = {
     sheetInscriptions: "preinscripciones",
-    sheetCurpNumberControl: "matricula&curp",
+    sheetNumberControl: "matricula",
+    sheetDatabase: "database",
     sheetCourses: "Cursos",
     sheetQuestions: "preguntas",
     sheetLinkInscription: "inscripcion",

@@ -1,17 +1,32 @@
 const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
-const { sheetCurpNumberControl, sheetInscriptions } = require("../models/namesSheet");
+const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 const JSONResponse = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
+const { timeStampt } = require("../utils/date")
 
+//Conexion a Firestore
+const { database } = require("../database/firestore")
+
+//conexion a Storage Firebase o Storage GCloud
 const storageCloud = require("../models/storageCloud")
 //const { uploadFirebase } = require("../database/firestore")
 const { uploadStorage } = require("../database/firebaseStorage")
 //const { uploadStorage } = require("../database/gcloudStorage")
 
 class Students {
-    nameSheetInscriptions = sheetInscriptions;
-    sheet = sheetCurpNumberControl;
+    // nameSheetInscriptions = sheetInscriptions;
+    // sheetFindCurp = sheetDatabase;
+    // sheetMatricula = sheetNumberControl;
     constructor(){}
+
+    typefilesUpload(){
+        const filesUpload = [
+            { name: 'actaNacimiento', maxCount: 1 },
+            { name: 'comprobanteDomicilio', maxCount: 1 },
+            { name: 'comprobanteEstudios', maxCount: 1 }
+        ];
+        return filesUpload;
+    }
 
     isCURPValidate(obj) {
         const createCURP = generateCURP(obj);
@@ -24,8 +39,30 @@ class Students {
         return responseValidateCurp
     }
 
+    async toCompleteInformationBody(links, body) {
+        const controlNumber = await this.generateNumberControl();        
+        const dataCompleted = {
+            ...body,
+            fechaRegistro: timeStampt,
+            matricula: controlNumber,
+            acta_de_nacimiento : links.acta,
+            comprobante_domicilio : links.domicilio,
+            comprobante_estudios : links.estudios
+        };
+        return dataCompleted;        
+    }
+
+    async generateNumberControl() {
+        const rows = await getSpreedSheat(sheetNumberControl);        
+        const countRows = rows.length;
+        const numberControl = rows[countRows-1].matricula;
+        const numberGenerate =  parseInt(numberControl, 10) + 1;
+        console.log("Numero de matricula Asignado", numberGenerate);
+        return numberGenerate;
+    }
+
     async findForCurp(stringCURP){
-        const rows = await getSpreedSheat(this.sheet);
+        const rows = await getSpreedSheat(sheetDatabase);
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
         })
@@ -50,25 +87,64 @@ class Students {
         // obj.telefono = "5523124 Harcodeado"
         const newObj = {
             ...obj,            
-            sheet: this.nameSheetInscriptions,
+            sheet: sheetNumberControl,
         }
         //*prueba a Firestore */
         //en Firestore solo guardar la coleccion de
         //*prueba a Firestore */
-
        
-        const sheet = await postSpreedSheat(newObj);
-        console.log(sheet)       
-       
-        return newObj;
+        //guardamos matricula y fecha de registro
+        await postSpreedSheat(newObj);
+        newObj.sheet = sheetDatabase,
+        //guardamos en database
+        await postSpreedSheat(newObj);
+        newObj.sheet = sheetInscriptions;
+        //guardamos en preinscripciones
+        await postSpreedSheat(newObj);
+        const sucessfulyRegister = this.verifyLastRegistration(obj)        
+       //sucessfulyRegister indica si se hizo el registro en SpreedSheet       
+        return sucessfulyRegister;
     }
 
+    async verifyLastRegistration(obj) {        
+        const rows = await getSpreedSheat(sheetInscriptions);
+        const countRows = rows.length;
+        const lastInscriptionCurp = rows[countRows-1].curp;
+        let verify = false;
+        if (lastInscriptionCurp === obj.curp){
+            verify = true;            
+        }
+        const res = {
+            status : verify,
+            matricula: obj.matricula,
+            fechaRegistro: obj.fechaRegistro
+        }
+        return res;
+    }
+
+    async recordInformation(obj) {
+        const newObj = {
+            ...obj,            
+            sheet: sheetDatabase,
+        }
+        await postSpreedSheat(newObj);
+        newObj.sheet = sheetNumberControl;
+    }
+    
     async uploadStorage(files, body){
-//        console.log(files.actaNacimiento)
+        // si hay algun fallo al subir indicar false.
+        const verifyUpload = true;
+        //linksFicticiosTemporales
+        const uploadNacimiento = "link Acta Nacimiento";
+        const uploadDomicilio = "link Comprobante de domicilio";
+        const uploadEstudios = "link Comprobante de estudios";
+        //linksFicticiosTemporales
+
+        //console.log(files.actaNacimiento)
         //referencia al bucket donde estara el archivo
-        //const fileNacimiento = files.actaNacimiento[0]
+        const fileNacimiento = files.actaNacimiento[0]
         //fileNacimiento.originalname = body.curp + "-" + files.actaNacimiento[0].originalname
-        //console.log(fileNacimiento)
+        console.log(fileNacimiento)
         //const uploadNacimiento = uploadFirebase(fileNacimiento)        
     
         console.log("por el momento simulamos subida a Storage de archivos adjuntos")
@@ -80,7 +156,16 @@ class Students {
         
         //const nameEstudios = body.curp + "-" + files.comprobanteEstudios[0].originalname
         //const fileEstudios =files.comprobanteEstudios[0]
-        //const uploadEstudios = uploadFirebase(nameEstudios,fileEstudios)        
+        //const uploadEstudios = uploadFirebase(nameEstudios,fileEstudios)
+        
+
+        const links = {
+            verify: verifyUpload,
+            acta: uploadNacimiento,
+            domicilio: uploadDomicilio,
+            estudios: uploadEstudios
+        }
+        return links;
     }
 }
 

@@ -1,16 +1,16 @@
 const express = require("express");
-const multer = require("multer")
 const Students = require("../services/studentsServices.js");
 const router = express.Router();
 const CURP = require("curp");
 const upload = require("../middlewares/multer")
 // const docsRoute = require("../utils/docs")
 // const upload = multer({ dest: docsRoute })
-const filesUpload = [
-    { name: 'actaNacimiento', maxCount: 1 },
-    { name: 'comprobanteDomicilio', maxCount: 1 },
-    { name: 'comprobanteEstudios', maxCount: 1 }
-];
+
+// const filesUpload = [
+//     { name: 'actaNacimiento', maxCount: 1 },
+//     { name: 'comprobanteDomicilio', maxCount: 1 },
+//     { name: 'comprobanteEstudios', maxCount: 1 }
+// ];
 
 const service = new Students();
 
@@ -35,10 +35,10 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
     try {
         const { body } = req;
         console.log("body", body);
-        const newStudentCURPValidate = service.isCURPValidate(body);            
+        const newStudentCURPValidate = service.isCURPValidate(body);
         const responseObj = {
             curp: body.curp,
-            nombre: body.nombre, 
+            nombre: body.nombre,
             a_paterno: body.a_paterno,
             a_materno: body.a_materno,
             placeofBirth: body.estado,
@@ -51,32 +51,29 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
             res.json({"curp": "false"})
         } else {
             res.json({responseObj})
-        }
-        
-        //const inscription =  await service.addFirestore(body);
-        //res.json(inscription);
-        //si pasa todas las validaciones anteriores entonces se registra en 
-        //registrar en GSheets preinscripcion    
+        }        
     } catch (error) {
         console.log(error)
     }
 })
 
 //funcion con carga de archivos en multer
-
-router.post("/newStudent/inscription", 
-    upload.fields(filesUpload),
+router.post("/newStudent/inscription",
+    upload.fields(service.typefilesUpload()),
     async (req, res)=> {
         try {
             const { body } = req;
-            // console.log("files", req.files)
-            // console.log("curp", req.body.curp)
-            console.log(" en /newStudent/inscription")
-            const inscriptionFiles =  await service.uploadStorage(req.files, req.body);
-            //si pasa todas las validaciones anteriores entonces se registra en 
-            //registrar en GSheets preinscripcion    
-            const inscriptionData = await service.addRegistration(body);
-            res.json(inscriptionData);            
+            console.log("valores de body", body)            
+            const inscriptionFiles =  await service.uploadStorage(req.files, body);
+            if (inscriptionFiles.verify) {
+                const dataCompleted = await service.toCompleteInformationBody(inscriptionFiles, body);
+                //registrar en GSheets preinscripcion
+                const inscriptionData = await service.addRegistration(dataCompleted);
+                console.log("final de /newStudent/inscription con respuesta: ", inscriptionData);
+                res.json(inscriptionData);
+            } else {
+                res.json({ value: "Storage Error" });
+            }            
         } catch (error) {
             console.log(error)
             console.log("error catch en router Student")

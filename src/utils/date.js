@@ -21,11 +21,15 @@ const day = date.getDate()
 const monthNumber = date.getMonth();
 const year = date.getFullYear();
 const nameMonth = name(monthNumber)
+const hours = date.getHours();
+const minutes = date.getMinutes();
 
 const monthYear = `${nameMonth}-${year}`
 const dateComplete = `${day}-${nameMonth}-${year}`
+const timeStampt = `${day}-${nameMonth}-${year} ${hours}:${minutes}`
 
 module.exports = {
     monthYear: monthYear,
-    dateComplete: dateComplete
+    dateComplete: dateComplete,
+    timeStampt: timeStampt
 }

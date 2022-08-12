@@ -9,10 +9,13 @@ function GSheetID(sheetName){
     switch (sheetName) {
         //nombres de GSheets en Registro Inscripción    
         case nameSheet.sheetInscriptions:
-            idSheet = idGoogleRegisterInscription            
+            idSheet = idGoogleRegisterInscription;
             break;
-        case nameSheet.sheetCurpNumberControl:
-            idSheet = idGoogleRegisterInscription            
+        case nameSheet.sheetDatabase:
+            idSheet = idGoogleRegisterInscription;
+            break;
+        case nameSheet.sheetNumberControl:
+            idSheet = idGoogleRegisterInscription;
             break;
         //Termina nombres de GSheets en Registro Inscripción
         default:
@@ -42,8 +45,8 @@ async function getSpreedSheat(sheetName){
 }
 
 async function postSpreedSheat(objInscription) {
-    const sheet = await conexionGoogleSheet(objInscription.sheet);    
-    await sheet.addRow(objInscription);
+    const sheet = await conexionGoogleSheet(objInscription.sheet);
+    await sheet.addRow(objInscription);    
 }
 
 module.exports = {

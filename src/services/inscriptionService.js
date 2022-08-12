@@ -92,7 +92,7 @@ class Inscriptions {
     }
 
     async validateCURP(string){
-        const CURP = curp.validar(string)        
+        const CURP = curp.validar(string)
         return CURP
     }  
 }
