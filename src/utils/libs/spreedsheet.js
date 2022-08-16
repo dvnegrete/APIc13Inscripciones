@@ -1,9 +1,10 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const config = require("../../../config/config");
+const { sheetHomePage } = require("../../models/namesSheet");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
 const nameSheet = require("../../models/namesSheet");
 
-function GSheetID(sheetName){
+function GSheetID(sheetName){    
     //console.log("GetSpreedSheet id : ", sheetName) 
     let idSheet = ""
     switch (sheetName) {
@@ -23,30 +24,35 @@ function GSheetID(sheetName){
             idSheet = idSheetCourses
             break;
     }    
-    return idSheet
+    return idSheet;
 }
 
 async function conexionGoogleSheet(sheetName) {
-    //creando nueva instancia de Googlesheet    
-    const idSheet = GSheetID(sheetName);    
-    const doc = new GoogleSpreadsheet(idSheet);    
-    await doc.useServiceAccountAuth(credentialGoogle);
-    await doc.loadInfo();    
-    
-    //seleccionando hoja a trabajar
-    const sheet = doc.sheetsByTitle[sheetName];    
-    return sheet;
+        //creando nueva instancia de Googlesheet
+        const idSheet = GSheetID(sheetName);
+        const doc = new GoogleSpreadsheet(idSheet);
+        await doc.useServiceAccountAuth(credentialGoogle);
+        await doc.loadInfo();
+        
+        //seleccionando hoja a trabajar
+        const sheet = doc.sheetsByTitle[sheetName];
+        return sheet;
 }
 
 async function getSpreedSheat(sheetName){
-    const sheet = await conexionGoogleSheet(sheetName);
-    const rows = await sheet.getRows();
-    return rows;
+    try {
+        const sheet = await conexionGoogleSheet(sheetName);
+        const rows = await sheet.getRows();
+        return rows;
+    } catch (error) {
+        console.log("Error en getSpreedSheat")
+    }
 }
+    
 
 async function postSpreedSheat(objInscription) {
     const sheet = await conexionGoogleSheet(objInscription.sheet);
-    await sheet.addRow(objInscription);    
+    await sheet.addRow(objInscription);
 }
 
 module.exports = {

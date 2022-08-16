@@ -5,8 +5,10 @@ function JSONResponse(dataArray){
         a_paterno: dataArray[0].a_paterno,
         a_materno: dataArray[0].a_materno,
         nombre: dataArray[0].nombre,
-        telefono: "** **** *456",
-        email: "pr*****@****l.com"
+        //trabajar en el cifrado parcial
+        telefono: dataArray[0].telefono,
+        email: dataArray[0].email
+        //trabajar en el cifrado parcial
     }        
     return info;
 }

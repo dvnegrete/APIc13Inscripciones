@@ -33,8 +33,7 @@ class Students {
         const userCURP = obj.curp;
         let responseValidateCurp = false;
         if (createCURP === userCURP) {
-            responseValidateCurp = true;
-            console.log("CURP VALIDADA, continuar inscripcion")
+            responseValidateCurp = true;            
         }
         return responseValidateCurp
     }
@@ -53,16 +52,15 @@ class Students {
     }
 
     async generateNumberControl() {
-        const rows = await getSpreedSheat(sheetNumberControl);        
+        const rows = await getSpreedSheat(sheetNumberControl);               
         const countRows = rows.length;
         const numberControl = rows[countRows-1].matricula;
-        const numberGenerate =  parseInt(numberControl, 10) + 1;
-        console.log("Numero de matricula Asignado", numberGenerate);
+        const numberGenerate =  parseInt(numberControl, 10) + 1;        
         return numberGenerate;
     }
 
     async findForCurp(stringCURP){
-        const rows = await getSpreedSheat(sheetDatabase);
+        const rows = await getSpreedSheat(sheetDatabase);        
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
         })
@@ -81,10 +79,7 @@ class Students {
 
     async addRegistration(obj){
         const addressState = obj.estado[1];
-        obj.estado = addressState;
-        console.log(obj)
-        // obj.estado = "Estado Harcodeado";
-        // obj.telefono = "5523124 Harcodeado"
+        obj.estado = addressState;        
         const newObj = {
             ...obj,            
             sheet: sheetNumberControl,
@@ -107,7 +102,7 @@ class Students {
     }
 
     async verifyLastRegistration(obj) {        
-        const rows = await getSpreedSheat(sheetInscriptions);
+        const rows = await getSpreedSheat(sheetInscriptions);        
         const countRows = rows.length;
         const lastInscriptionCurp = rows[countRows-1].curp;
         let verify = false;

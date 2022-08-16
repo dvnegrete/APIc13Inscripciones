@@ -14,11 +14,10 @@ const upload = require("../middlewares/multer")
 
 const service = new Students();
 
-router.post("/", async (req, res)=>{
+router.post("/typeRegister", async (req, res)=>{
     try {
         const { curp } = req.body;
-        if (CURP.validar(curp)) {
-            console.log("curp de router a servicio")  
+        if (CURP.validar(curp)) {            
             const studentCURP = await service.findForCurp(curp);
             res.json(studentCURP);
         }        
@@ -33,8 +32,7 @@ router.post("/", async (req, res)=>{
 
 router.post("/newStudent/dataGeneral", async (req, res)=> {
     try {
-        const { body } = req;
-        console.log("body", body);
+        const { body } = req;        
         const newStudentCURPValidate = service.isCURPValidate(body);
         const responseObj = {
             curp: body.curp,
@@ -49,9 +47,11 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
         }
         if (!newStudentCURPValidate) {
             res.json({"curp": "false"})
+        } else if (newStudentCURPValidate === { error: "Conexion-Spreedsheet" }) {
+            res.json(newStudentCURPValidate)
         } else {
             res.json({responseObj})
-        }        
+        }
     } catch (error) {
         console.log(error)
     }
@@ -63,12 +63,14 @@ router.post("/newStudent/inscription",
     async (req, res)=> {
         try {
             const { body } = req;
-            console.log("valores de body", body)            
             const inscriptionFiles =  await service.uploadStorage(req.files, body);
             if (inscriptionFiles.verify) {
                 const dataCompleted = await service.toCompleteInformationBody(inscriptionFiles, body);
                 //registrar en GSheets preinscripcion
                 const inscriptionData = await service.addRegistration(dataCompleted);
+                if (inscriptionData === { error: "Conexion-Spreedsheet" }) {
+                    res.json(newStudentCURPValidate)
+                }
                 console.log("final de /newStudent/inscription con respuesta: ", inscriptionData);
                 res.json(inscriptionData);
             } else {
