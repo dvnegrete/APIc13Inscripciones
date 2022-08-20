@@ -5,28 +5,13 @@ const { generateCURP } = require("../middlewares/validateCURP")
 const { timeStampt } = require("../utils/date")
 
 //Conexion a Firestore
-const { database } = require("../database/firestore")
-
-//conexion a Storage Firebase o Storage GCloud
-const storageCloud = require("../models/storageCloud")
-//const { uploadFirebase } = require("../database/firestore")
-const { uploadStorage } = require("../database/firebaseStorage")
-//const { uploadStorage } = require("../database/gcloudStorage")
+//const { database } = require("../database/firestore")
 
 class Students {
     // nameSheetInscriptions = sheetInscriptions;
     // sheetFindCurp = sheetDatabase;
     // sheetMatricula = sheetNumberControl;
-    constructor(){}
-
-    typefilesUpload(){
-        const filesUpload = [
-            { name: 'actaNacimiento', maxCount: 1 },
-            { name: 'comprobanteDomicilio', maxCount: 1 },
-            { name: 'comprobanteEstudios', maxCount: 1 }
-        ];
-        return filesUpload;
-    }
+    constructor(){}    
 
     isCURPValidate(obj) {
         const createCURP = generateCURP(obj);
@@ -124,44 +109,7 @@ class Students {
         }
         await postSpreedSheat(newObj);
         newObj.sheet = sheetNumberControl;
-    }
-    
-    async uploadStorage(files, body){
-        // si hay algun fallo al subir indicar false.
-        const verifyUpload = true;
-        //linksFicticiosTemporales
-        const uploadNacimiento = "link Acta Nacimiento";
-        const uploadDomicilio = "link Comprobante de domicilio";
-        const uploadEstudios = "link Comprobante de estudios";
-        //linksFicticiosTemporales
-
-        //console.log(files.actaNacimiento)
-        //referencia al bucket donde estara el archivo
-        const fileNacimiento = files.actaNacimiento[0]
-        //fileNacimiento.originalname = body.curp + "-" + files.actaNacimiento[0].originalname
-        console.log(fileNacimiento)
-        //const uploadNacimiento = uploadFirebase(fileNacimiento)        
-    
-        console.log("por el momento simulamos subida a Storage de archivos adjuntos")
-        //uploadStorage(fileNacimiento)
-        
-        //const nameDomicilio = body.curp + "-" + files.comprobanteDomicilio[0].originalname
-        //const fileDomicilio = files.comprobanteDomicilio[0]
-        //const uploadDomicilio = uploadFirebase(nameDomicilio, fileDomicilio)
-        
-        //const nameEstudios = body.curp + "-" + files.comprobanteEstudios[0].originalname
-        //const fileEstudios =files.comprobanteEstudios[0]
-        //const uploadEstudios = uploadFirebase(nameEstudios,fileEstudios)
-        
-
-        const links = {
-            verify: verifyUpload,
-            acta: uploadNacimiento,
-            domicilio: uploadDomicilio,
-            estudios: uploadEstudios
-        }
-        return links;
-    }
+    }    
 }
 
 module.exports = Students;
