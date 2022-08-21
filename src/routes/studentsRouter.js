@@ -12,12 +12,13 @@ router.post("/typeRegister", async (req, res)=>{
     try {
         const { curp } = req.body;
         if (CURP.validar(curp)) {            
-            const studentCURP = await service.findForCurp(curp);            
-            res.json(studentCURP);            
+            const studentCURP = await service.findForCurp(curp);
+            //pendiente encriptar respuesta antes de enviar
+            res.json(studentCURP);
         }
         else {
             res.json({error:"Validar estructura de información"});
-        }        
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "internal server error"});
@@ -59,7 +60,7 @@ router.post("/newStudent/inscription",
             const { body } = req;            
             const dataCompleted = await service.toCompleteInformationBody(inscriptionFiles, body);
             //registrar en GSheets preinscripcion
-            const inscriptionData = await service.addRegistration(dataCompleted);
+            const inscriptionData = await service.addInscriptionNewStudent(dataCompleted);
             if (inscriptionData === { error: "Conexion-Spreedsheet" }) {
                 res.json(newStudentCURPValidate)
             }
@@ -72,11 +73,14 @@ router.post("/newStudent/inscription",
     }
 )
 
-router.post("/:id", async () => {
+router.post("/DBStudent", async (req, res) => {
     try {
-        
+        const { body } = req;
+            const update = service.addInscriptionDBStudent(body)  
+        const updateCompleted = { message: "UpdateCompleted" };
+        res.json(updateCompleted);
     } catch (error) {
-        
+        console.error(error);
     }
 })
 

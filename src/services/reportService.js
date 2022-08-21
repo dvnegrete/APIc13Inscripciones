@@ -1,4 +1,4 @@
-const { getSpreedSheat } = require("../utils/libs/spreedsheet");
+const { getSpreedSheat } = require("../libs/spreedsheet");
 const nameSheet = require("../models/namesSheet");
 
 class Report {    

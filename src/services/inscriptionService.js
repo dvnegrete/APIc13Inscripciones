@@ -1,4 +1,4 @@
-const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
+const { postSpreedSheat, getSpreedSheat } = require("../libs/spreedsheet");
 const curp = require("curp");
 const nameSheet = require("../models/namesSheet");
 const studentDocument = require("../models/documents/studentDocument")

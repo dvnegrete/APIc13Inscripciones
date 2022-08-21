@@ -1,4 +1,4 @@
-const { getSpreedSheat } = require("../utils/libs/spreedsheet");
+const { getSpreedSheat } = require("../libs/spreedsheet");
 const { selectIdGSheet, selectModel } = require("../models/spreadsheetsOfertaEducativa");
 
 async function frontendURLService (id, size=undefined){

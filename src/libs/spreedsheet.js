@@ -1,8 +1,8 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const config = require("../../../config/config");
-const { sheetHomePage } = require("../../models/namesSheet");
+const config = require("../../config/config");
+const { sheetHomePage } = require("../models/namesSheet");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
-const nameSheet = require("../../models/namesSheet");
+const nameSheet = require("../models/namesSheet");
 
 function GSheetID(sheetName){    
     //console.log("GetSpreedSheet id : ", sheetName) 

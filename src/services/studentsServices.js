@@ -1,4 +1,4 @@
-const { postSpreedSheat, getSpreedSheat } = require("../utils/libs/spreedsheet");
+const { postSpreedSheat, getSpreedSheat } = require("../libs/spreedsheet");
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 const JSONResponse = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
@@ -45,45 +45,58 @@ class Students {
     }
 
     async findForCurp(stringCURP){
-        const rows = await getSpreedSheat(sheetDatabase);        
+        const rows = await getSpreedSheat(sheetDatabase);
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
         })
         if (data.length > 0) {
             const info = JSONResponse(data);
-            return info;            
+            return info;
         } else {
             const notFound = { error: "CURP"}
             return notFound;
         }
     }
 
-    async dataRegister(body){
-        console.log("que tiene el body: ", body)
-    }
-
-    async addRegistration(obj){
+    async addInscriptionNewStudent(obj){
         const addressState = obj.estado[1];
-        obj.estado = addressState;        
-        const newObj = {
-            ...obj,            
-            sheet: sheetNumberControl,
-        }
+        obj.estado = addressState;
         //*prueba a Firestore */
         //en Firestore solo guardar la coleccion de
         //*prueba a Firestore */
-       
-        //guardamos matricula y fecha de registro
+        this.dbSaveNumberControl(obj);
+        this.dbSaveRegister(obj);
+        const sucessfullyRegister = this.inscription(obj);
+        return sucessfullyRegister;
+    }
+
+    //guardamos matricula y fecha de registro        
+    async dbSaveNumberControl(obj) {
+        const newObj = this.insertSheet(obj, sheetNumberControl)
+        await postSpreedSheat(newObj);        
+    }
+
+    //guardamos en database
+    async dbSaveRegister(obj) {
+        const newObj = this.insertSheet(obj, sheetDatabase)        
         await postSpreedSheat(newObj);
-        newObj.sheet = sheetDatabase,
-        //guardamos en database
+    }
+
+    //guardamos en preinscripciones
+    async inscription(obj) {
+        const newObj = this.insertSheet(obj, sheetInscriptions);
         await postSpreedSheat(newObj);
-        newObj.sheet = sheetInscriptions;
-        //guardamos en preinscripciones
-        await postSpreedSheat(newObj);
-        const sucessfulyRegister = this.verifyLastRegistration(obj)        
-       //sucessfulyRegister indica si se hizo el registro en SpreedSheet       
-        return sucessfulyRegister;
+        //sucessfulyRegister indica si se hizo el registro en SpreedSheet
+        const sucessfullyRegister = this.verifyLastRegistration(obj);
+        return sucessfullyRegister;
+    }
+
+    insertSheet(obj, nameSheet){
+        const newObj = {
+            ...obj,            
+            sheet: nameSheet,
+        }
+        return newObj;
     }
 
     async verifyLastRegistration(obj) {        
@@ -102,14 +115,35 @@ class Students {
         return res;
     }
 
-    async recordInformation(obj) {
-        const newObj = {
-            ...obj,            
-            sheet: sheetDatabase,
+    async addInscriptionDBStudent(body) {
+        if (body.update) {
+          const update = this.updateDBStudent(body);
+          //campo update indica que se tiene que modificar la BD
         }
-        await postSpreedSheat(newObj);
-        newObj.sheet = sheetNumberControl;
-    }    
+        const data = this.findForCurp(body.curp);
+        const newObj = {
+            ...body,
+            ...data
+        };
+        const sucessfullyRegister = this.inscription(obj);
+        return sucessfullyRegister;
+    }
+
+    async updateDBStudent(body) {
+        //forma: body.update { contact : {}, address: {}, scholarship : {}}
+        console.log("recibimos bandera indicando actualizacion de registros");
+        const updateVerify = true;
+        return updateVerify;
+    }
+
+    // async recordInformation(obj) {
+    //     const newObj = {
+    //         ...obj,            
+    //         sheet: sheetDatabase,
+    //     }
+    //     await postSpreedSheat(newObj);
+    //     newObj.sheet = sheetNumberControl;
+    // }
 }
 
 module.exports = Students;
