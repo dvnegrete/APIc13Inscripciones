@@ -1,4 +1,4 @@
-const { postSpreedSheat, getSpreedSheat } = require("../libs/spreedsheet");
+const { postSpreedSheet, getSpreedSheet } = require("../libs/spreedsheet");
 const curp = require("curp");
 const nameSheet = require("../models/namesSheet");
 const studentDocument = require("../models/documents/studentDocument")
@@ -69,7 +69,7 @@ class Inscriptions {
 
 
             //**deshabilitar temporal conexión a Spreadsheets**
-            const sheet = await postSpreedSheat(newObj);
+            const sheet = await postSpreedSheet(newObj);
             const result = this.lastRegistration();
             //**deshabilitar temporal conexión a Spreadsheets**
             return result
@@ -82,7 +82,7 @@ class Inscriptions {
     }
 
     async lastRegistration() {        
-        const rows = await getSpreedSheat(this.sheet);        
+        const rows = await getSpreedSheet(this.sheet);        
         const countRows = rows.length        
         const lastInscription = rows[countRows-1].matricula;        
         const objInscription= {

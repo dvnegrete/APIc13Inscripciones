@@ -2,9 +2,6 @@ const express = require("express");
 const Students = require("../services/studentsServices.js");
 const router = express.Router();
 const CURP = require("curp");
-//const upload = require("../middlewares/multer")
-// const docsRoute = require("../utils/docs")
-// const upload = multer({ dest: docsRoute })
 
 const service = new Students();
 
@@ -43,7 +40,7 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
         if (!newStudentCURPValidate) {
             res.json({"curp": "false"})
         } else if (newStudentCURPValidate === { error: "Conexion-Spreedsheet" }) {
-            res.json(newStudentCURPValidate)            
+            res.json(newStudentCURPValidate)
         }  else {
             res.json({responseObj})
         }
@@ -52,33 +49,28 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
     }
 })
 
-//funcion con carga de archivos en multer
-router.post("/newStudent/inscription",
-    //upload.fields(service.typefilesUpload()),
-    async (req, res)=> {
-        try {
-            const { body } = req;            
-            const dataCompleted = await service.toCompleteInformationBody(inscriptionFiles, body);
-            //registrar en GSheets preinscripcion
-            const inscriptionData = await service.addInscriptionNewStudent(dataCompleted);
-            if (inscriptionData === { error: "Conexion-Spreedsheet" }) {
-                res.json(newStudentCURPValidate)
-            }
-            console.log("final de /newStudent/inscription con respuesta: ", inscriptionData);
-            res.json(inscriptionData);                       
-        } catch (error) {
-            console.log(error)
-            console.log("error catch en router Student")
-        }
+router.post("/newStudent/inscription", async (req, res)=> {
+    try {
+        const { body } = req;            
+        const dataCompleted = await service.toCompleteInformationBody(inscriptionFiles, body);
+        //registrar en GSheets preinscripcion
+        const inscriptionData = await service.addInscriptionNewStudent(dataCompleted);
+        if (inscriptionData === { error: "Conexion-Spreedsheet" }) {
+            res.json(newStudentCURPValidate)
+        }        
+        res.json(inscriptionData);                       
+    } catch (error) {
+        console.log(error)
+        console.log("error catch en router NewStudent/inscription")
     }
-)
+})
 
 router.post("/DBStudent", async (req, res) => {
     try {
-        const { body } = req;
-            const update = service.addInscriptionDBStudent(body)  
-        const updateCompleted = { message: "UpdateCompleted" };
-        res.json(updateCompleted);
+        const { body } = req;        
+        const update = await service.addInscriptionDBStudent(body);
+        //formato respuesta: {status: boolean, update: boolean, matricula: string, fechaRegistro: string}
+        res.json(update);
     } catch (error) {
         console.error(error);
     }

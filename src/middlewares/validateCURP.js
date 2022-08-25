@@ -1,15 +1,4 @@
 const curp = require("curp");
-const { format }= require("date-fns")
-
-function validar(string){
-    if(curp.validar(string)){
-        console.log("Curp Valida")
-    } else {
-        console.log("Error en CURP")
-    }
-}
-const curpString = "VAND870419HDFLGM01";
-validar(curpString)
 
 // let persona = curp.getPersona();
 // persona.nombre = 'Andrés Manuel';
@@ -26,8 +15,7 @@ function generateCURP (obj) {
         let formatted_date = (date.getDate() + 1) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
         return formatted_date;
     }
-    const fecha = formatDate(date)
-    console.log(fecha)
+    const fecha = formatDate(date)    
     const gender = obj.genero;
     const estado = obj.estado;
     let persona = curp.getPersona();
@@ -37,9 +25,8 @@ function generateCURP (obj) {
     persona.genero =  curp.GENERO[gender];
     //Formato: FEMENINO o MASCULINO
     persona.fechaNacimiento =  fecha;
-    //Formato '22-03-1988';
-    persona.estado = curp.ESTADO[estado];
-    console.log(persona)
+    //Formato '22-03-1970';
+    persona.estado = curp.ESTADO[estado];    
     const string = curp.generar(persona);
     return string
 }
@@ -56,7 +43,6 @@ function validateCURP (property) {
         }
     }
 }
-
 
 function errorCurp (req, res, next) {
     res.status(400).json({

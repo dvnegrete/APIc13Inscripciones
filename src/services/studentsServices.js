@@ -1,16 +1,14 @@
-const { postSpreedSheat, getSpreedSheat } = require("../libs/spreedsheet");
+const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/spreedsheet");
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 const JSONResponse = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
-const { timeStampt } = require("../utils/date")
+const { timeStampt } = require("../utils/date");
+const { da } = require("date-fns/locale");
 
 //Conexion a Firestore
 //const { database } = require("../database/firestore")
 
 class Students {
-    // nameSheetInscriptions = sheetInscriptions;
-    // sheetFindCurp = sheetDatabase;
-    // sheetMatricula = sheetNumberControl;
     constructor(){}    
 
     isCURPValidate(obj) {
@@ -37,7 +35,7 @@ class Students {
     }
 
     async generateNumberControl() {
-        const rows = await getSpreedSheat(sheetNumberControl);               
+        const rows = await getSpreedSheet(sheetNumberControl);               
         const countRows = rows.length;
         const numberControl = rows[countRows-1].matricula;
         const numberGenerate =  parseInt(numberControl, 10) + 1;        
@@ -45,7 +43,7 @@ class Students {
     }
 
     async findForCurp(stringCURP){
-        const rows = await getSpreedSheat(sheetDatabase);
+        const rows = await getSpreedSheet(sheetDatabase);
         const data = rows.filter( column => {
             return column.curp.includes(stringCURP)
         })
@@ -73,19 +71,19 @@ class Students {
     //guardamos matricula y fecha de registro        
     async dbSaveNumberControl(obj) {
         const newObj = this.insertSheet(obj, sheetNumberControl)
-        await postSpreedSheat(newObj);        
+        await postSpreedSheet(newObj);        
     }
 
     //guardamos en database
     async dbSaveRegister(obj) {
         const newObj = this.insertSheet(obj, sheetDatabase)        
-        await postSpreedSheat(newObj);
+        await postSpreedSheet(newObj);
     }
 
     //guardamos en preinscripciones
     async inscription(obj) {
         const newObj = this.insertSheet(obj, sheetInscriptions);
-        await postSpreedSheat(newObj);
+        await postSpreedSheet(newObj);
         //sucessfulyRegister indica si se hizo el registro en SpreedSheet
         const sucessfullyRegister = this.verifyLastRegistration(obj);
         return sucessfullyRegister;
@@ -99,13 +97,14 @@ class Students {
         return newObj;
     }
 
-    async verifyLastRegistration(obj) {        
-        const rows = await getSpreedSheat(sheetInscriptions);        
+    //consultar que ultimo registro en Spreedsheets sea el mismo que registramos
+    async verifyLastRegistration(obj) {
+        const rows = await getSpreedSheet(sheetInscriptions);
         const countRows = rows.length;
         const lastInscriptionCurp = rows[countRows-1].curp;
         let verify = false;
         if (lastInscriptionCurp === obj.curp){
-            verify = true;            
+            verify = true;
         }
         const res = {
             status : verify,
@@ -117,33 +116,31 @@ class Students {
 
     async addInscriptionDBStudent(body) {
         if (body.update) {
-          const update = this.updateDBStudent(body);
-          //campo update indica que se tiene que modificar la BD
+            //campo update indica que se tiene que modificar la BD
+            const updated = await this.updateDBStudent(body);
+            //confirmamos que se actualizo la informacion
+            body.update = updated.updated;
         }
-        const data = this.findForCurp(body.curp);
-        const newObj = {
-            ...body,
-            ...data
-        };
-        const sucessfullyRegister = this.inscription(obj);
-        return sucessfullyRegister;
+        //buscamos los datos en la BD
+        const data = await this.findForCurp(body.curp);
+        const newObj = { ...body, ...data };        
+        //e inscribimos
+        const sucessfullyRegister = await this.inscription(newObj);        
+        const res = {
+            ...sucessfullyRegister,
+            //indica si pudo realizarse actualizarse
+            update: newObj.update
+        }        
+        return res;        
     }
 
-    async updateDBStudent(body) {
-        //forma: body.update { contact : {}, address: {}, scholarship : {}}
-        console.log("recibimos bandera indicando actualizacion de registros");
-        const updateVerify = true;
-        return updateVerify;
+    async updateDBStudent(obj) {
+        const newObj = this.insertSheet(obj, sheetDatabase);
+        const updated = await updateSpreedSheet(newObj);
+        return {
+            updated : updated
+        }
     }
-
-    // async recordInformation(obj) {
-    //     const newObj = {
-    //         ...obj,            
-    //         sheet: sheetDatabase,
-    //     }
-    //     await postSpreedSheat(newObj);
-    //     newObj.sheet = sheetNumberControl;
-    // }
 }
 
 module.exports = Students;

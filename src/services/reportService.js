@@ -1,4 +1,4 @@
-const { getSpreedSheat } = require("../libs/spreedsheet");
+const { getSpreedSheet } = require("../libs/spreedsheet");
 const nameSheet = require("../models/namesSheet");
 
 class Report {    
@@ -6,7 +6,7 @@ class Report {
     constructor(){}
 
     async getInfo() {
-        const rows = await getSpreedSheat(this.sheet);      
+        const rows = await getSpreedSheet(this.sheet);      
         const data = [];
         //forma para  pedir info => rows[0].campo
         //falta definir los models segun la hoja que se esté trabajando
@@ -26,14 +26,14 @@ class Report {
     }
     
     async countBD(){
-        const sheet = await getSpreedSheat(this.sheet);
+        const sheet = await getSpreedSheet(this.sheet);
         const rows = await sheet.getRows();
         const countRows = rows.length
         return countRows;
     }
     
     async getCURP(){
-        const sheet = await getSpreedSheat(this.sheet);
+        const sheet = await getSpreedSheet(this.sheet);
         const rows = await sheet.getRows()
         const data = [];
         rows.forEach(column => {
