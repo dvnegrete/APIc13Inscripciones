@@ -25,10 +25,10 @@ function ubicationColumn (key){
         case "escolaridad":
             column = "P";
             break;        
-        case "comprobante_domicilio":
+        case "comprobanteDomicilio":
             column = "Q";
             break;
-        case "comprobante_estudios":
+        case "comprobanteEstudios":
             column = "R";
             break;
         default: 

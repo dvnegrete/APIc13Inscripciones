@@ -21,15 +21,12 @@ class Students {
         return responseValidateCurp
     }
 
-    async toCompleteInformationBody(links, body) {
+    async toCompleteInformationBody(body) {
         const controlNumber = await this.generateNumberControl();        
         const dataCompleted = {
             ...body,
             fechaRegistro: timeStampt,
-            matricula: controlNumber,
-            acta_de_nacimiento : links.acta,
-            comprobante_domicilio : links.domicilio,
-            comprobante_estudios : links.estudios
+            matricula: controlNumber,            
         };
         return dataCompleted;        
     }
@@ -45,10 +42,11 @@ class Students {
     async findForCurp(stringCURP){
         const rows = await getSpreedSheet(sheetDatabase);
         const data = rows.filter( column => {
-            return column.curp.includes(stringCURP)
+            const value = column.curp.toUpperCase();
+            return value.includes(stringCURP)            
         })
         if (data.length > 0) {
-            const info = JSONResponse(data);
+            const info = JSONResponse(data.toUpperCase());
             return info;
         } else {
             const notFound = { error: "CURP"}
@@ -57,8 +55,8 @@ class Students {
     }
 
     async addInscriptionNewStudent(obj){
-        const addressState = obj.estado[1];
-        obj.estado = addressState;
+        // const addressState = obj.estado[1];
+        // obj.estado = addressState;
         //*prueba a Firestore */
         //en Firestore solo guardar la coleccion de
         //*prueba a Firestore */

@@ -8,7 +8,7 @@ const service = new Students();
 router.post("/typeRegister", async (req, res)=>{
     try {
         const { curp } = req.body;
-        if (CURP.validar(curp)) {            
+        if (CURP.validar(curp)) {
             const studentCURP = await service.findForCurp(curp);
             //pendiente encriptar respuesta antes de enviar
             res.json(studentCURP);
@@ -24,7 +24,7 @@ router.post("/typeRegister", async (req, res)=>{
 
 router.post("/newStudent/dataGeneral", async (req, res)=> {
     try {
-        const { body } = req;        
+        const { body } = req;
         const newStudentCURPValidate = service.isCURPValidate(body);
         const responseObj = {
             curp: body.curp,
@@ -52,7 +52,7 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
 router.post("/newStudent/inscription", async (req, res)=> {
     try {
         const { body } = req;            
-        const dataCompleted = await service.toCompleteInformationBody(inscriptionFiles, body);
+        const dataCompleted = await service.toCompleteInformationBody(body);
         //registrar en GSheets preinscripcion
         const inscriptionData = await service.addInscriptionNewStudent(dataCompleted);
         if (inscriptionData === { error: "Conexion-Spreedsheet" }) {
@@ -73,6 +73,7 @@ router.post("/DBStudent", async (req, res) => {
         res.json(update);
     } catch (error) {
         console.error(error);
+        console.log("error catch en router /DBStudent")
     }
 })
 
