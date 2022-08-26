@@ -45,8 +45,8 @@ class Students {
             const value = column.curp.toUpperCase();
             return value.includes(stringCURP)            
         })
-        if (data.length > 0) {
-            const info = JSONResponse(data.toUpperCase());
+        if (data.length > 0) {            
+            const info = JSONResponse(data);
             return info;
         } else {
             const notFound = { error: "CURP"}

@@ -14,7 +14,7 @@ router.post("/typeRegister", async (req, res)=>{
             res.json(studentCURP);
         }
         else {
-            res.json({error:"Validar estructura de información"});
+            res.json({message:"Wrong Structure"});
         }
     } catch (error) {
         console.log(error);
