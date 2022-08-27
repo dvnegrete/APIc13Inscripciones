@@ -65,8 +65,7 @@ async function postSpreedSheet(objInscription) {
 }
 
 async function updateSpreedSheet(objUpdate){
-    try {    
-        //const idSheet = GSheetID(objUpdate.sheet);        
+    try {        
         const sheet = await conexionGoogleSheet(objUpdate.sheet);
         const columnCurp = ubicationColumn(objUpdate.curp) //por default regresa curp
         await sheet.loadCells(`${columnCurp}:${columnCurp}`); //rango de curp

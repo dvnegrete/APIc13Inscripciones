@@ -1,6 +1,6 @@
 const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/spreedsheet");
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
-const JSONResponse = require("../models/JSONResponse");
+const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
 const { timeStampt } = require("../utils/date");
 const { da } = require("date-fns/locale");
@@ -45,13 +45,23 @@ class Students {
             const value = column.curp.toUpperCase();
             return value.includes(stringCURP)            
         })
-        if (data.length > 0) {            
+        if (data.length > 0) {
             const info = JSONResponse(data);
             return info;
         } else {
             const notFound = { error: "CURP"}
             return notFound;
         }
+    }
+
+    async getDataDB(stringCURP){
+        const rows = await getSpreedSheet(sheetDatabase);
+        const data = rows.filter( column => {
+            const value = column.curp.toUpperCase();
+            return value.includes(stringCURP)            
+        });        
+        const info = JSONgetDB(data);
+        return info;        
     }
 
     async addInscriptionNewStudent(obj){
@@ -119,8 +129,8 @@ class Students {
             //confirmamos que se actualizo la informacion
             body.update = updated.updated;
         }
-        //buscamos los datos en la BD
-        const data = await this.findForCurp(body.curp);
+        //buscamos los datos en la BD        
+        const data = await this.getDataDB(body.curp);        
         const newObj = { ...body, ...data };        
         //e inscribimos
         const sucessfullyRegister = await this.inscription(newObj);        

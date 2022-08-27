@@ -1,10 +1,10 @@
 function ubicationColumn (key){
     let column;
     switch (key) {
-        case "telefono":
+        case "email":
             column = "I";
             break;
-        case "email":
+        case "telefono":
             column = "J";
             break;
         case "calle": 
@@ -22,14 +22,20 @@ function ubicationColumn (key){
         case "cp":
             column = "O";
             break;
-        case "escolaridad":
+        case "discapacidad":
             column = "P";
-            break;        
-        case "comprobanteDomicilio":
+            break;
+        case "escolaridad":
             column = "Q";
             break;
-        case "comprobanteEstudios":
+        case "comprobanteDomicilio":
             column = "R";
+            break;
+        case "comprobanteEstudios":
+            column = "S";
+            break;
+        case "actaNacimiento":
+            column = "T";
             break;
         default: 
         //curp
@@ -40,22 +46,25 @@ function ubicationColumn (key){
 }
 
 function updateableData (array){
+    //campos marcados en azul en Spreedsheets database
     const newArray = array.filter( key =>
-        key === "telefono" 
-        || key === "email" 
+        key === "telefono"
+        || key === "email"
         || key === "calle"
         || key ==="colonia"
         || key === "municipio"
         || key === "estado"
         || key === "cp"
+        || key === "discapacidad"
         || key === "escolaridad"            
-        || key === "comprobante_domicilio"
-        || key === "comprobante_estudios"
+        || key === "comprobanteDomicilio"
+        || key === "comprobanteEstudios"
+        || key === "actaNacimiento"
     );
     return newArray;
 }
 
-const rangeData = "I2:R";
+const rangeData = "I2:T";
     //rango de datos en SpreedSheet que se pueden actualizar
 
 module.exports = { ubicationColumn, updateableData, rangeData };

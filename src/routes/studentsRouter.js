@@ -51,7 +51,7 @@ router.post("/newStudent/dataGeneral", async (req, res)=> {
 
 router.post("/newStudent/inscription", async (req, res)=> {
     try {
-        const { body } = req;            
+        const { body } = req;
         const dataCompleted = await service.toCompleteInformationBody(body);
         //registrar en GSheets preinscripcion
         const inscriptionData = await service.addInscriptionNewStudent(dataCompleted);
