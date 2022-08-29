@@ -25,9 +25,9 @@ class Students {
         const controlNumber = await this.generateNumberControl();        
         const dataCompleted = {
             ...body,
-            fechaRegistro: timeStampt,
+            fechaRegistro: timeStampt(),
             matricula: controlNumber,            
-        };
+        };        
         return dataCompleted;        
     }
 
@@ -130,8 +130,12 @@ class Students {
             body.update = updated.updated;
         }
         //buscamos los datos en la BD        
-        const data = await this.getDataDB(body.curp);        
-        const newObj = { ...body, ...data };        
+        const data = await this.getDataDB(body.curp);
+        const newObj = { ...body, ...data };
+        //Reassignmos timestampt  que viene del Registro de BD al actual
+        const date = new Date();
+        const timeStampt = date.toLocaleString();
+        newObj.fechaRegistro = timeStampt();
         //e inscribimos
         const sucessfullyRegister = await this.inscription(newObj);        
         const res = {
