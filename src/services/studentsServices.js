@@ -2,7 +2,7 @@ const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
-const { timeStampt } = require("../utils/date");
+const MyDate = require("../utils/date");
 const { da } = require("date-fns/locale");
 
 //Conexion a Firestore
@@ -22,10 +22,11 @@ class Students {
     }
 
     async toCompleteInformationBody(body) {
-        const controlNumber = await this.generateNumberControl();        
+        const controlNumber = await this.generateNumberControl();
+        const date = new Date();        
         const dataCompleted = {
             ...body,
-            fechaRegistro: timeStampt(),
+            fechaRegistro: date.toLocaleString(),
             matricula: controlNumber,            
         };        
         return dataCompleted;        
@@ -135,7 +136,8 @@ class Students {
         //Reassignmos timestampt  que viene del Registro de BD al actual
         const date = new Date();
         const timeStampt = date.toLocaleString();
-        newObj.fechaRegistro = timeStampt();
+        newObj.fechaRegistro = timeStampt;
+        //newObj.fechaRegistro = MyDate.timeStampt();
         //e inscribimos
         const sucessfullyRegister = await this.inscription(newObj);        
         const res = {
