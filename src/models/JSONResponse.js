@@ -1,15 +1,17 @@
+const { hideCharactersPhone , hideCharactersEmail } = require("../utils/hideCharacters");
+
 function JSONResponse(dataArray){
+    const telefonoEncrypted = hideCharactersPhone(dataArray[0].telefono);
+    const emailEncrypted =  hideCharactersEmail(dataArray[0].email);
     const info = {
         curp: dataArray[0].curp,
         matricula: dataArray[0].matricula,
         a_paterno: dataArray[0].a_paterno,
         a_materno: dataArray[0].a_materno,
-        nombre: dataArray[0].nombre,
-        //trabajar en el cifrado parcial
-        telefono: dataArray[0].telefono,
-        email: dataArray[0].email
-        //trabajar en el cifrado parcial
-    }        
+        nombre: dataArray[0].nombre,        
+        telefono: telefonoEncrypted,
+        email: emailEncrypted,        
+    }    
     return info;
 }
 

@@ -9,8 +9,7 @@ router.post("/typeRegister", async (req, res)=>{
     try {
         const { curp } = req.body;
         if (CURP.validar(curp)) {
-            const studentCURP = await service.findForCurp(curp);
-            //pendiente encriptar respuesta antes de enviar
+            const studentCURP = await service.findForCurp(curp);            
             res.json(studentCURP);
         }
         else {
