@@ -1,4 +1,4 @@
-const { credentialFirebase } = require("../../config/config")
+const { credentialFirebase } = require("../../config")
 const { initializeApp } = require("firebase/app")
 const { ref, getStorage, uploadBytesResumable, getDownloadURL } = require("firebase/storage")
 const { Buffer, Blob } = require("node:buffer");

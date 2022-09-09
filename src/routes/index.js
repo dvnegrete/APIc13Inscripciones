@@ -1,22 +1,21 @@
 const express = require("express");
-const report = require("./reportRouter")
 const inscription = require("./inscriptionRouter");
 const students = require("./studentsRouter");
 const frontendURL = require("./frontendURLRouter");
-const specialtie = require("./specialitieRouter");
 
-function routerAPI (app) {  
+function routerAPI (app) {
     const router = express.Router();
-    app.use("/API/v1", router)
+    app.use("/API/v1", router);
 
     router.get("/", (req, res)=>{
-        res.send("Servidor para inscripciones")
+        res.json({status: true});
     });
-    router.use("/report", report);
     router.use("/inscription", inscription);
+    //inscription no usado. En services funciones para conexion a Firebase
     router.use("/students", students);
+    //students desde curso-inscripcion
     router.use("/frontendURL", frontendURL);
-    router.use("/specialtie", specialtie)
+    //frontendURL desde cursos, galeria, homePage, preguntas, tv
 }
 
 module.exports = routerAPI;

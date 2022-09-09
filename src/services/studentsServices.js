@@ -2,23 +2,45 @@ const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
-const MyDate = require("../utils/date");
-const { da } = require("date-fns/locale");
+const CURP = require("curp");
 
 //Conexion a Firestore
 //const { database } = require("../database/firestore")
 
 class Students {
-    constructor(){}    
+    constructor(){}
+
+    async findTypeRegister(stringCurp){
+        let objReturn = {};
+        if (CURP.validar(stringCurp)) {
+            objReturn = await this.findForCurp(stringCurp);            
+        }
+        else {
+            objReturn= { message: "Wrong Structure"};
+        }
+        return objReturn;
+    }
 
     isCURPValidate(obj) {
         const createCURP = generateCURP(obj);
-        const userCURP = obj.curp;
-        let responseValidateCurp = false;
+        const userCURP = obj.curp;        
+        let objReturn = {};
         if (createCURP === userCURP) {
-            responseValidateCurp = true;            
+            objReturn = {
+                curp: obj.curp,
+                nombre: obj.nombre,
+                a_paterno: obj.a_paterno,
+                a_materno: obj.a_materno,
+                placeofBirth: obj.estado,
+                gender: obj.genero,
+                disability: obj.disability,
+                birthdate: obj.fechaNacimiento,            
+                actaNacimientoRender: obj.actaNacimientoRender
+            };            
+        } else {
+            objReturn = {curp : false}
         }
-        return responseValidateCurp
+        return objReturn
     }
 
     async toCompleteInformationBody(body) {
@@ -46,13 +68,13 @@ class Students {
             const value = column.curp.toUpperCase();
             return value.includes(stringCURP)            
         })
+        let objReturn = {};
         if (data.length > 0) {            
-            const info = JSONResponse(data);
-            return info;
+            objReturn = JSONResponse(data);            
         } else {
-            const notFound = { error: "CURP"}
-            return notFound;
+            objReturn = { error: "CURP"}
         }
+        return objReturn;
     }
 
     async getDataDB(stringCURP){
@@ -100,7 +122,7 @@ class Students {
 
     insertSheet(obj, nameSheet){
         const newObj = {
-            ...obj,            
+            ...obj,
             sheet: nameSheet,
         }
         return newObj;
@@ -124,8 +146,7 @@ class Students {
     }
 
     async addInscriptionDBStudent(body) {
-        if (body.update) {
-            //campo update indica que se tiene que modificar la BD
+        if (body.update) {            
             const updated = await this.updateDBStudent(body);
             //confirmamos que se actualizo la informacion
             body.update = updated.updated;
@@ -136,8 +157,7 @@ class Students {
         //Reassignmos timestampt  que viene del Registro de BD al actual
         const date = new Date();
         const timeStampt = date.toLocaleString();
-        newObj.fechaRegistro = timeStampt;
-        //newObj.fechaRegistro = MyDate.timeStampt();
+        newObj.fechaRegistro = timeStampt;        
         //e inscribimos
         const sucessfullyRegister = await this.inscription(newObj);        
         const res = {

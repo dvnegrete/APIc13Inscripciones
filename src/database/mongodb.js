@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-const { dbUser, dbPassword, dbName, dbHost } = require("../../config/config");
+const { dbUser, dbPassword, dbName, dbHost } = require("../../config");
 
 const USER = encodeURIComponent(dbUser);
 const PASSWORD = encodeURIComponent(dbPassword);

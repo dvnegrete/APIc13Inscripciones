@@ -1,8 +1,7 @@
 const { GoogleAuth } = require("google-auth-library");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const { googleAccount } = require("../../config/config");
-const config = require("../../config/config");
-const { sheetHomePage } = require("../models/namesSheet");
+const { googleAccount } = require("../../config");
+const config = require("../../config");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
 const nameSheet = require("../models/namesSheet");
 const { ubicationColumn, updateableData, rangeData } = require("../models/sheetGoogle/databaseModel");

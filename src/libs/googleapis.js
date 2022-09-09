@@ -1,5 +1,5 @@
 const { google } = require("googleapis");
-const { credentialGoogle } = require("../../config/config")
+const { credentialGoogle } = require("../../config")
 const projectId = 'backend-cursos-cecati13'
 const keyFilename = '../../keysGoogle.json'
 

@@ -1,4 +1,4 @@
-const { credentialGoogle, credentialFirebase } = require("../../config/config")
+const { credentialGoogle, credentialFirebase } = require("../../config")
 const { initializeApp, cert } = require("firebase-admin/app");
 //const { getApp, initializeApp } = require("firebase/app")
 //const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestore")

@@ -6,6 +6,7 @@ const { monthYear, dateComplete } = require("../utils/date")
 const students = "estudiantes";
 
 
+//servicio conectado con FIREBASE, para retomar en un futuro esta u otra BD
 //Conexion a Firestore
 const { database } = require("../database/firestore")
 const collection = monthYear;
