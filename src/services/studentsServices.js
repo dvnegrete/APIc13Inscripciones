@@ -3,6 +3,7 @@ const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../mod
 const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
 const CURP = require("curp");
+const { datetime } = require("../utils/date");
 
 //Conexion a Firestore
 //const { database } = require("../database/firestore")
@@ -44,11 +45,10 @@ class Students {
     }
 
     async toCompleteInformationBody(body) {
-        const controlNumber = await this.generateNumberControl();
-        const date = new Date();        
+        const controlNumber = await this.generateNumberControl();        
         const dataCompleted = {
             ...body,
-            fechaRegistro: date.toLocaleString(),
+            fechaRegistro: datetime(),
             matricula: controlNumber,            
         };        
         return dataCompleted;        
@@ -150,13 +150,19 @@ class Students {
             const updated = await this.updateDBStudent(body);
             //confirmamos que se actualizo la informacion
             body.update = updated.updated;
-        }
+        }        
+        delete body.matricula;
+        delete body.a_paterno;
+        delete body.a_materno;
+        delete body.nombre;
+        delete body.telefono;
+        delete body.email;
         //buscamos los datos en la BD        
-        const data = await this.getDataDB(body.curp);
+        const data = await this.getDataDB(body.curp);        
         const newObj = { ...body, ...data };
         //Reassignmos timestampt  que viene del Registro de BD al actual
         const date = new Date();
-        const timeStampt = date.toLocaleString();
+        const timeStampt = datetime();        
         newObj.fechaRegistro = timeStampt;        
         //e inscribimos
         const sucessfullyRegister = await this.inscription(newObj);        
