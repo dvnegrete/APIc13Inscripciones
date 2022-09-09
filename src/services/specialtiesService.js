@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb")
-const { Database } = require("../database/index");
+const { Database } = require("../database");
 
 const COLLECTION = "specialties"
 

@@ -1,31 +1,17 @@
-function name (number) {
-     return arrayNameMonth[number]
-}
-const arrayNameMonth = [
-    "",
-    "enero",
-    "febrero",
-    "marzo",
-    "abril",
-    "mayo",
-    "junio",
-    "julio",
-    "agosto",
-    "septiembre",
-    "octubre",
-    "noviembre",
-    "diciembre"
-]
-const date = new Date()
-const day = date.getDate()
-const monthNumber = date.getMonth();
-const year = date.getFullYear();
-const nameMonth = name(monthNumber)
+const optionsTimeStampt = {
+    year: 'numeric', 
+    month: 'short', 
+    day: '2-digit', 
+    hour: "2-digit", 
+    minute: "2-digit", 
+    second: "2-digit", 
+    hourCycle: "h12"
+};
 
-const monthYear = `${nameMonth}-${year}`
-const dateComplete = `${day}-${nameMonth}-${year}`
-
-module.exports = {
-    monthYear: monthYear,
-    dateComplete: dateComplete
+function datetime(){    
+    const date = new Date();
+    const time = date.toLocaleString("es-MX", optionsTimeStampt);    
+    return time;    
 }
+
+module.exports = { datetime }
