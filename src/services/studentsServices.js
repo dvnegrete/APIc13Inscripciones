@@ -39,7 +39,7 @@ class Students {
                 actaNacimientoRender: obj.actaNacimientoRender
             };            
         } else {
-            objReturn = {curp : false}
+            objReturn = {curp : false, datacurp: createCURP}
         }
         return objReturn
     }
