@@ -11,11 +11,17 @@ const curp = require("curp");
 
 function generateCURP (obj) {
     const date = new Date(obj.fechaNacimiento);
+    //console.log("date", date)
     const formatDate = (date)=>{
-        let formatted_date = (date.getDate() + 1) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
+        //en App Engine Produccion, no sumar nada en el día
+        let formatted_date = date.getDate() + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
+        
+        //en ambiente local sumar 1. Revisar mas adelante por que falla
+        //let formatted_date = (date.getDate() + 1) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
         return formatted_date;
     }
     const fecha = formatDate(date)    
+    //console.log("fecha", fecha)
     const gender = obj.genero;
     const estado = obj.estado;
     let persona = curp.getPersona();
