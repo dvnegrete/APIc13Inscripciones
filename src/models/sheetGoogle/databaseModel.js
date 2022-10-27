@@ -1,41 +1,45 @@
+//ubicationColum usada cuando se requiere actualizar la información
 function ubicationColumn (key){
     let column;
     switch (key) {
-        case "email":
-            column = "I";
-            break;
-        case "telefono":
-            column = "J";
-            break;
-        case "calle": 
-            column = "K";
-            break;
-        case "colonia": 
-            column = "L";
-            break;
-        case "municipio": 
-            column = "M";
-            break;
-        case "estado": 
-            column = "N";
-            break;
-        case "cp":
-            column = "O";
-            break;
         case "discapacidad":
+            column = "O";
+            break;            
+        case "padecimiento":
             column = "P";
             break;
-        case "escolaridad":
+        case "email":
             column = "Q";
             break;
-        case "comprobanteDomicilio":
+        case "telefono":
             column = "R";
             break;
-        case "comprobanteEstudios":
+        case "calle": 
             column = "S";
             break;
-        case "actaNacimiento":
+        case "colonia": 
             column = "T";
+            break;
+        case "municipio": 
+            column = "U";
+            break;
+        case "estado": 
+            column = "V";
+            break;
+        case "cp":
+            column = "W";
+            break;
+        case "escolaridad":
+            column = "X";
+            break;
+        case "comprobanteDomicilio":
+            column = "Y";
+            break;
+        case "comprobanteEstudios":
+            column = "Z";
+            break;
+        case "actaNacimiento":
+            column = "AA";
             break;
         default: 
         //curp
@@ -55,6 +59,7 @@ function updateableData (array){
         || key === "municipio"
         || key === "estado"
         || key === "cp"
+        || key === "padecimiento"
         || key === "discapacidad"
         || key === "escolaridad"            
         || key === "comprobanteDomicilio"
@@ -64,7 +69,11 @@ function updateableData (array){
     return newArray;
 }
 
-const rangeData = "I2:T";
+const rangeData = "O2:AA";
     //rango de datos en SpreedSheet que se pueden actualizar
 
-module.exports = { ubicationColumn, updateableData, rangeData };
+const gender = (param) =>  param === "MASCULINO" ? "HOMBRE" : "MUJER";
+//Cambiar de MASCULINO/FEMENINO a HOMBRE/MUJER, que es el formato que tiene la hoja de calculo.
+//La forma MASCULINO/FEMENINO es utlizada por la dependencia de la CURP para validar la información.
+
+module.exports = { ubicationColumn, updateableData, rangeData, gender };

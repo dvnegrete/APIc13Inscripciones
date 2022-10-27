@@ -1,5 +1,6 @@
 const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/spreedsheet");
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
+const { gender } = require("../models/sheetGoogle/databaseModel");
 const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
 const CURP = require("curp");
@@ -38,7 +39,7 @@ class Students {
                 a_paterno: obj.a_paterno,
                 a_materno: obj.a_materno,
                 placeofBirth: obj.estado,
-                gender: obj.genero,
+                gender: gender(obj.genero),
                 disability: obj.disability,
                 birthdate: obj.fechaNacimiento,            
                 actaNacimientoRender: obj.actaNacimientoRender
@@ -211,8 +212,7 @@ class Students {
                 enumerable: true,
                 configurable: true
             });
-        })
-        console.log("URLs :", URLs)
+        })        
         return URLs;
     }
     

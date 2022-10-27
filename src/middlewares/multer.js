@@ -11,7 +11,7 @@ const filter = (req, file, cb) => {
     {
         cb(null, true)
     } else {
-        cb( (new Error("TYPE_FORMAT_INVALID")), false)            
+        cb( (new Error("TYPE_FORMAT_INVALID")), false)
     }
 };
 
