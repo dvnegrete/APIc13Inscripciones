@@ -11,7 +11,8 @@ const config = {
     idGoogleRegisterInscription: process.env.ID_ShEET_REGISTER_INSCRIPTION,
     googleAccount: process.env.GOOGLE_ACCOUNT,
     credentialGoogle: credentialGoogle,
-    credentialFirebase: credentialFirebase,    
+    credentialFirebase: credentialFirebase,
+    azureStorageConnection: process.env.AZURE_STORAGE_CONNECTION,
 }
 
 module.exports = config;

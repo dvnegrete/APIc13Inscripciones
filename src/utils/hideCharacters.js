@@ -32,7 +32,7 @@ function hideCharactersEmail (email) {
     while (cycle != 0 ) {
         arrayAssambleFirstPart.push("*");
         cycle--;
-    }    
+    }
     arrayAssambleFirstPart.push(lastPart);
     const assambleFirstPart = arrayAssambleFirstPart.toString().replace(/,/g, "");
     const assambleEmail = assambleFirstPart + "@"+ arrPartsEmail[1];

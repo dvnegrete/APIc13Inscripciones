@@ -1,5 +1,6 @@
 const { credentialGoogle, credentialFirebase } = require("../../config")
-const { initializeApp, cert } = require("firebase-admin/app");
+//const { initializeApp, cert } = require("firebase-admin/app");
+const admin = require("firebase-admin");
 //const { getApp, initializeApp } = require("firebase/app")
 //const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestore")
 //const { ref, getStorage, uploadBytes } = require("firebase/storage")
@@ -12,18 +13,61 @@ const fs = require('fs');
 const firebaseConfig = {
   ...credentialFirebase,
 }
-const BUCKET = "backend-cursos-cecati13.appspot.com"
 
-const firebaseAPP = initializeApp({ 
-  credential: cert(credentialFirebase),
+const BUCKET = "backend-cursos-cecati13.appspot.com"
+  
+admin.initializeApp({
+  credential : admin.credential.cert(credentialFirebase),
   storageBucket: BUCKET
-});
+})
+
+async function uploadFirebase(file) {
+  
+  const bucket = admin.storage().bucket();
+  let URL = "";
+  const name = "subio!!";  
+  console.log(file)
+  const fileUbication = bucket.file("pruebaFirestore")
+
+  const stream = fileUbication.createWriteStream({
+    metadata: {
+      contentType: file.mimetype,
+    },
+  });
+
+  stream.on("error", (e) => {
+    console.error(e);
+  });
+
+  stream.on("finish", async ()=> {
+    await fileUbication.makePublic();
+    URL = `https://storage.googleapis.com/${BUCKET}/${name}`;        
+  });
+
+  stream.end(file.buffer);
+  return { url: URL}
+}
+
+
+
+
+
+
+
+
+
+
+
+// const firebaseAPP = initializeApp({ 
+//   credential: cert(credentialFirebase),
+//   storageBucket: BUCKET
+// });
 
 function convertFileOfBlob(file){
   const blob = new Blob([file], { type: 'image/jpeg' })
   return blob
 }
-const bucket = getStorage().bucket();
+// const bucket = getStorage().bucket();
 //const bucket = admin.storage().bucket()
 //const storage = getStorage()
 //const db = getFirestore();
@@ -119,9 +163,9 @@ function createBlob(file) {
 // function uploadFirebase(fileParam) {
 //   //const blob = convertFileOfBlob(fileParam)
 //   //console.log("En firestores Blob: ", blob)
-//   // const bucket = getStorage().bucket();
+//   //const bucket = getStorage().bucket();
 //   //console.log(fileParam.filename)
-//   const localReadStream = fs.createReadStream(fileParam);
+//   //const localReadStream = fs.createReadStream(fileParam);
 //   const name = fileParam.filename
 //   const file = bucket.file(name)
 //   //const file = bucket.file(blob)
@@ -151,13 +195,13 @@ function createBlob(file) {
 //   return { url: URL}
 // }
 
-async function uploadFirebase(fileParam) {
-  let storageRef = bucket.ref().child("pruebaUpload")
-  //let storageRef = ref().child("pruebaUpload")
-  await storageRef.put(fileParam)
+// async function uploadFirebase(fileParam) {
+//   let storageRef = bucket.ref().child("prueba")
+//   //let storageRef = ref().child("pruebaUpload")
+//   await storageRef.put(fileParam)
 
-  return storageRef
-}
+//   return storageRef
+// }
 
 
 

@@ -9,7 +9,7 @@ const { ubicationColumn, updateableData, rangeData } = require("../models/sheetG
 //para pruebas
 //const {updateGoogleApis} = require("./googleapis")
 
-function GSheetID(sheetName){    
+function GSheetID(sheetName){
     //console.log("GetSpreedSheet id : ", sheetName) 
     let idSheet = ""
     switch (sheetName) {
@@ -44,14 +44,14 @@ async function conexionGoogleSheet(sheetName) {
         //await doc.useServiceAccountAuth(credentialGoogle)
         
         //seleccionando hoja a trabajar
-        const sheet = doc.sheetsByTitle[sheetName];
+        const sheet = doc.sheetsByTitle[sheetName];        
         return sheet;
 }
 
 async function getSpreedSheet(sheetName){
     try {
         const sheet = await conexionGoogleSheet(sheetName);
-        const rows = await sheet.getRows();
+        const rows = await sheet.getRows();        
         return rows;
     } catch (error) {
         console.log("Error en getSpreedSheat")

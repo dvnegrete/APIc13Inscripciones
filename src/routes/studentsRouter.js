@@ -1,6 +1,7 @@
 const express = require("express");
 const Students = require("../services/studentsServices.js");
 const router = express.Router();
+const { uploadDocs } = require("../middlewares/multer")
 
 const service = new Students();
 
@@ -52,5 +53,14 @@ router.post("/DBStudent", async (req, res) => {
         console.log("error catch en router /DBStudent")
     }
 })
+
+router.post("/files", uploadDocs, async (req, res) => {
+    try {
+        const URLs = await service.uploadStorageDocs(req.files, req.body.curp);
+        res.json(URLs);
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 module.exports = router;

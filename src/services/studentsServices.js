@@ -4,6 +4,10 @@ const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP } = require("../middlewares/validateCURP")
 const CURP = require("curp");
 const { datetime } = require("../utils/date");
+// const { file } = require("googleapis/build/src/apis/file");
+// const { uploadStorage } =require("../database/firebaseStorage")
+// const { uploadFirebase } = require("../database/firestore")
+const { uploadBlobStorage, getBlobStorage } = require("../controller/blobsAzure");
 
 //Conexion a Firestore
 //const { database } = require("../database/firestore")
@@ -26,6 +30,7 @@ class Students {
         const createCURP = generateCURP(obj);
         const userCURP = obj.curp;        
         let objReturn = {};
+        //ajustar en middlewares/validateCURP.js formatDate segun ambiente productivo
         if (createCURP === userCURP) {
             objReturn = {
                 curp: obj.curp,
@@ -45,20 +50,20 @@ class Students {
     }
 
     async toCompleteInformationBody(body) {
-        const controlNumber = await this.generateNumberControl();        
+        const controlNumber = await this.generateNumberControl();
         const dataCompleted = {
             ...body,
             fechaRegistro: datetime(),
-            matricula: controlNumber,            
-        };        
-        return dataCompleted;        
+            matricula: controlNumber,
+        };
+        return dataCompleted;
     }
 
     async generateNumberControl() {
-        const rows = await getSpreedSheet(sheetNumberControl);               
+        const rows = await getSpreedSheet(sheetNumberControl);
         const countRows = rows.length;
         const numberControl = rows[countRows-1].matricula;
-        const numberGenerate =  parseInt(numberControl, 10) + 1;        
+        const numberGenerate =  parseInt(numberControl, 10) + 1;
         return numberGenerate;
     }
 
@@ -66,11 +71,11 @@ class Students {
         const rows = await getSpreedSheet(sheetDatabase);
         const data = rows.filter( column => {
             const value = column.curp.toUpperCase();
-            return value.includes(stringCURP)            
+            return value.includes(stringCURP)
         })
         let objReturn = {};
-        if (data.length > 0) {            
-            objReturn = JSONResponse(data);            
+        if (data.length > 0) {
+            objReturn = JSONResponse(data);
         } else {
             objReturn = { error: "CURP"}
         }
@@ -99,15 +104,15 @@ class Students {
         return sucessfullyRegister;
     }
 
-    //guardamos matricula y fecha de registro        
+    //guardamos matricula y fecha de registro
     async dbSaveNumberControl(obj) {
         const newObj = this.insertSheet(obj, sheetNumberControl)
-        await postSpreedSheet(newObj);        
+        await postSpreedSheet(newObj);
     }
 
     //guardamos en database
     async dbSaveRegister(obj) {
-        const newObj = this.insertSheet(obj, sheetDatabase)        
+        const newObj = this.insertSheet(obj, sheetDatabase)
         await postSpreedSheet(newObj);
     }
 
@@ -146,32 +151,32 @@ class Students {
     }
 
     async addInscriptionDBStudent(body) {
-        if (body.update) {            
+        if (body.update) {
             const updated = await this.updateDBStudent(body);
             //confirmamos que se actualizo la informacion
             body.update = updated.updated;
-        }        
+        }
         delete body.matricula;
         delete body.a_paterno;
         delete body.a_materno;
         delete body.nombre;
         delete body.telefono;
         delete body.email;
-        //buscamos los datos en la BD        
-        const data = await this.getDataDB(body.curp);        
+        //buscamos los datos en la BD
+        const data = await this.getDataDB(body.curp);
         const newObj = { ...body, ...data };
         //Reassignmos timestampt  que viene del Registro de BD al actual
         const date = new Date();
-        const timeStampt = datetime();        
-        newObj.fechaRegistro = timeStampt;        
+        const timeStampt = datetime();
+        newObj.fechaRegistro = timeStampt;
         //e inscribimos
-        const sucessfullyRegister = await this.inscription(newObj);        
+        const sucessfullyRegister = await this.inscription(newObj);
         const res = {
             ...sucessfullyRegister,
             //indica si pudo realizarse actualizarse
             update: newObj.update
-        }        
-        return res;        
+        }
+        return res;
     }
 
     async updateDBStudent(obj) {
@@ -180,6 +185,56 @@ class Students {
         return {
             updated : updated
         }
+    }
+
+    async uploadStorageDocs (files, curp) {
+        let arrayURLs = [];
+        if (files.actaNacimiento) {
+            const url = await this.uploadFile(files.actaNacimiento, curp);
+            arrayURLs.push(url);
+        }
+        if (files.comprobanteDomicilio) {
+            const url = await this.uploadFile(files.comprobanteDomicilio, curp);
+            arrayURLs.push(url);
+        }
+        if (files.comprobanteEstudios) {
+            const url = await this.uploadFile(files.comprobanteEstudios, curp);
+            arrayURLs.push(url);
+        }
+        const URLs = {};
+        arrayURLs.forEach( element => {
+            const arrayKey = Object.keys(element);
+            const key = arrayKey[0];
+            Object.defineProperty(URLs, key, {
+                value: element[key],
+                writable: true,
+                enumerable: true,
+                configurable: true
+            });
+        })
+        console.log("URLs :", URLs)
+        return URLs;
+    }
+    
+    async uploadFile (file, curp) {
+        const name = file[0].fieldname;
+        const ext = file[0].mimetype.split("/")[1];
+        const nameFile = `${curp}-${file[0].fieldname}.${ext}`;
+        const url =  {}
+        Object.defineProperty( url, name, {
+            value: nameFile,
+            enumerable: true,
+            writable: true,
+            configurable: true
+        });
+        const azureUpload = await uploadBlobStorage(file[0], nameFile)
+        // console.log("azureUpload", azureUpload)
+        // if (azureUpload) {
+        //     const azureGet = getBlobStorage(name);            
+        // } else {
+        //     console.error("no se pudo subir archivo")
+        // }
+        return url
     }
 }
 
