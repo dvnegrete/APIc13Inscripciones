@@ -153,7 +153,11 @@ class Students {
 
     async addInscriptionDBStudent(body) {
         if (body.update) {
-            const updated = await this.updateDBStudent(body);
+            const bodyWithDatetime = { 
+                ...body, 
+                fechaRegistro: datetime() 
+            };
+            const updated = await this.updateDBStudent(bodyWithDatetime);
             //confirmamos que se actualizo la informacion
             body.update = updated.updated;
         }

@@ -4,7 +4,7 @@ const { googleAccount } = require("../../config");
 const config = require("../../config");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
 const nameSheet = require("../models/namesSheet");
-const { ubicationColumn, updateableData, rangeData } = require("../models/sheetGoogle/databaseModel");
+const { ubicationColumn, updateableData, rangeData, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
 
 //para pruebas
 //const {updateGoogleApis} = require("./googleapis")
@@ -64,7 +64,7 @@ async function postSpreedSheet(objInscription) {
 }
 
 async function updateSpreedSheet(objUpdate){
-    try {        
+    try {
         const sheet = await conexionGoogleSheet(objUpdate.sheet);
         const columnCurp = ubicationColumn(objUpdate.curp) //por default regresa curp
         await sheet.loadCells(`${columnCurp}:${columnCurp}`); //rango de curp
@@ -86,8 +86,14 @@ async function updateSpreedSheet(objUpdate){
             dataUpdate.value = objUpdate[nameColumnsArray[0]];
             nameColumnsArray.shift();
         }
-        //guardando cambios en spreedsheets
         await sheet.saveUpdatedCells();
+        //guardando cambios en spreedsheets
+
+        await sheet.loadCells(`${rangeDateRegister}${index}`); //rango de Fecha de Registro
+        const dateUpdateRegister = sheet.getCellByA1(`${rangeDateRegister}${index}`);
+        dateUpdateRegister.value = objUpdate.fechaRegistro;
+        await sheet.saveUpdatedCells();
+
         return true;
     } catch (error) {
         console.log("Error en updateSpreedSheat");
@@ -98,13 +104,13 @@ async function updateSpreedSheet(objUpdate){
 async function findRowOnSpreedsheets (obj){
     let index = 0;
     for (let i = 1; i <= obj.totalRows; i++) {
-        const cell = obj.sheet.getCellByA1(`${obj.columnCurp}${i}`);        
+        const cell = obj.sheet.getCellByA1(`${obj.columnCurp}${i}`);
         if (cell.value === obj.curp) {
             index = i;
             break;
         }
     }
-    return index
+    return index;
 }
 
 function countDataUpdate(obj) {
@@ -116,5 +122,5 @@ function countDataUpdate(obj) {
 module.exports = {
     getSpreedSheet: getSpreedSheet,
     postSpreedSheet: postSpreedSheet,
-    updateSpreedSheet: updateSpreedSheet    
+    updateSpreedSheet: updateSpreedSheet
 }

@@ -72,8 +72,11 @@ function updateableData (array){
 const rangeData = "O2:AA";
     //rango de datos en SpreedSheet que se pueden actualizar
 
+const rangeDateRegister = "A";
+//columna donde se actualiza la fecha de registro
+
 const gender = (param) =>  param === "MASCULINO" ? "HOMBRE" : "MUJER";
 //Cambiar de MASCULINO/FEMENINO a HOMBRE/MUJER, que es el formato que tiene la hoja de calculo.
 //La forma MASCULINO/FEMENINO es utlizada por la dependencia de la CURP para validar la información.
 
-module.exports = { ubicationColumn, updateableData, rangeData, gender };
+module.exports = { ubicationColumn, updateableData, rangeData, rangeDateRegister, gender };
