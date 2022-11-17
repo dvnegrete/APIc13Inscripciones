@@ -13,6 +13,7 @@ const config = {
     credentialGoogle: credentialGoogle,
     credentialFirebase: credentialFirebase,
     azureStorageConnection: process.env.AZURE_STORAGE_CONNECTION,
+    dateForCurp: process.env.DATE_FOR_CURP
 }
 
 module.exports = config;

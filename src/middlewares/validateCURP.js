@@ -1,4 +1,5 @@
 const curp = require("curp");
+const { dateForCurp } = require("../../config")
 
 // let persona = curp.getPersona();
 // persona.nombre = 'Andrés Manuel';
@@ -13,11 +14,12 @@ function generateCURP (obj) {
     const date = new Date(obj.fechaNacimiento);
     //console.log("date", date)
     const formatDate = (date)=>{
+        const dateValueCorrection = parseInt(dateForCurp, 10);
         //en App Engine Produccion, no sumar nada en el día
-        let formatted_date = date.getDate() + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
+        //en ambiente local sumar 1. para que funcione.
+        //let formatted_date = date.getDate() + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
         
-        //en ambiente local sumar 1. Revisar mas adelante por que falla
-        //let formatted_date = (date.getDate() + 1) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
+        let formatted_date = (date.getDate() + dateValueCorrection) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
         return formatted_date;
     }
     const fecha = formatDate(date)    
@@ -56,4 +58,26 @@ function errorCurp (req, res, next) {
     })
 }
 
-module.exports = { validateCURP, generateCURP ,errorCurp }
+function compareDigitVerifyCurp(userCURP, createCURP){
+    const userArray = userCURP.split("", 16);
+    const createArray = createCURP.split("", 16);
+    const newUserCurp = userArray.join("");
+    const newCreateCurp = createArray.join("");
+    const res = newUserCurp === newCreateCurp ? true : false;
+    return res;
+}
+
+const messageDuplicity = `Lo sentimos, no podemos validar el dígito verificador de tu CURP. 
+Por favor acude a la ventanilla del plantel para continuar tu inscripcion. 
+Lamentamos los inconvenientes que esto puede causar.`;
+
+ const messageErrorCurp = "Verifica la informacíon";
+
+module.exports = { 
+    validateCURP, 
+    generateCURP,
+    errorCurp,
+    compareDigitVerifyCurp,
+    messageDuplicity,
+    messageErrorCurp
+};

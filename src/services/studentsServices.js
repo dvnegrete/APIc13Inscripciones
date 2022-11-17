@@ -2,7 +2,7 @@ const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 const { gender } = require("../models/sheetGoogle/databaseModel");
 const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
-const { generateCURP } = require("../middlewares/validateCURP")
+const { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } = require("../middlewares/validateCURP")
 const CURP = require("curp");
 const { datetime } = require("../utils/date");
 // const { file } = require("googleapis/build/src/apis/file");
@@ -29,7 +29,7 @@ class Students {
 
     isCURPValidate(obj) {
         const createCURP = generateCURP(obj);
-        const userCURP = obj.curp;        
+        const userCURP = obj.curp;
         let objReturn = {};
         //ajustar en middlewares/validateCURP.js formatDate segun ambiente productivo
         if (createCURP === userCURP) {
@@ -45,7 +45,12 @@ class Students {
                 actaNacimientoRender: obj.actaNacimientoRender
             };            
         } else {
-            objReturn = {curp : false, datacurp: createCURP}
+            const compareCURP = compareDigitVerifyCurp(userCURP, createCURP);
+            if (compareCURP) {
+                objReturn = {curp: false, datacurp: createCURP, message: messageDuplicity}
+            } else {
+                objReturn = {curp : false, datacurp: createCURP, message: messageErrorCurp}
+            }
         }
         return objReturn
     }

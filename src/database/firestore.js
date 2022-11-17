@@ -1,24 +1,29 @@
 const { credentialGoogle, credentialFirebase } = require("../../config")
 //const { initializeApp, cert } = require("firebase-admin/app");
 const admin = require("firebase-admin");
+const { getAuth, Auth, BaseAuth} = require("firebase-admin/auth");
 //const { getApp, initializeApp } = require("firebase/app")
 //const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestore")
 //const { ref, getStorage, uploadBytes } = require("firebase/storage")
 const { getStorage } = require("firebase-admin/storage")
 const { Blob } = require("node:buffer");
 const fs = require('fs');
+const { firebase } = require("googleapis/build/src/apis/firebase");
 
 //const uploadStorage  = require("./firebaseStorage")
-
 const firebaseConfig = {
   ...credentialFirebase,
 }
 
 const BUCKET = "backend-cursos-cecati13.appspot.com"
-  
+const URL = "https://backend-cursos-cecati13.firebaseapp.com/__/auth/handler"
+const databaseURL = "https://backend-cursos-cecati13.firebaseio.com"
+
+
 admin.initializeApp({
   credential : admin.credential.cert(credentialFirebase),
-  storageBucket: BUCKET
+  //storageBucket: BUCKET,
+  databaseURL : databaseURL
 })
 
 async function uploadFirebase(file) {
@@ -49,8 +54,11 @@ async function uploadFirebase(file) {
 }
 
 
+const auth = getAuth()
 
-
+function auhtMicrosoft (email, password) {
+  
+}
 
 
 
