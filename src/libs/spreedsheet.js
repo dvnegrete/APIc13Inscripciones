@@ -4,7 +4,7 @@ const { googleAccount } = require("../../config");
 const config = require("../../config");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
 const nameSheet = require("../models/namesSheet");
-const { ubicationColumn, updateableData, rangeData, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
+const { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
 
 //para pruebas
 //const {updateGoogleApis} = require("./googleapis")
@@ -77,7 +77,8 @@ async function updateSpreedSheet(objUpdate){
         };
         const index = await findRowOnSpreedsheets(newObjUpdate);
         //las celdas que se deben cargar antes de poder escribir sobre ellas.
-        await sheet.loadCells(`${rangeData}${index+1}`); //rango de datos actualizables + 1
+        //await sheet.loadCells(`${rangeData}${index+1}`); //rango de datos actualizables + 1
+        await sheet.loadCells(`${firstComunUpdate}${index}:${lastColumnUpdate}${index}`);        
         let nameColumnsArray = countDataUpdate(objUpdate);
         while (nameColumnsArray.length > 0) {
             //actulizando datos en Spreedsheets
