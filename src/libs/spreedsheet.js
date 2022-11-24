@@ -1,13 +1,9 @@
-const { GoogleAuth } = require("google-auth-library");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { googleAccount } = require("../../config");
 const config = require("../../config");
 const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
 const nameSheet = require("../models/namesSheet");
 const { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
-
-//para pruebas
-//const {updateGoogleApis} = require("./googleapis")
 
 function GSheetID(sheetName){
     //console.log("GetSpreedSheet id : ", sheetName) 

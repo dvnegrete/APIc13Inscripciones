@@ -1,9 +1,6 @@
 const { credentialFirebase } = require("../../config")
 const { initializeApp } = require("firebase/app")
 const { ref, getStorage, uploadBytesResumable, getDownloadURL, uploadBytes } = require("firebase/storage")
-//const { Buffer, Blob } = require("node:buffer");
-const fs = require("fs")
-//const { Storage } = require("@google-cloud/storage")
 
 const firebaseConfig = {
   // apiKey: credentialFirebase.private_key_id,

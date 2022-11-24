@@ -2,6 +2,7 @@ const express = require("express");
 const inscription = require("./inscriptionRouter");
 const students = require("./studentsRouter");
 const frontendURL = require("./frontendURLRouter");
+const controlStudents = require("./controlStudentsRouter");
 
 function routerAPI (app) {
     const router = express.Router();
@@ -16,6 +17,7 @@ function routerAPI (app) {
     //students desde curso-inscripcion
     router.use("/frontendURL", frontendURL);
     //frontendURL desde cursos, galeria, homePage, preguntas, tv
+    router.use("/controlStudents", controlStudents)
 }
 
 module.exports = routerAPI;

@@ -5,7 +5,6 @@ const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 const { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } = require("../middlewares/validateCURP")
 const CURP = require("curp");
 const { datetime } = require("../utils/date");
-// const { file } = require("googleapis/build/src/apis/file");
 // const { uploadStorage } =require("../database/firebaseStorage")
 // const { uploadFirebase } = require("../database/firestore")
 const { uploadBlobStorage, getBlobStorage } = require("../controller/blobsAzure");
