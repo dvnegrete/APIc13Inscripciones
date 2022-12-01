@@ -48,12 +48,7 @@ class ControlStudentsService {
     async getFileBlob(body) {
         const filename = `${body.curp.toUpperCase()}-${body.typeDocument}.${body.extension}`;
         const fileBase64 = await getBlobStorage(filename);
-        //convert base64 to file
-        fs.writeFileSync(`src/utils/downloads/file.${body.extension}`, fileBase64, {encoding: 'base64'}, (err) =>{
-            console.log(err)
-        });
-        const routeFile = path.join(__dirname, '../utils/downloads/') + `file.${body.extension}`;
-        return `${routeFile}`;
+        return {file: fileBase64}
     }
 }
 

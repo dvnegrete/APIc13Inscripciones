@@ -37,7 +37,7 @@ router.post("/create", async (req, res)=> {
 router.post("/getFile", async (req, res)=>{
     try {        
         const file = await service.getFileBlob(req.body);
-        res.sendFile(file);
+        res.json(file);
     } catch (error) {
         console.error(error);
     }
