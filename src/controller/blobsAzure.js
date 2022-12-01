@@ -20,11 +20,33 @@ async function uploadBlobStorage (file, name) {
 async function getBlobStorage (name) {
     try {
         const containerClient = blobServices.getContainerClient(container);
-        const fileBlob = await containerClient.getBlockBlobClient(name).downloadToBuffer();
-        return true;
+        const blockBlobClient = containerClient.getBlockBlobClient(name);
+        const downloadBlockBlobResponse = await blockBlobClient.download();
+        const downloaded = (
+          await streamToBuffer(downloadBlockBlobResponse.readableStreamBody)
+        );        
+        return downloaded;
     } catch (error) {
+        console.error(error.message);
         return { "message": error.message }
     }
 }
+
+async function deleteBlob (name){
+    const containerClient = blobServices.getContainerClient(container);
+        const fileBlob = await containerClient.getBlockBlobClient(name).deleteIfExists();
+        console.log(fileBlob)
+        return fileBlob;
+}
+
+
+async function streamToBuffer(readable) {
+    readable.setEncoding('base64');
+    let data = '';
+    for await (const chunk of readable) {
+      data += chunk;
+    }
+    return data;
+  }
 
 module.exports = { uploadBlobStorage, getBlobStorage };

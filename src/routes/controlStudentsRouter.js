@@ -1,12 +1,11 @@
 const express = require("express");
 const ControlStudents = require("./../services/controlStudentsService");
 const { checkApiKey } = require("../middlewares/authHandler");
-const { response } = require("express");
 
 const router = express.Router();
 const service = new ControlStudents();
 
-router.post("/", async (req, res)=> {
+router.post("/oauth", async (req, res)=> {
     try {
         const { username, password } = req.body;
         const user = await service.checkAccess(username, password)
@@ -31,13 +30,17 @@ router.post("/create", async (req, res)=> {
         res.json(response);
     } catch (error) {
         console.log(error)
-        res.json({ message: false});
-        //next(error);
+        res.json({ message: false});        
     }
 })
 
-router.get("/", async (req, res)=>{
-    
+router.post("/getFile", async (req, res)=>{
+    try {        
+        const file = await service.getFileBlob(req.body);
+        res.sendFile(file);
+    } catch (error) {
+        console.error(error);
+    }
 })
 
 module.exports = router;

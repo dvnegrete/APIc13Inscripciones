@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const { database } = require("../database/firestore");
-const { use } = require("../routes/controlStudentsRouter");
+const { getBlobStorage } = require("../controller/blobsAzure")
+const path = require("path");
+const fs = require("fs");
+const collection = "usuarios";
 
 class ControlStudentsService {
     constructor(){}
@@ -11,7 +14,7 @@ class ControlStudentsService {
             username: username,
             password: hash
         };
-        await database.collection("usuarios").add(newUser);
+        await database.collection(collection).add(newUser);
         return {
             username: username,
             message:"Usuario creado",
@@ -19,10 +22,8 @@ class ControlStudentsService {
         }
     }
 
-    async checkAccess (username, password) {
-        console.log("checkAccess ")
-        
-        const consult = database.collection("usuarios");
+    async checkAccess (username, password) {        
+        const consult = database.collection(collection);
         const snapshot = await consult.get();
         const user = [];
         snapshot.forEach( doc => {
@@ -30,10 +31,10 @@ class ControlStudentsService {
             if (document.username === username) {
                 user.push(document);                
             }            
-        })        
-        if (user[0]) {            
-            const verify = this.verifyPassword(password, user[0].password)
-            return verify;            
+        });
+        if (user[0]) {
+            const verify = this.verifyPassword(password, user[0].password);
+            return verify;
         } else {
             return false;
         }
@@ -42,6 +43,17 @@ class ControlStudentsService {
     async verifyPassword(password, hash){
         const isMatch = await bcrypt.compare(password, hash);
         return isMatch;
+    }
+
+    async getFileBlob(body) {
+        const filename = `${body.curp.toUpperCase()}-${body.typeDocument}.${body.extension}`;
+        const fileBase64 = await getBlobStorage(filename);
+        //convert base64 to file
+        fs.writeFileSync(`src/utils/downloads/file.${body.extension}`, fileBase64, {encoding: 'base64'}, (err) =>{
+            console.log(err)
+        });
+        const routeFile = path.join(__dirname, '../utils/downloads/') + `file.${body.extension}`;
+        return `${routeFile}`;
     }
 }
 
