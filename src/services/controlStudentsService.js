@@ -2,8 +2,6 @@ const bcrypt = require("bcrypt");
 const boom = require("@hapi/boom");
 const { database } = require("../database/firestore");
 const { getBlobStorage } = require("../controller/blobsAzure");
-const path = require("path");
-const fs = require("fs");
 const collection = "usuarios";
 
 class ControlStudentsService {
@@ -44,8 +42,7 @@ class ControlStudentsService {
             const json = {
                 id: id,
                 role: user[0].role
-            }
-            console.log("checkAccess verify =>", id);
+            }            
             return json;
         } else {
             throw boom.unauthorized();

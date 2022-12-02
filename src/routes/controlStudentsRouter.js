@@ -28,15 +28,15 @@ router.post("/oauth",
 )
 
 //una ruta que solo se usara para crear usuarios y estara desde otro servidor
-router.post("/create", async (req, res, next)=> {
-    try {
-        const { username, password } = req.body;
-        const response = await service.create(username, password)
-        res.json(response);
-    } catch (error) {
-        next(error);
-    }
-})
+// router.post("/create", async (req, res, next)=> {
+//     try {
+//         const { username, password } = req.body;
+//         const response = await service.create(username, password)
+//         res.json(response);
+//     } catch (error) {
+//         next(error);
+//     }
+// })
 
 router.post("/getFile", 
     passport.authenticate("jwt", {session: false}),
