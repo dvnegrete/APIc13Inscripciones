@@ -6,10 +6,10 @@ const config = {
     port: process.env.PORT || 3000,
     cors: process.env.CORS,
     idSheetCourses: process.env.ID_SHEET_COURSES,
+    idGoogleRegisterInscription: process.env.ID_ShEET_REGISTER_INSCRIPTION,    
     //api_key of Google Storage
     apiKey: process.env.API_KEY,
-    idGoogleRegisterInscription: process.env.ID_ShEET_REGISTER_INSCRIPTION,
-    googleAccount: process.env.GOOGLE_ACCOUNT,
+    secret: process.env.SECRET,
     credentialGoogle: credentialGoogle,
     credentialFirebase: credentialFirebase,
     azureStorageConnection: process.env.AZURE_STORAGE_CONNECTION,

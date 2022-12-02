@@ -1,5 +1,6 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { azureStorageConnection } = require("../../config")
+const boom = require("@hapi/boom");
 
 const blobServices= BlobServiceClient.fromConnectionString(azureStorageConnection);
 const container = "comprobantes";
@@ -27,8 +28,7 @@ async function getBlobStorage (name) {
         );        
         return downloaded;
     } catch (error) {
-        console.error(error.message);
-        return { "message": error.message }
+        throw boom.notFound(error);
     }
 }
 

@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
+const boom = require("@hapi/boom");
 const { database } = require("../database/firestore");
-const { getBlobStorage } = require("../controller/blobsAzure")
+const { getBlobStorage } = require("../controller/blobsAzure");
 const path = require("path");
 const fs = require("fs");
 const collection = "usuarios";
@@ -8,35 +9,46 @@ const collection = "usuarios";
 class ControlStudentsService {
     constructor(){}
 
-    async create (username, password){
+    async create (username, password) {
         const hash = await bcrypt.hash(password, 9);
+        const snapshot = await database.collection(collection).count().get();
+        const id = snapshot.data().count + 1;
         const newUser = {
+            id: id,
             username: username,
-            password: hash
+            password: hash,
+            role: "user"
         };
         await database.collection(collection).add(newUser);
         return {
             username: username,
+            id: id,
             message:"Usuario creado",
             status: true
         }
     }
 
-    async checkAccess (username, password) {        
+    async checkAccess (username, password) {
         const consult = database.collection(collection);
         const snapshot = await consult.get();
         const user = [];
         snapshot.forEach( doc => {
             const document = doc.data();
             if (document.username === username) {
-                user.push(document);                
-            }            
+                user.push(document);
+            }
         });
         if (user[0]) {
-            const verify = this.verifyPassword(password, user[0].password);
-            return verify;
+            const verify = await this.verifyPassword(password, user[0].password);
+            const id = verify ? user[0].id : false;
+            const json = {
+                id: id,
+                role: user[0].role
+            }
+            console.log("checkAccess verify =>", id);
+            return json;
         } else {
-            return false;
+            throw boom.unauthorized();
         }
     }
 
