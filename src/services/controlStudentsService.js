@@ -13,7 +13,7 @@ class ControlStudentsService {
         const id = snapshot.data().count + 1;
         const newUser = {
             id: id,
-            username: username,
+            username: username.toUpperCase(),
             password: hash,
             role: "user"
         };
@@ -32,7 +32,7 @@ class ControlStudentsService {
         const user = [];
         snapshot.forEach( doc => {
             const document = doc.data();
-            if (document.username === username) {
+            if (document.username === username.toUpperCase()) {
                 user.push(document);
             }
         });

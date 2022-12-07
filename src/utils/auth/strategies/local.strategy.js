@@ -6,8 +6,7 @@ const ControlStudents = require("./../../../services/controlStudentsService");
 const service = new ControlStudents();
 
 const LocalStrategy = new Strategy( async (username, password, done) => {
-    try {
-        console.log("verificado en Local Strategy")
+    try {        
         const userID = await service.checkAccess(username, password)
         if (!userID.id) {
             throw boom.unauthorized();

@@ -20,7 +20,7 @@ router.post("/oauth",
                 access: true,
             };
             const token = jwt.sign(payload, secret)
-            res.json({username, token});
+            res.status(200).json({username, token});
         } catch (error) {
             next(error);
         }

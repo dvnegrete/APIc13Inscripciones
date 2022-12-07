@@ -1,7 +1,6 @@
-const { ObjectId } = require("mongodb")
-const { Database } = require("../database");
+const { database } = require("./../database/firestore");
 
-const COLLECTION = "specialties"
+const COLLECTION = "especialidades"
 
 class Specialtie {
   constructor(){}
@@ -13,11 +12,21 @@ class Specialtie {
     return allCollections
   }
 
-  async create(name){
-    const specialities = await Database(COLLECTION);
-    let result = specialities.insertOne(name);
-    //insertedId es el identificador que asigno Mongo a esta insercion
-    return result.insertedId;
+  async create(name, data){
+    const specialitie = await this.findSpecialitie(name);
+    const doc = specialitie.set(data);
+    const response = {
+      create: true,
+      id: name,
+      date: doc.writeTime
+
+    }    
+    return response;    
+  }
+
+  async findSpecialitie(name) {
+    const specialities = await database.collection(COLLECTION).doc(name);
+    return specialities;
   }
 
   async findOne(id){
@@ -31,17 +40,15 @@ class Specialtie {
     return specialitie.findOne(name)
   }
 
-  async update(id, body){
-    const specialitie = await Database(COLLECTION).updateOne(
-      { _id: id },
-    {
-
-    })
-
-    console.log(body)
-    //console.log(specialitie.name)
-    //specialtie.updateOne(obj);
-
+  async update(name, data){
+    const specialitie = await this.findSpecialitie(name);
+    const doc = specialitie.update(data);
+    const response = {
+      update: true,
+      id: name,
+      date: doc.writeTime
+    }    
+    return response;
   }
 }
 

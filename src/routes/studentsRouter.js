@@ -8,7 +8,7 @@ const service = new Students();
 router.post("/typeRegister", async (req, res)=>{
     try {
         const { curp } = req.body;
-        const studentCURP = await service.findTypeRegister(curp);        
+        const studentCURP = await service.findTypeRegister(curp);
         res.json(studentCURP);        
     } catch (error) {
         console.log(error);

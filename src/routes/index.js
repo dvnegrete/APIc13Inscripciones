@@ -3,6 +3,7 @@ const inscription = require("./inscriptionRouter");
 const students = require("./studentsRouter");
 const frontendURL = require("./frontendURLRouter");
 const controlStudents = require("./controlStudentsRouter");
+const specialitie = require("./specialitieRouter");
 
 function routerAPI (app) {
     const router = express.Router();
@@ -18,6 +19,8 @@ function routerAPI (app) {
     router.use("/frontendURL", frontendURL);
     //frontendURL desde cursos, galeria, homePage, preguntas, tv
     router.use("/controlStudents", controlStudents)
+    //crear y usar espcialidades
+    router.use("/specialitie", specialitie);
 }
 
 module.exports = routerAPI;
