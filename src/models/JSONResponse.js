@@ -14,7 +14,8 @@ function JSONResponse(dataArray){
             a_materno: dataArray[0].a_materno,
             nombre: dataArray[0].nombre,
             telefono: telefonoEncrypted,
-            email: emailEncrypted,        
+            email: emailEncrypted,
+            indexR: dataArray[0].rowIndex
         }
     } else {
         info = {
@@ -23,7 +24,8 @@ function JSONResponse(dataArray){
             a_paterno: dataArray[0].a_paterno,
             a_materno: dataArray[0].a_materno,
             nombre: dataArray[0].nombre,
-            updateContact : true
+            updateContact : true,
+            indexR: dataArray[0].rowIndex
         }
     }
     return info;
