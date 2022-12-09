@@ -62,18 +62,7 @@ async function postSpreedSheet(objInscription) {
 async function updateSpreedSheet(objUpdate){
     try {
         const sheet = await conexionGoogleSheet(objUpdate.sheet);
-        const columnCurp = ubicationColumn(objUpdate.curp) //por default regresa curp
-        await sheet.loadCells(`${columnCurp}:${columnCurp}`); //rango de curp
-        const totalRows = sheet.rowCount;
-        const newObjUpdate = {
-            totalRows,
-            curp: objUpdate.curp,
-            columnCurp,
-            sheet
-        };
-        const index = await findRowOnSpreedsheets(newObjUpdate);
-        //las celdas que se deben cargar antes de poder escribir sobre ellas.
-        //await sheet.loadCells(`${rangeData}${index+1}`); //rango de datos actualizables + 1
+        const index = objUpdate.indexR;
         await sheet.loadCells(`${firstComunUpdate}${index}:${lastColumnUpdate}${index}`);        
         let nameColumnsArray = countDataUpdate(objUpdate);
         while (nameColumnsArray.length > 0) {
@@ -96,18 +85,6 @@ async function updateSpreedSheet(objUpdate){
         console.log("Error en updateSpreedSheat");
         return false;
     }
-}
-
-async function findRowOnSpreedsheets (obj){
-    let index = 0;
-    for (let i = 1; i <= obj.totalRows; i++) {
-        const cell = obj.sheet.getCellByA1(`${obj.columnCurp}${i}`);
-        if (cell.value === obj.curp) {
-            index = i;
-            break;
-        }
-    }
-    return index;
 }
 
 function countDataUpdate(obj) {
