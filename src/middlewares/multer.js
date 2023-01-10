@@ -1,6 +1,7 @@
 const multer = require("multer");
 
-const storage = multer.memoryStorage()
+const storage = multer.memoryStorage();
+const typeError = new Error("TYPE_FORMAT_INVALID");
 
 const filter = (req, file, cb) => {
     if (
@@ -11,9 +12,13 @@ const filter = (req, file, cb) => {
     {
         cb(null, true)
     } else {
-        cb( (new Error("TYPE_FORMAT_INVALID")), false)
+        cb( typeError, false)
     }
 };
+
+const filterPDF = (req, file, cb, next) => {
+    file.mimetype == "application/pdf" ? cb(null, true) : cb(typeError, false);
+}
 
 const upload = multer({
     storage: storage,
@@ -24,10 +29,17 @@ const upload = multer({
     }
 })
 
+const fInformation = multer({
+    storage: storage,
+    fileFilter: filterPDF
+})
+
 const uploadDocs =  upload.fields([
     { name: 'actaNacimiento', maxCount: 1 },
     { name: 'comprobanteDomicilio', maxCount: 1 },
     { name: 'comprobanteEstudios', maxCount: 1 }
 ]);
 
-module.exports = { uploadDocs };
+const uploadFI = fInformation.single("fileFI");
+
+module.exports = { uploadDocs, uploadFI };

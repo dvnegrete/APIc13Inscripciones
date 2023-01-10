@@ -2,7 +2,8 @@ const express = require("express");
 const ControlStudents = require("./../services/controlStudentsService");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const { secret } = require("./../../config")
+const { secret } = require("./../../config");
+const { uploadFI } = require("./../middlewares/multer");
 //const { checkApiKey } = require("../middlewares/authHandler");
 
 const router = express.Router();
@@ -38,14 +39,26 @@ router.post("/oauth",
 //     }
 // })
 
-router.post("/getFile", 
+router.post("/getFile",
     passport.authenticate("jwt", {session: false}),
     async (req, res, next)=>{
         try {
             const file = await service.getFileBlob(req.body);
             res.json(file);
-        } catch (error) {            
+        } catch (error) {
             next(error);
+        }
+    }
+)
+
+router.post("/fileInformation",
+    passport.authenticate("jwt", {session: false}), uploadFI,
+    async(req, res, next) => {
+        try {
+            console.log(req.file)                        
+        } catch (error) {
+            console.error(error)
+            next(error)
         }
     }
 )
