@@ -235,7 +235,12 @@ class Students {
             writable: true,
             configurable: true
         });
-        const azureUpload = await uploadBlobStorage(file[0], nameFile)
+        const objInformationBlob = {
+            file: file[0],
+            name: nameFile,
+            container: "comprobantes"
+        };
+        const azureUpload = await uploadBlobStorage(objInformationBlob);
         // console.log("azureUpload", azureUpload)
         // if (azureUpload) {
         //     const azureGet = getBlobStorage(name);            

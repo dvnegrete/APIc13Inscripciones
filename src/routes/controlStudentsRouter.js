@@ -55,7 +55,9 @@ router.post("/fileInformation",
     passport.authenticate("jwt", {session: false}), uploadFI,
     async(req, res, next) => {
         try {
-            console.log(req.file)                        
+            console.log(req.file)
+            const response = await service.uploadFiPdf(req.file);
+            res.json(response)
         } catch (error) {
             console.error(error)
             next(error)

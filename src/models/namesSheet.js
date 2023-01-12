@@ -1,9 +1,13 @@
 const nameSheet = {
+    //sheets para prueba
+    // sheetNumberControl: "pruebaMatricula",
+    // sheetInscriptions: "pruebaPreinscripciones",
+    // sheetDatabase: "databasePruebas",
+    //sheets para prueba
+    
     sheetInscriptions: "preinscripciones",
-    //sheetInscriptions: "pruebaPreinscripciones",
     sheetNumberControl: "matricula",
     sheetDatabase: "database",
-    //sheetDatabase: "databasePruebas",
     sheetCourses: "Cursos",
     sheetQuestions: "preguntas",
     sheetLinkInscription: "inscripcion",

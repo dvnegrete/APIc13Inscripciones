@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const boom = require("@hapi/boom");
 const { database } = require("../database/firestore");
-const { getBlobStorage } = require("../controller/blobsAzure");
+const { getBlobStorage, uploadBlobStorage } = require("../controller/blobsAzure");
 const collection = "usuarios";
 
 class ControlStudentsService {
@@ -56,8 +56,29 @@ class ControlStudentsService {
 
     async getFileBlob(body) {
         const filename = `${body.curp.toUpperCase()}-${body.typeDocument}.${body.extension}`;
+        const objInformationBlob = {
+            name: filename,
+            container: "comprobantes"
+        };
         const fileBase64 = await getBlobStorage(filename);
         return {file: fileBase64}
+    }
+
+    async uploadFiPdf (file) {
+        const name = file.originalname;        
+        const objInformationBlob = {
+            file: file,
+            name: name,
+            container: "informacion"
+        };
+        const azureUpload = await uploadBlobStorage(objInformationBlob);
+         console.log("azureUpload", azureUpload)
+        // if (azureUpload) {
+        //     const azureGet = getBlobStorage(name);            
+        // } else {
+        //     console.error("no se pudo subir archivo")
+        // }
+        return { message: azureUpload }
     }
 }
 

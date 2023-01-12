@@ -3,25 +3,27 @@ const { azureStorageConnection } = require("../../config")
 const boom = require("@hapi/boom");
 
 const blobServices= BlobServiceClient.fromConnectionString(azureStorageConnection);
-const container = "comprobantes";
 
-async function uploadBlobStorage (file, name) {
+async function uploadBlobStorage (obj) {
+    //obj = file, name, container
     try {
-        const { buffer } = file;
-        const containerClient = blobServices.getContainerClient(container);
-        await containerClient.getBlockBlobClient(name).uploadData(buffer);
-        await getBlobStorage(name);
-        return true;
+        const { buffer } = obj.file;
+        const containerClient = blobServices.getContainerClient(obj.container);
+        await containerClient.getBlockBlobClient(obj.name).uploadData(buffer);
+        const blockBlobClient = containerClient.getBlockBlobClient(obj.name);        
+        return blockBlobClient.url;
     } catch (error) {
         console.error(error.message);
         return { "message": error.message }
     }
 }
 
-async function getBlobStorage (name) {
+//const container = "comprobantes";
+
+async function getBlobStorage (obj) {
     try {
-        const containerClient = blobServices.getContainerClient(container);
-        const blockBlobClient = containerClient.getBlockBlobClient(name);
+        const containerClient = blobServices.getContainerClient(obj.container);
+        const blockBlobClient = containerClient.getBlockBlobClient(obj.name);
         const downloadBlockBlobResponse = await blockBlobClient.download();
         const downloaded = (
           await streamToBuffer(downloadBlockBlobResponse.readableStreamBody)
@@ -32,9 +34,9 @@ async function getBlobStorage (name) {
     }
 }
 
-async function deleteBlob (name){
-    const containerClient = blobServices.getContainerClient(container);
-        const fileBlob = await containerClient.getBlockBlobClient(name).deleteIfExists();
+async function deleteBlob (obj){
+    const containerClient = blobServices.getContainerClient(obj.container);
+        const fileBlob = await containerClient.getBlockBlobClient(obj.name).deleteIfExists();
         console.log(fileBlob)
         return fileBlob;
 }
