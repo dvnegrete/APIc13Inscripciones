@@ -4,6 +4,20 @@ const boom = require("@hapi/boom");
 
 const blobServices= BlobServiceClient.fromConnectionString(azureStorageConnection);
 
+async function listBlobs(obj){
+    const list = [];
+    const containerClient = blobServices.getContainerClient(obj.container);
+    for await (const blob of containerClient.listBlobsFlat()){
+        const tempBlockBlobClient = containerClient.getBlockBlobClient(blob.name);
+        const obj = {
+            name: blob.name,
+            url: tempBlockBlobClient.url
+        }
+        list.push(obj);
+    }
+    return list
+}
+
 async function uploadBlobStorage (obj) {
     //obj = file, name, container
     try {
@@ -41,7 +55,6 @@ async function deleteBlob (obj){
         return fileBlob;
 }
 
-
 async function streamToBuffer(readable) {
     readable.setEncoding('base64');
     let data = '';
@@ -51,4 +64,4 @@ async function streamToBuffer(readable) {
     return data;
   }
 
-module.exports = { uploadBlobStorage, getBlobStorage };
+module.exports = { listBlobs, uploadBlobStorage, getBlobStorage };

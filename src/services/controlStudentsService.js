@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const boom = require("@hapi/boom");
 const { database } = require("../database/firestore");
-const { getBlobStorage, uploadBlobStorage } = require("../controller/blobsAzure");
+const { listBlobs, getBlobStorage, uploadBlobStorage } = require("../controller/blobsAzure");
 const collection = "usuarios";
 
 class ControlStudentsService {
@@ -54,6 +54,14 @@ class ControlStudentsService {
         return isMatch;
     }
 
+    async listBlobs () {
+        const objInformationBlob = {           
+            container: "informacion"
+        };
+        const list = await listBlobs(objInformationBlob);
+        return { message: list }
+    }
+
     async getFileBlob(body) {
         const filename = `${body.curp.toUpperCase()}-${body.typeDocument}.${body.extension}`;
         const objInformationBlob = {
@@ -64,21 +72,24 @@ class ControlStudentsService {
         return {file: fileBase64}
     }
 
-    async uploadFiPdf (file) {
-        const name = file.originalname;        
-        const objInformationBlob = {
-            file: file,
-            name: name,
-            container: "informacion"
-        };
-        const azureUpload = await uploadBlobStorage(objInformationBlob);
-         console.log("azureUpload", azureUpload)
+    async uploadFiPdf (arrayFiles) {
+        const arrayURLs = [];
+        for (const file of arrayFiles) {
+            const name = file.originalname;
+            const objInformationBlob = {
+                file: file,
+                name: name,
+                container: "informacion"
+            };
+            const azureUpload = await uploadBlobStorage(objInformationBlob);
+            arrayURLs.push(azureUpload);
+        }        
         // if (azureUpload) {
-        //     const azureGet = getBlobStorage(name);            
-        // } else {
-        //     console.error("no se pudo subir archivo")
-        // }
-        return { message: azureUpload }
+            //     const azureGet = getBlobStorage(name);
+            // } else {
+                //     console.error("no se pudo subir archivo")
+                // }        
+        return arrayURLs
     }
 }
 

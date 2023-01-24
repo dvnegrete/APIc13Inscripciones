@@ -40,6 +40,8 @@ const uploadDocs =  upload.fields([
     { name: 'comprobanteEstudios', maxCount: 1 }
 ]);
 
-const uploadFI = fInformation.single("fileFI");
+//const uploadFI = fInformation.single("fileFI");
+
+const uploadFI = fInformation.array("fileFI")
 
 module.exports = { uploadDocs, uploadFI };

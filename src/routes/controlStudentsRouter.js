@@ -39,6 +39,18 @@ router.post("/oauth",
 //     }
 // })
 
+router.post("/listBlobs", 
+    passport.authenticate("jwt", {session: false}),
+    async (req, res, next) =>{
+        try {
+            const list = await service.listBlobs();
+            res.json(list)
+        } catch (error) {
+            next(error)
+        }
+    }
+)
+
 router.post("/getFile",
     passport.authenticate("jwt", {session: false}),
     async (req, res, next)=>{
@@ -55,9 +67,10 @@ router.post("/fileInformation",
     passport.authenticate("jwt", {session: false}), uploadFI,
     async(req, res, next) => {
         try {
-            console.log(req.file)
-            const response = await service.uploadFiPdf(req.file);
-            res.json(response)
+            const arrayURL = await service.uploadFiPdf(req.files);
+            Promise.all(arrayURL).then( response =>{
+                res.json({message: response});
+            })
         } catch (error) {
             console.error(error)
             next(error)
