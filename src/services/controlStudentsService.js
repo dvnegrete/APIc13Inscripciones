@@ -54,9 +54,9 @@ class ControlStudentsService {
         return isMatch;
     }
 
-    async listBlobs () {
+    async listBlobs (container) {
         const objInformationBlob = {           
-            container: "informacion"
+            container: container
         };
         const list = await listBlobs(objInformationBlob);
         return { message: list }

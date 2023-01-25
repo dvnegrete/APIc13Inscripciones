@@ -39,11 +39,13 @@ router.post("/oauth",
 //     }
 // })
 
-router.post("/listBlobs", 
+router.get("/listBlobs/:container", 
     passport.authenticate("jwt", {session: false}),
     async (req, res, next) =>{
         try {
-            const list = await service.listBlobs();
+            const { container } = req.params
+            //"informacion";
+            const list = await service.listBlobs(container);
             res.json(list)
         } catch (error) {
             next(error)
