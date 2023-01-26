@@ -59,7 +59,18 @@ class ControlStudentsService {
             container: container
         };
         const list = await listBlobs(objInformationBlob);
-        return { message: list }
+        return list;
+    }
+
+    findBlobUser(arrayList, user){        
+        const filesforUser  = arrayList.filter( obj => {
+            //example obj.name in format: NNNN0000NNNNNN00-actaNacimiento.pdf
+            const arrayFileName = obj.name.split("-");
+            if (arrayFileName[0] === user) {
+                return obj;
+            }
+        })
+        return filesforUser;
     }
 
     async getFileBlob(body) {

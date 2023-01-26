@@ -39,14 +39,20 @@ router.post("/oauth",
 //     }
 // })
 
-router.get("/listBlobs/:container", 
+//query parameter "user" para la curp. Example: /listBlobs/comprobantes?CURPSTUDENT
+router.get("/listBlobs/:container",
+//container = "informacion" or "comprobantes"
     passport.authenticate("jwt", {session: false}),
     async (req, res, next) =>{
         try {
             const { container } = req.params
-            //"informacion";
-            const list = await service.listBlobs(container);
-            res.json(list)
+            const list = await service.listBlobs(container);            
+            if (req.query.user) {
+                const listUser = service.findBlobUser(list, req.query.user);
+                res.json({message: listUser})
+            } else {
+                res.json({message: list});
+            }
         } catch (error) {
             next(error)
         }
