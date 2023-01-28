@@ -62,7 +62,7 @@ class ControlStudentsService {
         return list;
     }
 
-    findBlobUser(arrayList, user){        
+    findBlobUser(arrayList, user){
         const filesforUser  = arrayList.filter( obj => {
             //example obj.name in format: NNNN0000NNNNNN00-actaNacimiento.pdf
             const arrayFileName = obj.name.split("-");
@@ -73,13 +73,12 @@ class ControlStudentsService {
         return filesforUser;
     }
 
-    async getFileBlob(body) {
-        const filename = `${body.curp.toUpperCase()}-${body.typeDocument}.${body.extension}`;
+    async getFileBlob(filename) {
         const objInformationBlob = {
             name: filename,
             container: "comprobantes"
         };
-        const fileBase64 = await getBlobStorage(filename);
+        const fileBase64 = await getBlobStorage(objInformationBlob);
         return {file: fileBase64}
     }
 

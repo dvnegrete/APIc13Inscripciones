@@ -59,11 +59,12 @@ router.get("/listBlobs/:container",
     }
 )
 
-router.post("/getFile",
+router.get("/file/:filename",
     passport.authenticate("jwt", {session: false}),
     async (req, res, next)=>{
         try {
-            const file = await service.getFileBlob(req.body);
+            const { filename } = req.params;
+            const file = await service.getFileBlob(filename);
             res.json(file);
         } catch (error) {
             next(error);
