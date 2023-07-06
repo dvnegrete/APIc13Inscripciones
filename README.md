@@ -1,14 +1,14 @@
 # APIc13Inscripciones
 Backend para inscripciones en linea del CECATI 13
 
-### /API/v1/students
+#### /API/v1/students
     POST    /API/v1/students/typeRegister
-    POST    /newStudent/dataGeneral
-    POST    /newStudent/inscription
-    POST    /DBStudent
-    POST    /files
+    POST    /API/v1/students/newStudent/dataGeneral
+    POST    /API/v1/students/newStudent/inscription
+    POST    /API/v1/students/DBStudent
+    POST    /API/v1/students/files
 
-### /API/v1/frontendURL
+#### /API/v1/frontendURL
     GET     /API/v1/frontendURL/imageHomePage
     GET     /API/v1/frontendURL/:id
 
@@ -18,18 +18,17 @@ Backend para inscripciones en linea del CECATI 13
     40 => Imágenes
     50 => Información Home Page
 
-### /API/v1/controlStudents
-Autenticacion con Passport
+#### /API/v1/controlStudents
     POST    /API/v1/controlStudents/oauth
     GET     /API/v1/controlStudents/listBlobs/:container
     GET     /API/v1/controlStudents/file/:filename
     POST    /API/v1/controlStudents/fileInformation
 
-### /API/v1/specialitie
+Endpoind en pruebas y mantenimiento:
+#### /API/v1/specialitie
     POST    /API/v1/specialitie/created
     POST    /API/v1/specialitie/update
     PATCH   /API/v1/specialitie/:id
-#### Endpoind en pruebas y mantenimiento
 
 ### /API/v1/c196
     GET     /API/v1/c196
