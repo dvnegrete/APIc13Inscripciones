@@ -4,6 +4,7 @@ const students = require("./studentsRouter");
 const frontendURL = require("./frontendURLRouter");
 const controlStudents = require("./controlStudentsRouter");
 const specialitie = require("./specialitieRouter");
+const c196 = require("./c196Router");
 
 function routerAPI (app) {
     const router = express.Router();
@@ -21,6 +22,8 @@ function routerAPI (app) {
     router.use("/controlStudents", controlStudents)
     //crear y usar espcialidades
     router.use("/specialitie", specialitie);
+
+    router.use("/c196", c196);
 }
 
 module.exports = routerAPI;

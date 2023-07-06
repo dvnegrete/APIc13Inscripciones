@@ -1,31 +1,30 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { googleAccount } = require("../../config");
 const config = require("../../config");
-const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
+const { idSheetCourses, idGoogleRegisterInscription, idsheet196Courses, credentialGoogle } = config;
 const nameSheet = require("../models/namesSheet");
 const { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
 
 function GSheetID(sheetName){
-    //console.log("GetSpreedSheet id : ", sheetName) 
-    let idSheet = ""
+    //console.log("GetSpreedSheet id : ", sheetName)
     switch (sheetName) {
         //nombres de GSheets en Registro Inscripción
         case nameSheet.sheetInscriptions:
-            idSheet = idGoogleRegisterInscription;
-            break;
+            return idGoogleRegisterInscription;
         case nameSheet.sheetDatabase:
-            idSheet = idGoogleRegisterInscription;
-            break;
+            return idGoogleRegisterInscription;
         case nameSheet.sheetNumberControl:
-            idSheet = idGoogleRegisterInscription;
-            break;
+            return idGoogleRegisterInscription;
         //Termina nombres de GSheets en Registro Inscripción
+        
+        //C-196
+        case nameSheet.sheet196Courses:
+            return idsheet196Courses;
+        
+        //GSheets en Oferta Educativa
         default:
-            //GSheets en Oferta Educativa
-            idSheet = idSheetCourses
-            break;
-    }    
-    return idSheet;
+            return idSheetCourses;
+    }     
 }
 
 async function conexionGoogleSheet(sheetName) {
@@ -40,14 +39,14 @@ async function conexionGoogleSheet(sheetName) {
         //await doc.useServiceAccountAuth(credentialGoogle)
         
         //seleccionando hoja a trabajar
-        const sheet = doc.sheetsByTitle[sheetName];        
+        const sheet = doc.sheetsByTitle[sheetName];
         return sheet;
 }
 
 async function getSpreedSheet(sheetName){
     try {
         const sheet = await conexionGoogleSheet(sheetName);
-        const rows = await sheet.getRows();        
+        const rows = await sheet.getRows();
         return rows;
     } catch (error) {
         console.log("Error en getSpreedSheat")
@@ -63,7 +62,7 @@ async function updateSpreedSheet(objUpdate){
     try {
         const sheet = await conexionGoogleSheet(objUpdate.sheet);
         const index = objUpdate.indexR;
-        await sheet.loadCells(`${firstComunUpdate}${index}:${lastColumnUpdate}${index}`);        
+        await sheet.loadCells(`${firstComunUpdate}${index}:${lastColumnUpdate}${index}`);
         let nameColumnsArray = countDataUpdate(objUpdate);
         while (nameColumnsArray.length > 0) {
             //actulizando datos en Spreedsheets

@@ -12,7 +12,8 @@ const nameSheet = {
     sheetQuestions: "preguntas",
     sheetLinkInscription: "inscripcion",
     sheetImage: "imagenes",
-    sheetHomePage: "anunciosHomePage"
+    sheetHomePage: "anunciosHomePage",
+    sheet196Courses: "C-196Cursos"
 }
 
 module.exports = nameSheet;
