@@ -26,6 +26,7 @@
     "multer": "^1.4.4",
     "nodemon": "^2.0.19",
     "passport": "^0.6.0",
+    "passport-azure-ad": "^4.3.5",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   }
