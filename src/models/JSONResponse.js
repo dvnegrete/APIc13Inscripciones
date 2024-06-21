@@ -1,6 +1,7 @@
-const { hideCharactersPhone , hideCharactersEmail } = require("../utils/hideCharacters");
+import { hideCharactersEmail, hideCharactersPhone } from "./../utils/hideCharacters.js";
+//const { hideCharactersPhone , hideCharactersEmail } = require("../utils/hideCharacters");
 
-function JSONResponse(dataArray){
+export function JSONResponse(dataArray){
     let info = {};    
     const date = dataArray[0].fechaRegistro;
     //Si date es undefined, los datos son previos a este sistema de inscripciones, y obligamos a actualizar info.
@@ -31,7 +32,7 @@ function JSONResponse(dataArray){
     return info;
 }
 
-function JSONgetDB(dataArray){
+export function JSONgetDB(dataArray){
     const info = {
         fechaRegistro: dataArray[0].fechaRegistro,
         curp: dataArray[0].curp,
@@ -57,4 +58,4 @@ function JSONgetDB(dataArray){
     return info;
 }
 
-module.exports =  { JSONResponse, JSONgetDB } ;
+//module.exports =  { JSONResponse, JSONgetDB } ;

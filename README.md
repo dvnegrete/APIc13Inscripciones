@@ -30,9 +30,6 @@ Endpoind en pruebas y mantenimiento:
     POST    /API/v1/specialitie/update
     PATCH   /API/v1/specialitie/:id
 
-### /API/v1/c196
-    GET     /API/v1/c196
-
 #### endpoints NO USADOS:
     /API/v1/inscription 
 Conexion a Firebase preparada y probada.

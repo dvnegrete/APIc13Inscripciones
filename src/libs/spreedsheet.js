@@ -1,11 +1,20 @@
-const { GoogleSpreadsheet } = require("google-spreadsheet");
-const { googleAccount } = require("../../config");
-const config = require("../../config");
-const { idSheetCourses, idGoogleRegisterInscription, idsheet196Courses, credentialGoogle } = config;
-const nameSheet = require("../models/namesSheet");
-const { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
+import { GoogleSpreadsheet } from "google-spreadsheet";
+//const { GoogleSpreadsheet } = require("google-spreadsheet");
+import { config } from "./../config/index.js";
+//const config = require("../../config");
+const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
+import { nameSheet } from "./../models/namesSheet.js";
+//const nameSheet = require("../models/namesSheet");
+import {
+    ubicationColumn,
+    updateableData,
+    firstComunUpdate,
+    lastColumnUpdate,
+    rangeDateRegister
+} from "./../models/sheetGoogle/databaseModel.js";
+//const { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister } = require("../models/sheetGoogle/databaseModel");
 
-function GSheetID(sheetName){
+function GSheetID(sheetName) {
     //console.log("GetSpreedSheet id : ", sheetName)
     switch (sheetName) {
         //nombres de GSheets en Registro Inscripción
@@ -16,34 +25,30 @@ function GSheetID(sheetName){
         case nameSheet.sheetNumberControl:
             return idGoogleRegisterInscription;
         //Termina nombres de GSheets en Registro Inscripción
-        
-        //C-196
-        case nameSheet.sheet196Courses:
-            return idsheet196Courses;
-        
+
         //GSheets en Oferta Educativa
         default:
             return idSheetCourses;
-    }     
+    }
 }
 
 async function conexionGoogleSheet(sheetName) {
-        //creando nueva instancia de Googlesheet
-        const idSheet = GSheetID(sheetName);
-        const doc = new GoogleSpreadsheet(idSheet);
-        await doc.useServiceAccountAuth(credentialGoogle);
-        await doc.loadInfo();
+    //creando nueva instancia de Googlesheet
+    const idSheet = GSheetID(sheetName);
+    const doc = new GoogleSpreadsheet(idSheet);
+    await doc.useServiceAccountAuth(credentialGoogle);
+    await doc.loadInfo();
 
-        //probando otra forma de autentificacion con SpreedSheats
-        //const doc = new GoogleSpreadsheet(idSheet)
-        //await doc.useServiceAccountAuth(credentialGoogle)
-        
-        //seleccionando hoja a trabajar
-        const sheet = doc.sheetsByTitle[sheetName];
-        return sheet;
+    //probando otra forma de autentificacion con SpreedSheats
+    //const doc = new GoogleSpreadsheet(idSheet)
+    //await doc.useServiceAccountAuth(credentialGoogle)
+
+    //seleccionando hoja a trabajar
+    const sheet = doc.sheetsByTitle[sheetName];
+    return sheet;
 }
 
-async function getSpreedSheet(sheetName){
+async function getSpreedSheet(sheetName) {
     try {
         const sheet = await conexionGoogleSheet(sheetName);
         const rows = await sheet.getRows();
@@ -58,7 +63,7 @@ async function postSpreedSheet(objInscription) {
     await sheet.addRow(objInscription);
 }
 
-async function updateSpreedSheet(objUpdate){
+async function updateSpreedSheet(objUpdate) {
     try {
         const sheet = await conexionGoogleSheet(objUpdate.sheet);
         const index = objUpdate.indexR;
@@ -92,8 +97,14 @@ function countDataUpdate(obj) {
     return columnsUpdateable;
 }
 
-module.exports = {
-    getSpreedSheet: getSpreedSheet,
-    postSpreedSheet: postSpreedSheet,
-    updateSpreedSheet: updateSpreedSheet
+// module.exports = {
+//     getSpreedSheet: getSpreedSheet,
+//     postSpreedSheet: postSpreedSheet,
+//     updateSpreedSheet: updateSpreedSheet
+// }
+
+export {
+    getSpreedSheet,
+    postSpreedSheet,
+    updateSpreedSheet
 }

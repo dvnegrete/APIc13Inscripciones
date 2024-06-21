@@ -1,10 +1,13 @@
-const nameSheet = require("./namesSheet");
-
-const coursesModel = require("./sheetGoogle/coursesModel");
-//const inscriptionModel = require("./sheetGoogle/inscriptionModel");
-const questionsModel = require("./sheetGoogle/questionsModel");
-const imageModel = require("./sheetGoogle/imageModel");
-const homePageModel = require("./sheetGoogle/homePageModel");
+import { nameSheet } from "./namesSheet.js";
+//const nameSheet = require("./namesSheet");
+import { coursesModel } from "./sheetGoogle/coursesModel.js";
+//const coursesModel = require("./sheetGoogle/coursesModel");
+import { questionsModel } from "./sheetGoogle/questionsModel.js";
+//const questionsModel = require("./sheetGoogle/questionsModel");
+import { imageModel } from "./sheetGoogle/imageModel.js";
+//const imageModel = require("./sheetGoogle/imageModel");
+import { homePageModel } from "./sheetGoogle/homePageModel.js";
+//const homePageModel = require("./sheetGoogle/homePageModel");
 
 // function selectModel(id, rows, size) {
 //     if (id === 10) {
@@ -42,10 +45,10 @@ function selectModel(id, rows, size) {
             return coursesModel(rows);
         default:
             return new Error("Hoja no indicada");
-    }    
+    }
 }
 
-function selectIdGSheet (id){    
+function selectIdGSheet(id) {
     switch (id) {
         //id 10: courses
         case 10:
@@ -61,15 +64,9 @@ function selectIdGSheet (id){
         case 40:
             return nameSheet.sheetImage;
         case 50:
-            return  nameSheet.sheetHomePage;
-        case 196:
-            return nameSheet.sheet196Courses;
-    }     
+            return nameSheet.sheetHomePage;
+    }
 }
 
-const spreadsheetsOfertaEducativa = {
-    selectModel: selectModel,
-    selectIdGSheet: selectIdGSheet
-}
-
-module.exports = spreadsheetsOfertaEducativa;
+//module.exports = spreadsheetsOfertaEducativa;
+export { selectModel, selectIdGSheet }

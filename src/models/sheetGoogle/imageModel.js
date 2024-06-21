@@ -1,4 +1,4 @@
-function imageModel(rows, size){
+export function imageModel(rows, size){
     const data = [];        
         rows.forEach(column => {
             const register = {
@@ -19,4 +19,4 @@ function imageModel(rows, size){
         return data;
 }
 
-module.exports = imageModel;
+//module.exports = imageModel;

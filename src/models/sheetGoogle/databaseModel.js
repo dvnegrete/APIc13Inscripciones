@@ -80,4 +80,4 @@ const gender = (param) =>  param === "MASCULINO" ? "HOMBRE" : "MUJER";
 //Cambiar de MASCULINO/FEMENINO a HOMBRE/MUJER, que es el formato que tiene la hoja de calculo.
 //La forma MASCULINO/FEMENINO es utlizada por la dependencia de la CURP para validar la información.
 
-module.exports = { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister, gender };
+export { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister, gender };

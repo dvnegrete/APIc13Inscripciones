@@ -1,17 +1,22 @@
-const { postSpreedSheet, getSpreedSheet } = require("../libs/spreedsheet");
-const curp = require("curp");
-const nameSheet = require("../models/namesSheet");
-const studentDocument = require("../models/documents/studentDocument")
-const { monthYear, dateComplete } = require("../utils/date")
+import { getSpreedSheet, postSpreedSheet } from "./../libs/spreedsheet.js";
+//const { postSpreedSheet, getSpreedSheet } = require("../libs/spreedsheet");
+import pkgCurp from "curp";
+//const curp = require("curp");
+import { nameSheet } from "./../models/namesSheet.js";
+//const nameSheet = require("../models/namesSheet");
+import { datetime } from "./../utils/date.js";
+//const studentDocument = require("../models/documents/studentDocument")
+//const { monthYear, dateComplete } = require("../utils/date")
 const students = "estudiantes";
 
 
 //servicio conectado con FIREBASE, para retomar en un futuro esta u otra BD
 //Conexion a Firestore
-const { database } = require("../database/firestore")
-const collection = monthYear;
+import { database } from "./../database/firestore.js";
+//const { database } = require("../database/firestore")
+const collection = "";
  
-class Inscriptions {
+export default class Inscriptions {
     
     sheet = nameSheet.sheetInscriptions;
 
@@ -29,7 +34,7 @@ class Inscriptions {
 
         const newObj = {
             ...obj,
-            fecha: dateComplete
+            fecha: datetime
         }
         await docRef.set(newObj)
         return { message : "Pre-inscripción guardada" }
@@ -93,9 +98,9 @@ class Inscriptions {
     }
 
     async validateCURP(string){
-        const CURP = curp.validar(string)
+        const CURP = pkgCurp.validar(string)
         return CURP
     }  
 }
 
-module.exports = Inscriptions;
+//module.exports = Inscriptions;

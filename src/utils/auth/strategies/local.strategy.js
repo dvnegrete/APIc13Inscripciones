@@ -1,15 +1,19 @@
-const { use } = require("passport");
-const boom = require("@hapi/boom");
-const { Strategy } = require("passport-local");
-const ControlStudents = require("./../../../services/controlStudentsService");
+//import { use } from "passport";
+//const { use } = require("passport");
+import { unauthorized } from "@hapi/boom";
+//const boom = require("@hapi/boom");
+import { Strategy } from "passport-local";
+//const { Strategy } = require("passport-local");
+import ControlStudents from "./../../../services/controlStudentsService.js";
+//const ControlStudents = require("./../../../services/controlStudentsService");
 
 const service = new ControlStudents();
 
-const LocalStrategy = new Strategy( async (username, password, done) => {
-    try {        
+export const LocalStrategy = new Strategy(async (username, password, done) => {
+    try {
         const userID = await service.checkAccess(username, password)
         if (!userID.id) {
-            throw boom.unauthorized();
+            throw unauthorized();
         } else {
             //userID es recibido en el siguiente next como req.user
             done(null, userID);
@@ -19,4 +23,4 @@ const LocalStrategy = new Strategy( async (username, password, done) => {
     }
 });
 
-module.exports = LocalStrategy;
+//module.exports = LocalStrategy;

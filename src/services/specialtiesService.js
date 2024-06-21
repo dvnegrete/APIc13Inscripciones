@@ -1,8 +1,9 @@
-const { database } = require("./../database/firestore");
+import { database } from "./../database/firestore.js";
+//const { database } = require("./../database/firestore");
 
 const COLLECTION = "especialidades"
 
-class Specialtie {
+export default class Specialtie {
   constructor(){}
   
   async getAll(){
@@ -52,4 +53,4 @@ class Specialtie {
   }
 }
 
-module.exports = Specialtie;
+//module.exports = Specialtie;

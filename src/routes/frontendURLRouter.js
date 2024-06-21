@@ -1,7 +1,8 @@
-const express = require("express");
-const service = require("../services/frontendURLService")
+import { Router } from "express";
+import service from "./../services/frontendURLService.js";
+//const service = require("../services/frontendURLService")
 
-const router = express.Router();
+const router = Router();
 
 router.get("/imageHomePage", async (req, res)=>{
     try {        
@@ -25,5 +26,5 @@ router.get("/:id", async (req, res)=>{
         res.status(500).json({message: "internal server error"})
     }
 })
-
-module.exports = router;
+export default router;
+//module.exports = router;

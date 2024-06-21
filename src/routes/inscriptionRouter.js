@@ -1,6 +1,7 @@
-const express = require("express");
-const Inscriptions = require("../services/inscriptionService");
-const router = express.Router();
+import { Router } from "express";
+import Inscriptions from "./../services/inscriptionService.js";
+
+const router = Router();
 
 const service = new Inscriptions();
 
@@ -55,4 +56,4 @@ router.post("/register", async (req, res, next)=> {
     }
 })
 
-module.exports = router;
+export default router;

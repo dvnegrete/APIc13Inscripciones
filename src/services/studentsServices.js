@@ -1,27 +1,36 @@
-const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/spreedsheet");
-const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
-const { gender } = require("../models/sheetGoogle/databaseModel");
-const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
-const { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } = require("../middlewares/validateCURP")
-const CURP = require("curp");
-const { datetime } = require("../utils/date");
+import CURP from "curp";
+//const CURP = require("curp");
+import { getSpreedSheet, postSpreedSheet, updateSpreedSheet } from "./../libs/spreedsheet.js";
+//const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/spreedsheet");
+import { nameSheet } from "./../models/namesSheet.js";
+const { sheetDatabase, sheetInscriptions, sheetNumberControl } = nameSheet;
+//const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
+import { gender } from "./../models/sheetGoogle/databaseModel.js";
+//const { gender } = require("../models/sheetGoogle/databaseModel");
+import { JSONResponse, JSONgetDB } from "./../models/JSONResponse.js";
+//const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
+import { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } from "./../middlewares/validateCURP.js";
+//const { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } = require("../middlewares/validateCURP")
+import { datetime } from "./../utils/date.js";
+//const { datetime } = require("../utils/date");
 // const { uploadStorage } =require("../database/firebaseStorage")
 // const { uploadFirebase } = require("../database/firestore")
-const { uploadBlobStorage, getBlobStorage } = require("../controller/blobsAzure");
+import { uploadBlobStorage } from "./../controller/blobsAzure.js";
+//const { uploadBlobStorage, getBlobStorage } = require("../controller/blobsAzure");
 
 //Conexion a Firestore
 //const { database } = require("../database/firestore")
 
-class Students {
-    constructor(){}
+export default class Students {
+    constructor() { }
 
-    async findTypeRegister(stringCurp){
+    async findTypeRegister(stringCurp) {
         let objReturn = {};
         if (CURP.validar(stringCurp)) {
-            objReturn = await this.findForCurp(stringCurp);            
+            objReturn = await this.findForCurp(stringCurp);
         }
         else {
-            objReturn= { message: "Wrong Structure"};
+            objReturn = { message: "Wrong Structure" };
         }
         return objReturn;
     }
@@ -40,15 +49,15 @@ class Students {
                 placeofBirth: obj.estado,
                 gender: gender(obj.genero),
                 disability: obj.disability,
-                birthdate: obj.fechaNacimiento,            
+                birthdate: obj.fechaNacimiento,
                 actaNacimientoRender: obj.actaNacimientoRender
-            };            
+            };
         } else {
             const compareCURP = compareDigitVerifyCurp(userCURP, createCURP);
             if (compareCURP) {
-                objReturn = {curp: false, datacurp: createCURP, message: messageDuplicity}
+                objReturn = { curp: false, datacurp: createCURP, message: messageDuplicity }
             } else {
-                objReturn = {curp : false, datacurp: createCURP, message: messageErrorCurp}
+                objReturn = { curp: false, datacurp: createCURP, message: messageErrorCurp }
             }
         }
         return objReturn
@@ -67,14 +76,14 @@ class Students {
     async generateNumberControl() {
         const rows = await getSpreedSheet(sheetNumberControl);
         const countRows = rows.length;
-        const numberControl = rows[countRows-1].matricula;
-        const numberGenerate =  parseInt(numberControl, 10) + 1;
+        const numberControl = rows[countRows - 1].matricula;
+        const numberGenerate = parseInt(numberControl, 10) + 1;
         return numberGenerate;
     }
 
-    async findForCurp(stringCURP){
+    async findForCurp(stringCURP) {
         const rows = await getSpreedSheet(sheetDatabase);
-        const data = rows.filter( column => {
+        const data = rows.filter(column => {
             const value = column.curp.toUpperCase();
             return value.includes(stringCURP)
         })
@@ -82,22 +91,22 @@ class Students {
         if (data.length > 0) {
             objReturn = JSONResponse(data);
         } else {
-            objReturn = { error: "CURP"}
+            objReturn = { error: "CURP" }
         }
         return objReturn;
     }
 
-    async getDataDB(stringCURP){
+    async getDataDB(stringCURP) {
         const rows = await getSpreedSheet(sheetDatabase);
-        const data = rows.filter( column => {
+        const data = rows.filter(column => {
             const value = column.curp.toUpperCase();
-            return value.includes(stringCURP)            
-        });        
+            return value.includes(stringCURP)
+        });
         const info = JSONgetDB(data);
-        return info;        
+        return info;
     }
 
-    async addInscriptionNewStudent(obj){
+    async addInscriptionNewStudent(obj) {
         // const addressState = obj.estado[1];
         // obj.estado = addressState;
         //*prueba a Firestore */
@@ -130,7 +139,7 @@ class Students {
         return sucessfullyRegister;
     }
 
-    insertSheet(obj, nameSheet){
+    insertSheet(obj, nameSheet) {
         const newObj = {
             ...obj,
             sheet: nameSheet,
@@ -142,13 +151,13 @@ class Students {
     async verifyLastRegistration(obj) {
         const rows = await getSpreedSheet(sheetInscriptions);
         const countRows = rows.length;
-        const lastInscriptionCurp = rows[countRows-1].curp;
+        const lastInscriptionCurp = rows[countRows - 1].curp;
         let verify = false;
-        if (lastInscriptionCurp === obj.curp){
+        if (lastInscriptionCurp === obj.curp) {
             verify = true;
         }
         const res = {
-            status : verify,
+            status: verify,
             matricula: obj.matricula,
             fechaRegistro: obj.fechaRegistro
         }
@@ -157,9 +166,9 @@ class Students {
 
     async addInscriptionDBStudent(body) {
         if (body.update) {
-            const bodyWithDatetime = { 
-                ...body, 
-                fechaRegistro: datetime() 
+            const bodyWithDatetime = {
+                ...body,
+                fechaRegistro: datetime()
             };
             const updated = await this.updateDBStudent(bodyWithDatetime);
             //confirmamos que se actualizo la informacion
@@ -192,11 +201,11 @@ class Students {
         const newObj = this.insertSheet(obj, sheetDatabase);
         const updated = await updateSpreedSheet(newObj);
         return {
-            updated : updated
+            updated: updated
         }
     }
 
-    async uploadStorageDocs (files, curp) {
+    async uploadStorageDocs(files, curp) {
         let arrayURLs = [];
         if (files.actaNacimiento) {
             const url = await this.uploadFile(files.actaNacimiento, curp);
@@ -211,7 +220,7 @@ class Students {
             arrayURLs.push(url);
         }
         const URLs = {};
-        arrayURLs.forEach( element => {
+        arrayURLs.forEach(element => {
             const arrayKey = Object.keys(element);
             const key = arrayKey[0];
             Object.defineProperty(URLs, key, {
@@ -220,16 +229,16 @@ class Students {
                 enumerable: true,
                 configurable: true
             });
-        })        
+        })
         return URLs;
     }
-    
-    async uploadFile (file, curp) {
+
+    async uploadFile(file, curp) {
         const name = file[0].fieldname;
         const ext = file[0].mimetype.split("/")[1];
         const nameFile = `${curp}-${file[0].fieldname}.${ext}`;
-        const url =  {}
-        Object.defineProperty( url, name, {
+        const url = {}
+        Object.defineProperty(url, name, {
             value: nameFile,
             enumerable: true,
             writable: true,
@@ -251,4 +260,4 @@ class Students {
     }
 }
 
-module.exports = Students;
+//module.exports = Students;

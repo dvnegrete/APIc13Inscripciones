@@ -1,4 +1,4 @@
-function questionsModel(rows){
+export function questionsModel(rows){
     const data = [];        
         rows.forEach(column => {
             const register = {
@@ -11,4 +11,4 @@ function questionsModel(rows){
         return data;
 }
 
-module.exports = questionsModel;
+//module.exports = questionsModel;

@@ -1,5 +1,7 @@
-const curp = require("curp");
-const { dateForCurp } = require("../../config")
+import curp from "curp";
+//const curp = require("curp");
+import { config } from "./../config/index.js";
+//const { dateForCurp } = require("../../config")
 
 // let persona = curp.getPersona();
 // persona.nombre = 'Andrés Manuel';
@@ -10,19 +12,19 @@ const { dateForCurp } = require("../../config")
 // persona.estado = curp.ESTADO.TABASCO;
 // console.log( curp.generar(persona) );
 
-function generateCURP (obj) {
+export function generateCURP(obj) {
     const date = new Date(obj.fechaNacimiento);
     //console.log("date", date)
-    const formatDate = (date)=>{
-        const dateValueCorrection = parseInt(dateForCurp, 10);
+    const formatDate = (date) => {
+        const dateValueCorrection = parseInt(config.dateForCurp, 10);
         //en App Engine Produccion, no sumar nada en el día
         //en ambiente local sumar 1. para que funcione.
         //let formatted_date = date.getDate() + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
-        
-        let formatted_date = (date.getDate() + dateValueCorrection) + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
+
+        let formatted_date = (date.getDate() + dateValueCorrection) + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
         return formatted_date;
     }
-    const fecha = formatDate(date)    
+    const fecha = formatDate(date)
     //console.log("fecha", fecha)
     const gender = obj.genero;
     const estado = obj.estado;
@@ -30,18 +32,18 @@ function generateCURP (obj) {
     persona.nombre = obj.nombre;
     persona.apellidoPaterno = obj.a_paterno;
     persona.apellidoMaterno = obj.a_materno;
-    persona.genero =  curp.GENERO[gender];
+    persona.genero = curp.GENERO[gender];
     //Formato: FEMENINO o MASCULINO
-    persona.fechaNacimiento =  fecha;
+    persona.fechaNacimiento = fecha;
     //Formato '22-03-1970';
-    persona.estado = curp.ESTADO[estado];    
+    persona.estado = curp.ESTADO[estado];
     const string = curp.generar(persona);
     return string
 }
 
-function validateCURP (property) {
+export function validateCURP(property) {
     return (req, res, next) => {
-    const data = req[property].curp;
+        const data = req[property].curp;
         if (curp.validar(data)) {
             next(data)
         } else {
@@ -52,13 +54,13 @@ function validateCURP (property) {
     }
 }
 
-function errorCurp (req, res, next) {
+export function errorCurp(req, res, next) {
     res.status(400).json({
         message: "Curp no valida"
     })
 }
 
-function compareDigitVerifyCurp(userCURP, createCURP){
+export function compareDigitVerifyCurp(userCURP, createCURP) {
     const userArray = userCURP.split("", 16);
     const createArray = createCURP.split("", 16);
     const newUserCurp = userArray.join("");
@@ -67,17 +69,17 @@ function compareDigitVerifyCurp(userCURP, createCURP){
     return res;
 }
 
-const messageDuplicity = `Lo sentimos, no podemos validar el dígito verificador de tu CURP. 
+export const messageDuplicity = `Lo sentimos, no podemos validar el dígito verificador de tu CURP. 
 Por favor acude a la ventanilla del plantel para continuar tu inscripcion. 
 Lamentamos los inconvenientes que esto puede causar.`;
 
- const messageErrorCurp = "Verifica la informacíon";
+export const messageErrorCurp = "Verifica la informacíon";
 
-module.exports = { 
-    validateCURP, 
-    generateCURP,
-    errorCurp,
-    compareDigitVerifyCurp,
-    messageDuplicity,
-    messageErrorCurp
-};
+// module.exports = {
+//     validateCURP,
+//     generateCURP,
+//     errorCurp,
+//     compareDigitVerifyCurp,
+//     messageDuplicity,
+//     messageErrorCurp
+// };

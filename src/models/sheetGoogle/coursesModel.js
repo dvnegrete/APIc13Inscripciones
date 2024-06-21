@@ -1,4 +1,4 @@
-function coursesModel(rows){
+export function coursesModel(rows){
     const data = [];        
         rows.forEach(column => {
             const register = {
@@ -24,4 +24,5 @@ function coursesModel(rows){
         return data;
 }
 
-module.exports = coursesModel;
+
+//module.exports = coursesModel;

@@ -1,4 +1,4 @@
-function hideCharactersPhone (phone){
+export function hideCharactersPhone (phone){
     const large = phone.length;    
     const firstPart = phone[0];
     const penultimatePart = phone[ large -2 ];
@@ -21,7 +21,7 @@ function hideCharactersPhone (phone){
     return assamblePhone;
 }
 
-function hideCharactersEmail (email) {
+export function hideCharactersEmail (email) {
     const arrPartsEmail = email.split("@");
     const firstPart = arrPartsEmail[0];
     const large = firstPart.length;
@@ -39,4 +39,4 @@ function hideCharactersEmail (email) {
     return assambleEmail;
 }
 
-module.exports = { hideCharactersPhone, hideCharactersEmail };
+//module.exports = { hideCharactersPhone, hideCharactersEmail };

@@ -1,13 +1,16 @@
-const { BlobServiceClient } = require("@azure/storage-blob");
-const { azureStorageConnection } = require("../../config")
-const boom = require("@hapi/boom");
+import { BlobServiceClient } from "@azure/storage-blob";
+//const { BlobServiceClient } = require("@azure/storage-blob");
+import { config } from "./../config/index.js";
+//const { azureStorageConnection } = require("../../config")
+import { notFound } from "@hapi/boom";
+//const boom = require("@hapi/boom");
 
-const blobServices= BlobServiceClient.fromConnectionString(azureStorageConnection);
+const blobServices = BlobServiceClient.fromConnectionString(config.azureStorageConnection);
 
-async function listBlobs(obj){
+export async function listBlobs(obj) {
     const list = [];
     const containerClient = blobServices.getContainerClient(obj.container);
-    for await (const blob of containerClient.listBlobsFlat()){
+    for await (const blob of containerClient.listBlobsFlat()) {
         const tempBlockBlobClient = containerClient.getBlockBlobClient(blob.name);
         const obj = {
             name: blob.name,
@@ -18,13 +21,13 @@ async function listBlobs(obj){
     return list
 }
 
-async function uploadBlobStorage (obj) {
+export async function uploadBlobStorage(obj) {
     //obj = file, name, container
     try {
         const { buffer } = obj.file;
         const containerClient = blobServices.getContainerClient(obj.container);
         await containerClient.getBlockBlobClient(obj.name).uploadData(buffer);
-        const blockBlobClient = containerClient.getBlockBlobClient(obj.name);        
+        const blockBlobClient = containerClient.getBlockBlobClient(obj.name);
         return blockBlobClient.url;
     } catch (error) {
         console.error(error.message);
@@ -34,34 +37,34 @@ async function uploadBlobStorage (obj) {
 
 //const container = "comprobantes";
 
-async function getBlobStorage (obj) {
+export async function getBlobStorage(obj) {
     try {
         const containerClient = blobServices.getContainerClient(obj.container);
         const blockBlobClient = containerClient.getBlockBlobClient(obj.name);
         const downloadBlockBlobResponse = await blockBlobClient.download();
         const downloaded = (
-          await streamToBuffer(downloadBlockBlobResponse.readableStreamBody)
-        );        
+            await streamToBuffer(downloadBlockBlobResponse.readableStreamBody)
+        );
         return downloaded;
     } catch (error) {
-        throw boom.notFound(error);
+        throw notFound(error);
     }
 }
 
-async function deleteBlob (obj){
+export async function deleteBlob(obj) {
     const containerClient = blobServices.getContainerClient(obj.container);
-        const fileBlob = await containerClient.getBlockBlobClient(obj.name).deleteIfExists();
-        console.log(fileBlob)
-        return fileBlob;
+    const fileBlob = await containerClient.getBlockBlobClient(obj.name).deleteIfExists();
+    console.log(fileBlob)
+    return fileBlob;
 }
 
 async function streamToBuffer(readable) {
     readable.setEncoding('base64');
     let data = '';
     for await (const chunk of readable) {
-      data += chunk;
+        data += chunk;
     }
     return data;
-  }
+}
 
-module.exports = { listBlobs, uploadBlobStorage, getBlobStorage };
+//module.exports = { listBlobs, uploadBlobStorage, getBlobStorage };

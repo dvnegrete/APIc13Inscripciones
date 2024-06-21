@@ -1,17 +1,22 @@
-const express = require("express");
-const ControlStudents = require("./../services/controlStudentsService");
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const { secret } = require("./../../config");
-const { uploadFI } = require("./../middlewares/multer");
+import { Router } from "express";
+import ControlStudents from "./../services/controlStudentsService.js";
+//const ControlStudents = require("./../services/controlStudentsService");
+import jwt from "jsonwebtoken";
+//const jwt = require("jsonwebtoken");
+import passport from "passport";
+//const passport = require("passport");
+import { config } from "./../config/index.js";
+//const { secret } = require("./../../config");
+import { uploadFI } from "./../middlewares/multer.js";
+//const { uploadFI } = require("./../middlewares/multer");
 //const { checkApiKey } = require("../middlewares/authHandler");
 
-const router = express.Router();
+const router = Router();
 const service = new ControlStudents();
 
 router.post("/oauth",
-    passport.authenticate("local", {session: false}),
-    async (req, res, next)=> {
+    passport.authenticate("local", { session: false }),
+    async (req, res, next) => {
         try {
             const username = req.body.username;
             const { id, role } = req.user;
@@ -20,9 +25,17 @@ router.post("/oauth",
                 role: role,
                 access: true,
             };
-            const token = jwt.sign(payload, secret)
-            res.status(200).json({username, token});
+            const cookieOptions = {
+
+            }
+            const token = jwt.sign(payload, config.secret)
+            res.cookie("token_jwt", token, {
+                httpOnly: true,
+                secure: false,
+            })
+            res.send({ username, token });
         } catch (error) {
+            console.warn("/oauth");
             next(error);
         }
     }
@@ -41,17 +54,18 @@ router.post("/oauth",
 
 //query parameter "user" para la curp. Example: /listBlobs/comprobantes?CURPSTUDENT
 router.get("/listBlobs/:container",
-//container = "informacion" or "comprobantes"
-    passport.authenticate("jwt", {session: false}),
-    async (req, res, next) =>{
+    //container = "informacion" or "comprobantes"
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
         try {
             const { container } = req.params
-            const list = await service.listBlobs(container);            
+            const list = await service.listBlobs(container);
+            console.log(list.length);
             if (req.query.user) {
                 const listUser = service.findBlobUser(list, req.query.user);
-                res.json({message: listUser})
+                res.json({ message: listUser })
             } else {
-                res.json({message: list});
+                res.json({ message: list });
             }
         } catch (error) {
             next(error)
@@ -60,8 +74,8 @@ router.get("/listBlobs/:container",
 )
 
 router.get("/file/:filename",
-    passport.authenticate("jwt", {session: false}),
-    async (req, res, next)=>{
+    passport.authenticate("jwt", { session: false }),
+    async (req, res, next) => {
         try {
             const { filename } = req.params;
             const file = await service.getFileBlob(filename);
@@ -73,12 +87,12 @@ router.get("/file/:filename",
 )
 
 router.post("/fileInformation",
-    passport.authenticate("jwt", {session: false}), uploadFI,
-    async(req, res, next) => {
+    passport.authenticate("jwt", { session: false }), uploadFI,
+    async (req, res, next) => {
         try {
             const arrayURL = await service.uploadFiPdf(req.files);
-            Promise.all(arrayURL).then( response =>{
-                res.json({message: response});
+            Promise.all(arrayURL).then(response => {
+                res.json({ message: response });
             })
         } catch (error) {
             console.error(error)
@@ -87,4 +101,5 @@ router.post("/fileInformation",
     }
 )
 
-module.exports = router;
+//module.exports = router;
+export default router;

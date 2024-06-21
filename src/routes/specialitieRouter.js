@@ -1,7 +1,11 @@
-const express = require("express");
-const boom = require("@hapi/boom");
-const router = express.Router();
-const Specialtie = require("../services/specialtiesService");
+import { Router } from "express";
+//const { Router } = require("express");
+import { badRequest } from "@hapi/boom";
+//const boom = require("@hapi/boom");
+import Specialtie from "./../services/specialtiesService.js";
+//const Specialtie = require("../services/specialtiesService");
+
+const router = Router()
 
 const service = new Specialtie();
 
@@ -45,7 +49,7 @@ router.post("/created", async (req, res, next)=> {
     const specialitie = await service.create(name, data);    
     res.json(specialitie)
   } catch (error) {
-    throw boom.badRequest();
+    throw badRequest();
   }
 })
 
@@ -56,7 +60,7 @@ router.post("/update", async (req, res, next)=> {
     const specialitie = await service.update(name, data);    
     res.json(specialitie)
   } catch (error) {
-    throw boom.badRequest();
+    throw badRequest();
   }
 })
 
@@ -73,8 +77,9 @@ router.patch("/:id", async (req, res, next) => {
       //const specialitie= await service.update(id)
       res.send("Ok, el id es: " + id);
   } catch (error) {
-    throw boom.badRequest();
+    throw badRequest();
   }
 });
 
-module.exports = router;
+//module.exports = router;
+export default router

@@ -1,10 +1,14 @@
-const bcrypt = require("bcrypt");
-const boom = require("@hapi/boom");
-const { database } = require("../database/firestore");
-const { listBlobs, getBlobStorage, uploadBlobStorage } = require("../controller/blobsAzure");
+import bcrypt from "bcrypt";
+//const bcrypt = require("bcrypt");
+import { notFound, unauthorized } from "@hapi/boom";
+//const boom = require("@hapi/boom");
+import { database } from "./../database/firestore.js";
+//const { database } = require("../database/firestore");
+import { listBlobs, getBlobStorage, uploadBlobStorage } from "./../controller/blobsAzure.js";
+//const { listBlobs, getBlobStorage, uploadBlobStorage } = require("../controller/blobsAzure");
 const collection = "usuarios";
 
-class ControlStudentsService {
+export default class ControlStudentsService {
     constructor(){}
 
     async create (username, password) {
@@ -45,7 +49,7 @@ class ControlStudentsService {
             }            
             return json;
         } else {
-            throw boom.unauthorized();
+            throw unauthorized();
         }
     }
 
@@ -71,7 +75,7 @@ class ControlStudentsService {
             }            
         })
         if (arrayFilesforUser.length === 0) {
-            throw new Error(boom.notFound)
+            throw new Error(notFound)
         }
         return arrayFilesforUser;
     }
@@ -106,4 +110,4 @@ class ControlStudentsService {
     }
 }
 
-module.exports = ControlStudentsService;
+//module.exports = ControlStudentsService;

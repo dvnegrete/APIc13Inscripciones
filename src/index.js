@@ -1,8 +1,4 @@
-const app = require("./app");
-const { port } = require("../config")
+import { app } from "./app.js";
+import { config } from "./config/index.js";
 
-app.listen(port, ()=> console.log("Servidor en el puerto ", port ));
-
-
-
-
+app.listen(config.port, () => console.log("Servidor en el puerto ", config.port));

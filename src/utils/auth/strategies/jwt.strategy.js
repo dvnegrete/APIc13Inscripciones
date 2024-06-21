@@ -1,18 +1,21 @@
-const { Strategy, ExtractJwt  } = require("passport-jwt");
-const { secret } = require("../../../../config");
-const boom = require("@hapi/boom");
+import { Strategy, ExtractJwt } from "passport-jwt";
+//const { Strategy, ExtractJwt  } = require("passport-jwt");
+import { config } from "./../../../config/index.js";
+//const { secret } = require("../../../../config");
+import { forbidden } from "@hapi/boom";
+//const boom = require("@hapi/boom");
 
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: secret
+    secretOrKey: config.secret
 }
 
-const JwtStrategy = new Strategy(options, (payload, done)=>{
+export const JwtStrategy = new Strategy(options, (payload, done)=>{
     try {
         return done(null, payload);        
     } catch (error) {
-        throw boom.forbidden(error);
+        throw forbidden(error);
     }
 });
 
-module.exports = JwtStrategy;
+//module.exports = JwtStrategy;
