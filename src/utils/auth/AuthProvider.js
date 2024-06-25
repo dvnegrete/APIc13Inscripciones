@@ -250,7 +250,7 @@ class AuthProvider {
                 const authCodeUrlResponse = await msalInstance.getAuthCodeUrl(req.session.authCodeUrlRequest);
                 // DVN!!!!!!!!
                 console.log("AuthProvider: redirectToAuthCodeUrl. en try authCodeUrlResponse");
-                res.send(authCodeUrlResponse);
+                res.redirect(authCodeUrlResponse);
             } catch (error) {
                 next(error);
             }

@@ -5,11 +5,15 @@ import { REDIRECT_URI, POST_LOGOUT_REDIRECT_URI } from "./../config/authConfig.j
 const router = Router();
 
 router.get("/singin",
+    (req, res, next)=> {
+        console.log("-------", req.session.isAuthenticated);
+        next();        
+    },
     authProvider.login({
-        scopes: [],
-        redirectUri: REDIRECT_URI,
-        successRedirect: '/'
-    }),
+    scopes: ["user.read"],
+    redirectUri: REDIRECT_URI,
+    successRedirect: '/'
+})
 );
 
 router.get('/acquireToken', authProvider.acquireToken({
@@ -18,7 +22,12 @@ router.get('/acquireToken', authProvider.acquireToken({
     successRedirect: '/users/profile'
 }));
 
-router.post('/redirect', authProvider.handleRedirect());
+router.post('/redirect', 
+    (req, res, next) => {
+        console.log("-------redirect");
+        next();
+    },
+    authProvider.handleRedirect());
 
 router.get('/signout', authProvider.logout({
     postLogoutRedirectUri: POST_LOGOUT_REDIRECT_URI
