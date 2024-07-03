@@ -1,10 +1,18 @@
-export function corsHandler(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    //res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-    next();
-}
+const allowedOrigins = [
+    'https://cecati13.edu.mx',
+    //dev
+    'http://localhost:5501',
+    undefined,
+];
 
-//module.exports = { corsHandler: corsHandler };
+export function corsHandler(req, res, next) {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Credentials', true);
+        res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+        res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+        next();
+    }
+}

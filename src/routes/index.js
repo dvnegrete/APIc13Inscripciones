@@ -1,19 +1,11 @@
-//const { Router } = require("express");
-import { Router  } from "express";
-import { ExpressAuth  } from "@auth/express";
-//const { ExpressAuth } = require("@auth/express");
+import { Router } from "express";
+import { ExpressAuth } from "@auth/express";
 
-import inscription  from "./inscriptionRouter.js";
-//const inscription = require("./inscriptionRouter");
-import students  from "./studentsRouter.js";
-//const students = require("./studentsRouter");
-import frontendURL  from "./frontendURLRouter.js";
-//const frontendURL = require("./frontendURLRouter");
-import controlStudents  from "./controlStudentsRouter.js";
-//const controlStudents = require("./controlStudentsRouter");
-import specialitie  from "./specialitieRouter.js";
-//const specialitie = require("./specialitieRouter");
-import auth from "./authRouter.js";
+import inscription from "./inscriptionRouter.js";
+import students from "./studentsRouter.js";
+import frontendURL from "./frontendURLRouter.js";
+import controlStudents from "./controlStudentsRouter.js";
+import specialitie from "./specialitieRouter.js";
 
 export function routerAPI(app) {
     const router = Router();
@@ -26,14 +18,18 @@ export function routerAPI(app) {
     router.get("/", (req, res) => {
         res.json({ status: true });
     });
+
+    //inscription PENDIENTE. En services para conexion a Firebase
     router.use("/inscription", inscription);
-    //inscription no usado. En services funciones para conexion a Firebase
-    router.use("/students", students);
+
     //students desde curso-inscripcion
-    router.use("/frontendURL", frontendURL);
+    router.use("/students", students);
+
     //frontendURL desde cursos, galeria, homePage, preguntas, tv
+    router.use("/frontendURL", frontendURL);
+
     router.use("/controlStudents", controlStudents)
-    //crear y usar espcialidades
+
+    //crear y usar especialidades
     router.use("/specialitie", specialitie);
-    router.use("/auth", auth);
 }

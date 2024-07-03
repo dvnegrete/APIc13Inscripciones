@@ -8,11 +8,43 @@ import passport from "passport";
 import { config } from "./../config/index.js";
 //const { secret } = require("./../../config");
 import { uploadFI } from "./../middlewares/multer.js";
+import { oauthMsalTokenHandler } from "./../middlewares/oauthMsalTokenHandler.js";
+import { jwtDecodeTokenHandler } from "../middlewares/jwtDecodeHandler.js";
 //const { uploadFI } = require("./../middlewares/multer");
 //const { checkApiKey } = require("../middlewares/authHandler");
 
 const router = Router();
 const service = new ControlStudents();
+
+router.get('/prueba',
+    jwtDecodeTokenHandler,
+    oauthMsalTokenHandler,
+    (req, res, next) => {
+        try {
+            const { 
+                upn:username, 
+                name:nameComplete, 
+                given_name:name, 
+                role  
+            } = req.body;
+            const payload = {
+                username,
+                nameComplete,
+                name, 
+                role
+            };
+            const token = jwt.sign(payload, config.secret)
+            res.cookie("token_jwt", token, {
+                httpOnly: true,
+                secure: false,
+            })
+            res.send({ username, token });
+        } catch (error) {
+            console.warn("/prueba");
+            next(error);
+        }
+    }
+)
 
 router.post("/oauth",
     passport.authenticate("local", { session: false }),
@@ -40,17 +72,6 @@ router.post("/oauth",
         }
     }
 )
-
-//una ruta que solo se usara para crear usuarios y estara desde otro servidor
-// router.post("/create", async (req, res, next)=> {
-//     try {
-//         const { username, password } = req.body;
-//         const response = await service.create(username, password)
-//         res.json(response);
-//     } catch (error) {
-//         next(error);
-//     }
-// })
 
 //query parameter "user" para la curp. Example: /listBlobs/comprobantes?CURPSTUDENT
 router.get("/listBlobs/:container",

@@ -3,14 +3,6 @@ import curp from "curp";
 import { config } from "./../config/index.js";
 //const { dateForCurp } = require("../../config")
 
-// let persona = curp.getPersona();
-// persona.nombre = 'Andrés Manuel';
-// persona.apellidoPaterno = 'López';
-// persona.apellidoMaterno = 'Obrador';
-// persona.genero = curp.GENERO.MASCULINO;
-// persona.fechaNacimiento = '13-11-1953';
-// persona.estado = curp.ESTADO.TABASCO;
-// console.log( curp.generar(persona) );
 
 export function generateCURP(obj) {
     const date = new Date(obj.fechaNacimiento);

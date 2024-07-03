@@ -9,6 +9,7 @@ import { corsHandler } from "./middlewares/corsHandler.js";
 //const { corsHandler } = require("./middlewares/corsHandler");
 import { boomErrorHandler, errorHandler, logErrors } from "./middlewares/errorHandler.js";
 import { authStrategy } from "./utils/auth/index.js";
+import passport from "passport";
 //const { logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
 
 export const app = express();
@@ -25,6 +26,7 @@ app.use(session({
 }));
 
 app.use(cookieParser());
+app.use(passport.initialize());
 authStrategy();
 app.use(express.json());
 

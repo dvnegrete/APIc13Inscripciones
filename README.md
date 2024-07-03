@@ -38,3 +38,7 @@ Conexion a Firebase preparada y probada.
     POST    /API/v1/inscription//newStudent/dataGeneral
     POST    /API/v1/inscription/dbStudent
     POST    /API/v1/inscription/register
+
+
+    Configuración de Oauth 2.0 desde:
+    https://github.com/Azure-Samples/ms-identity-javascript-tutorial/tree/main/3-Authorization-II/1-call-api#configure-the-service-app-msal-node-api-to-use-your-app-registration

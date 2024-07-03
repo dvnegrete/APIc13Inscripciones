@@ -10,9 +10,9 @@ const options = {
     secretOrKey: config.secret
 }
 
-export const JwtStrategy = new Strategy(options, (payload, done)=>{
+export const JwtStrategy = new Strategy(options, (payload, done) => {
     try {
-        return done(null, payload);        
+        return done(null, payload);
     } catch (error) {
         throw forbidden(error);
     }
