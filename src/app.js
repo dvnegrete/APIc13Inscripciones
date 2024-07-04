@@ -1,16 +1,12 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import passport from "passport";
 
 import { routerAPI } from "./routes/index.js";
-//const routerAPI = require("./routes");
-//const cors = require("cors");
 import { corsHandler } from "./middlewares/corsHandler.js";
-//const { corsHandler } = require("./middlewares/corsHandler");
 import { boomErrorHandler, errorHandler, logErrors } from "./middlewares/errorHandler.js";
 import { authStrategy } from "./utils/auth/index.js";
-import passport from "passport";
-//const { logErrors, errorHandler, boomErrorHandler } = require("./middlewares/errorHandler");
 
 export const app = express();
 

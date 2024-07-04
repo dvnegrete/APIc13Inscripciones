@@ -1,4 +1,4 @@
-const { credentialFirebase, credentialGoogle, apiKey } = require("../../config")
+const { credentialFirebase, credentialGoogle } = require("../../config")
 const { Storage } = require("@google-cloud/storage");
 
 //const auth = new GoogleAuth({
