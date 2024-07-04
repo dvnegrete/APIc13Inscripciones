@@ -1,14 +1,13 @@
 import { Router } from "express";
-import ControlStudents from "./../services/controlStudentsService.js";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-//const passport = require("passport");
+
 import { config } from "./../config/index.js";
-//const { secret } = require("./../../config");
+
+import ControlStudents from "./../services/controlStudentsService.js";
 import { uploadFI } from "./../middlewares/multer.js";
 import { oauthMsalTokenHandler } from "./../middlewares/oauthMsalTokenHandler.js";
 import { jwtDecodeTokenHandler } from "../middlewares/jwtDecodeHandler.js";
-//const { uploadFI } = require("./../middlewares/multer");
 
 const router = Router();
 const service = new ControlStudents();

@@ -13,7 +13,6 @@ import { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCur
 //const { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } = require("../middlewares/validateCURP")
 import { datetime } from "./../utils/date.js";
 //const { datetime } = require("../utils/date");
-// const { uploadStorage } =require("../database/firebaseStorage")
 // const { uploadFirebase } = require("../database/firestore")
 import { uploadBlobStorage } from "./../controller/blobsAzure.js";
 //const { uploadBlobStorage, getBlobStorage } = require("../controller/blobsAzure");

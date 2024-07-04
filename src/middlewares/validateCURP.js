@@ -1,12 +1,9 @@
 import curp from "curp";
-//const curp = require("curp");
 import { config } from "./../config/index.js";
-//const { dateForCurp } = require("../../config")
 
 
 export function generateCURP(obj) {
     const date = new Date(obj.fechaNacimiento);
-    //console.log("date", date)
     const formatDate = (date) => {
         const dateValueCorrection = parseInt(config.dateForCurp, 10);
         //en App Engine Produccion, no sumar nada en el día
@@ -17,7 +14,6 @@ export function generateCURP(obj) {
         return formatted_date;
     }
     const fecha = formatDate(date)
-    //console.log("fecha", fecha)
     const gender = obj.genero;
     const estado = obj.estado;
     let persona = curp.getPersona();
@@ -66,12 +62,3 @@ Por favor acude a la ventanilla del plantel para continuar tu inscripcion.
 Lamentamos los inconvenientes que esto puede causar.`;
 
 export const messageErrorCurp = "Verifica la informacíon";
-
-// module.exports = {
-//     validateCURP,
-//     generateCURP,
-//     errorCurp,
-//     compareDigitVerifyCurp,
-//     messageDuplicity,
-//     messageErrorCurp
-// };

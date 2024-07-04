@@ -11,5 +11,3 @@ export function signToken(payload, secret, jwtConfig) {
 export function verifyToken(token, secret) {
     return jwt.verify(token, secret);
 }
-
-//module.exports = { signToken, verifyToken, authMSAL };

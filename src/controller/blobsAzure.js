@@ -1,9 +1,6 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-//const { BlobServiceClient } = require("@azure/storage-blob");
 import { config } from "./../config/index.js";
-//const { azureStorageConnection } = require("../../config")
 import { notFound } from "@hapi/boom";
-//const boom = require("@hapi/boom");
 
 const blobServices = BlobServiceClient.fromConnectionString(config.azureStorageConnection);
 
@@ -66,5 +63,3 @@ async function streamToBuffer(readable) {
     }
     return data;
 }
-
-//module.exports = { listBlobs, uploadBlobStorage, getBlobStorage };

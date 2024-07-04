@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { ExpressAuth } from "@auth/express";
 
 import inscription from "./inscriptionRouter.js";
 import students from "./studentsRouter.js";
