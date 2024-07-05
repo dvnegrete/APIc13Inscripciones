@@ -1,29 +1,30 @@
-const express = require("express");
-const inscription = require("./inscriptionRouter");
-const students = require("./studentsRouter");
-const frontendURL = require("./frontendURLRouter");
-const controlStudents = require("./controlStudentsRouter");
-const specialitie = require("./specialitieRouter");
-const c196 = require("./c196Router");
+import { Router } from "express";
 
-function routerAPI (app) {
-    const router = express.Router();
+import inscription from "./inscriptionRouter.js";
+import students from "./studentsRouter.js";
+import frontendURL from "./frontendURLRouter.js";
+import controlStudents from "./controlStudentsRouter.js";
+import specialitie from "./specialitieRouter.js";
+
+export function routerAPI(app) {
+    const router = Router();
     app.use("/API/v1", router);
 
-    router.get("/", (req, res)=>{
-        res.json({status: true});
+    router.get("/", (req, res) => {
+        res.json({ status: true });
     });
+
+    //inscription PENDIENTE. En services para conexion a Firebase
     router.use("/inscription", inscription);
-    //inscription no usado. En services funciones para conexion a Firebase
-    router.use("/students", students);
+
     //students desde curso-inscripcion
-    router.use("/frontendURL", frontendURL);
+    router.use("/students", students);
+
     //frontendURL desde cursos, galeria, homePage, preguntas, tv
+    router.use("/frontendURL", frontendURL);
+
     router.use("/controlStudents", controlStudents)
-    //crear y usar espcialidades
+
+    //crear y usar especialidades
     router.use("/specialitie", specialitie);
-
-    router.use("/c196", c196);
 }
-
-module.exports = routerAPI;

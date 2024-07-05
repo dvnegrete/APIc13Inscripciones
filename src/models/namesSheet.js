@@ -1,10 +1,10 @@
-const nameSheet = {
+export const nameSheet = {
     //sheets para prueba
     // sheetNumberControl: "pruebaMatricula",
     // sheetInscriptions: "pruebaPreinscripciones",
     // sheetDatabase: "databasePruebas",
     //sheets para prueba
-    
+
     sheetInscriptions: "preinscripciones",
     sheetNumberControl: "matricula",
     sheetDatabase: "database",
@@ -15,5 +15,3 @@ const nameSheet = {
     sheetHomePage: "anunciosHomePage",
     sheet196Courses: "C-196Cursos"
 }
-
-module.exports = nameSheet;

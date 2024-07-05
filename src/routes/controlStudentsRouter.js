@@ -1,90 +1,73 @@
-const express = require("express");
-const ControlStudents = require("./../services/controlStudentsService");
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const { secret } = require("./../../config");
-const { uploadFI } = require("./../middlewares/multer");
-//const { checkApiKey } = require("../middlewares/authHandler");
+import { Router } from "express";
+import passport from "passport";
 
-const router = express.Router();
-const service = new ControlStudents();
+import {
+    uploadFI,
+    msalTokenVerify,
+    decodeOauthToken,
+    userAllowedHandler,
+    checkRoleAdmin,
+    checkRole
+} from "./../middlewares/index.js";
 
-router.post("/oauth",
-    passport.authenticate("local", {session: false}),
-    async (req, res, next)=> {
-        try {
-            const username = req.body.username;
-            const { id, role } = req.user;
-            const payload = {
-                id: id,
-                role: role,
-                access: true,
-            };
-            const token = jwt.sign(payload, secret)
-            res.status(200).json({username, token});
-        } catch (error) {
-            next(error);
-        }
-    }
-)
+import { changeTokenUser, deleteUser, getUsers, updateRoleUser } from "../controller/userController.js";
+import { getFile, getListBlobs, postFileInformation } from "../controller/controlStudentsController.js";
+import { notTheSameUser } from "../middlewares/notTheSameUser.js";
 
-//una ruta que solo se usara para crear usuarios y estara desde otro servidor
-// router.post("/create", async (req, res, next)=> {
-//     try {
-//         const { username, password } = req.body;
-//         const response = await service.create(username, password)
-//         res.json(response);
-//     } catch (error) {
-//         next(error);
-//     }
-// })
+const router = Router();
 
-//query parameter "user" para la curp. Example: /listBlobs/comprobantes?CURPSTUDENT
+//eliminar cuando el fronted se actualice
+router.get('/prueba',
+    [decodeOauthToken, msalTokenVerify, userAllowedHandler],
+    changeTokenUser
+);
+//eliminar cuando el fronted se actualice
+
+router.get("/oauth",
+    [decodeOauthToken, msalTokenVerify, userAllowedHandler],
+    changeTokenUser
+);
+
+//users
+router.get("/users",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    getUsers
+);
+
+router.put("/updateRole/:id",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    notTheSameUser,
+    updateRoleUser
+);
+
+router.delete("/user/:id",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    notTheSameUser,
+    deleteUser
+);
+//users
+
+//control Escolar
 router.get("/listBlobs/:container",
-//container = "informacion" or "comprobantes"
-    passport.authenticate("jwt", {session: false}),
-    async (req, res, next) =>{
-        try {
-            const { container } = req.params
-            const list = await service.listBlobs(container);            
-            if (req.query.user) {
-                const listUser = service.findBlobUser(list, req.query.user);
-                res.json({message: listUser})
-            } else {
-                res.json({message: list});
-            }
-        } catch (error) {
-            next(error)
-        }
-    }
-)
+    passport.authenticate("jwt", { session: false }),
+    checkRole,
+    getListBlobs
+);
 
 router.get("/file/:filename",
-    passport.authenticate("jwt", {session: false}),
-    async (req, res, next)=>{
-        try {
-            const { filename } = req.params;
-            const file = await service.getFileBlob(filename);
-            res.json(file);
-        } catch (error) {
-            next(error);
-        }
-    }
-)
+    passport.authenticate("jwt", { session: false }),
+    checkRole,
+    getFile
+);
 
 router.post("/fileInformation",
-    passport.authenticate("jwt", {session: false}), uploadFI,
-    async(req, res, next) => {
-        try {
-            const arrayURL = await service.uploadFiPdf(req.files);
-            Promise.all(arrayURL).then( response =>{
-                res.json({message: response});
-            })
-        } catch (error) {
-            console.error(error)
-            next(error)
-        }
-    }
-)
+    passport.authenticate("jwt", { session: false }), uploadFI,
+    checkRole,
+    postFileInformation
+);
+//control Escolar
 
-module.exports = router;
+export default router;
