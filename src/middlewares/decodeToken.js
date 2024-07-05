@@ -7,22 +7,26 @@ export const decode = (token) => {
 }
 
 export const decodeOauthToken = (req, res, next) => {
-    const token = req.headers.authorization;
-    if (token) {
-        const { upn, name, given_name, family_name } = decode(token);
-        req.body = {
-            upn,
-            name,
-            given_name,
-            family_name,
+    try {
+        const token = req.headers.authorization;
+        if (token) {
+            const { upn, name, given_name, family_name } = decode(token);
+            req.body = {
+                upn,
+                name,
+                given_name,
+                family_name,
+            }
         }
-    }
-    const { upn } = req.body;
-    const access = upn.includes(passportConfig.credentials.tenantID)
-        && upn.includes(passportConfig.otherValues.tenantName);
-    if (access) {
-        next();
-    } else {
-        throw unauthorized();
+        const { upn } = req.body;
+        const access = upn.includes(passportConfig.credentials.tenantID)
+            && upn.includes(passportConfig.otherValues.tenantName);
+        if (access) {
+            next();
+        } else {
+            throw unauthorized();
+        }
+    } catch (error) {
+        next(error)
     }
 }

@@ -9,4 +9,14 @@ export const database = createConnection({
     database: config.nameDB,
 });
 
-export const closeConnectionDB = async ()=> (await database).end();
+export const isDatabaseConnected = async () => {
+    try {
+        await (await database).query('SELECT 1');
+        return true;
+    } catch (error) {
+        console.warn("cannot check database status");
+        return false;
+    }
+}
+
+export const closeConnectionDB = async () => (await database).end();

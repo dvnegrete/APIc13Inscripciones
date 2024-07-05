@@ -7,7 +7,6 @@ export const userAllowedHandler = async (req, res, next) => {
     try {
         const { upn: username } = req.body;
         let user = await service.findOneUser(username);
-        await service.closeServiceDB();
         if (!user) {
             const addUser = await service.addUserDefault(req.body);
             addUser === 1 ?
@@ -20,6 +19,6 @@ export const userAllowedHandler = async (req, res, next) => {
         }
         next();
     } catch (error) {
-        throw unauthorized;
+        throw unauthorized();
     }
 }
