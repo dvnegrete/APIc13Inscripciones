@@ -1,16 +1,13 @@
 import bcrypt from "bcrypt";
-//const bcrypt = require("bcrypt");
 import { notFound, unauthorized } from "@hapi/boom";
-//const boom = require("@hapi/boom");
 import { database } from "./../database/firestore.js";
-//const { database } = require("../database/firestore");
-import { listBlobs, getBlobStorage, uploadBlobStorage } from "./../controller/blobsAzure.js";
-//const { listBlobs, getBlobStorage, uploadBlobStorage } = require("../controller/blobsAzure");
+import { listBlobs, getBlobStorage, uploadBlobStorage } from "./../libs/blobsAzure.js";
 const collection = "usuarios";
 
 export default class ControlStudentsService {
     constructor(){}
 
+    // Métodos de Authenticación local
     async create (username, password) {
         const hash = await bcrypt.hash(password, 9);
         const snapshot = await database.collection(collection).count().get();
@@ -57,6 +54,8 @@ export default class ControlStudentsService {
         const isMatch = await bcrypt.compare(password, hash);
         return isMatch;
     }
+    // Métodos de Authenticación local
+    
 
     async listBlobs (container) {
         const objInformationBlob = {
@@ -109,5 +108,3 @@ export default class ControlStudentsService {
         return arrayURLs
     }
 }
-
-//module.exports = ControlStudentsService;

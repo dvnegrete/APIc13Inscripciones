@@ -1,8 +1,8 @@
 import { request, response } from 'express';
-import User from "../services/userServices.js";
+import UserService from "../services/userServices.js";
 import { signToken } from '../utils/signToken.js';
 
-const service = new User();
+const service = new UserService();
 
 export const changeTokenUser = (req, res, next) => {
     try {
@@ -22,13 +22,13 @@ export const changeTokenUser = (req, res, next) => {
 export const getUsers = async (req = request, res = response, next) => {
     try {
         const users = await service.findUsers();
-        res.send(users)
+        res.send(users);
     } catch (error) {
         next(error)
     }
 }
 
-export const updateRole = async (req = request, res = response, next) => {
+export const updateRoleUser = async (req = request, res = response, next) => {
     try {
         const { id } = req.params;
         const { role } = req.query;

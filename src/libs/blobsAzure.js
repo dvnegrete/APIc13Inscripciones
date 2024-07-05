@@ -1,6 +1,6 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-import { config } from "./../config/index.js";
 import { notFound } from "@hapi/boom";
+import { config } from "./../config/index.js";
 
 const blobServices = BlobServiceClient.fromConnectionString(config.azureStorageConnection);
 

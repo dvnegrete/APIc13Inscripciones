@@ -1,21 +1,12 @@
 import CURP from "curp";
-//const CURP = require("curp");
 import { getSpreedSheet, postSpreedSheet, updateSpreedSheet } from "./../libs/spreedsheet.js";
-//const { postSpreedSheet, getSpreedSheet, updateSpreedSheet } = require("../libs/spreedsheet");
 import { nameSheet } from "./../models/namesSheet.js";
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = nameSheet;
-//const { sheetDatabase, sheetInscriptions, sheetNumberControl } = require("../models/namesSheet");
 import { gender } from "./../models/sheetGoogle/databaseModel.js";
-//const { gender } = require("../models/sheetGoogle/databaseModel");
 import { JSONResponse, JSONgetDB } from "./../models/JSONResponse.js";
-//const { JSONResponse, JSONgetDB } = require("../models/JSONResponse");
 import { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } from "./../middlewares/validateCURP.js";
-//const { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } = require("../middlewares/validateCURP")
 import { datetime } from "./../utils/date.js";
-//const { datetime } = require("../utils/date");
-// const { uploadFirebase } = require("../database/firestore")
-import { uploadBlobStorage } from "./../controller/blobsAzure.js";
-//const { uploadBlobStorage, getBlobStorage } = require("../controller/blobsAzure");
+import { uploadBlobStorage } from "./../libs/blobsAzure.js";
 
 //Conexion a Firestore
 //const { database } = require("../database/firestore")
@@ -258,5 +249,3 @@ export default class Students {
         return url
     }
 }
-
-//module.exports = Students;

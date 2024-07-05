@@ -2,9 +2,12 @@ import { internal } from "@hapi/boom";
 import { database } from "../database/mysql.js";
 import { roles } from "../models/tablesDB.model.js";
 import { createUserDefaultQuery, deleteUserQuery, getAllUsersQuery, getUserForEmailQuery, updateUserQuery } from "../queries/userQueries.js";
+import ControlStudentsService from "./controlStudentsService.js";
 
-export default class User {
-    constructor() { }
+export default class UserService extends ControlStudentsService {
+    constructor() {
+        super();
+    }
 
     async findUsers() {
         try {

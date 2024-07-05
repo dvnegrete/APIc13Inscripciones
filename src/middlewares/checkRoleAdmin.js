@@ -3,10 +3,11 @@ import { roles } from "../models/tablesDB.model.js";
 import { decode } from "./decodeToken.js";
 
 export const checkRoleAdmin = (req, res, next) => {
-    const { role } = decode(req.headers.authorization);
+    const { role, id } = decode(req.headers.authorization);
     if (role === roles.admin) {
+        req.query.information = { role, idAdmin: id };
         next();
-    } else{
+    } else {
         throw unauthorized();
     }
 }

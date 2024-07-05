@@ -1,89 +1,73 @@
 import { Router } from "express";
 import passport from "passport";
-import { uploadFI, msalTokenVerify, decodeOauthToken, userAllowedHandler, checkRoleAdmin } from "./../middlewares/index.js";
-import ControlStudents from "./../services/controlStudentsService.js";
-import { changeTokenUser, deleteUser, getUsers, updateRole } from "../controller/userController.js";
+
+import {
+    uploadFI,
+    msalTokenVerify,
+    decodeOauthToken,
+    userAllowedHandler,
+    checkRoleAdmin,
+    checkRole
+} from "./../middlewares/index.js";
+
+import { changeTokenUser, deleteUser, getUsers, updateRoleUser } from "../controller/userController.js";
+import { getFile, getListBlobs, postFileInformation } from "../controller/controlStudentsController.js";
+import { notTheSameUser } from "../middlewares/notTheSameUser.js";
 
 const router = Router();
-const service = new ControlStudents();
 
 //eliminar cuando el fronted se actualice
 router.get('/prueba',
     [decodeOauthToken, msalTokenVerify, userAllowedHandler],
     changeTokenUser
-)
+);
+//eliminar cuando el fronted se actualice
 
 router.get("/oauth",
     [decodeOauthToken, msalTokenVerify, userAllowedHandler],
     changeTokenUser
-)
+);
+
+//users
+router.get("/users",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    getUsers
+);
 
 router.put("/updateRole/:id",
     passport.authenticate("jwt", { session: false }),
     checkRoleAdmin,
-    updateRole
-)
-
-router.get("/users",
-    passport.authenticate("jwt", { session: false }),
-    checkRoleAdmin,
-    getUsers,
-)
+    notTheSameUser,
+    updateRoleUser
+);
 
 router.delete("/user/:id",
     passport.authenticate("jwt", { session: false }),
     checkRoleAdmin,
-    deleteUser,
-)
+    notTheSameUser,
+    deleteUser
+);
+//users
 
-//query parameter "user" para la curp. Example: /listBlobs/comprobantes?CURPSTUDENT
+//control Escolar
 router.get("/listBlobs/:container",
-    //container = "informacion" or "comprobantes"
     passport.authenticate("jwt", { session: false }),
-    async (req, res, next) => {
-        try {
-            const { container } = req.params
-            const list = await service.listBlobs(container);
-            console.log(list.length);
-            if (req.query.user) {
-                const listUser = service.findBlobUser(list, req.query.user);
-                res.json({ message: listUser })
-            } else {
-                res.json({ message: list });
-            }
-        } catch (error) {
-            next(error)
-        }
-    }
-)
+    checkRole,
+    getListBlobs
+);
 
 router.get("/file/:filename",
     passport.authenticate("jwt", { session: false }),
-    async (req, res, next) => {
-        try {
-            const { filename } = req.params;
-            const file = await service.getFileBlob(filename);
-            res.json(file);
-        } catch (error) {
-            next(error);
-        }
-    }
-)
+    checkRole,
+    getFile
+);
 
 router.post("/fileInformation",
     passport.authenticate("jwt", { session: false }), uploadFI,
-    async (req, res, next) => {
-        try {
-            const arrayURL = await service.uploadFiPdf(req.files);
-            Promise.all(arrayURL).then(response => {
-                res.json({ message: response });
-            })
-        } catch (error) {
-            console.error(error)
-            next(error)
-        }
-    }
-)
+    checkRole,
+    postFileInformation
+);
+//control Escolar
 
-//module.exports = router;
 export default router;
