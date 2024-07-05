@@ -8,3 +8,5 @@ export const database = createConnection({
     port: config.portDB,
     database: config.nameDB,
 });
+
+export const closeConnectionDB = async ()=> (await database).end();

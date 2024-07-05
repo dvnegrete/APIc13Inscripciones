@@ -1,72 +1,39 @@
 import { Router } from "express";
-import jwt from "jsonwebtoken";
 import passport from "passport";
-
-import { config } from "./../config/index.js";
-
+import { uploadFI, msalTokenVerify, decodeOauthToken, userAllowedHandler, checkRoleAdmin } from "./../middlewares/index.js";
 import ControlStudents from "./../services/controlStudentsService.js";
-import { uploadFI } from "./../middlewares/multer.js";
-import { oauthMsalTokenHandler } from "./../middlewares/oauthMsalTokenHandler.js";
-import { jwtDecodeTokenHandler } from "../middlewares/jwtDecodeHandler.js";
+import { changeTokenUser, deleteUser, getUsers, updateRole } from "../controller/userController.js";
 
 const router = Router();
 const service = new ControlStudents();
 
+//eliminar cuando el fronted se actualice
 router.get('/prueba',
-    jwtDecodeTokenHandler,
-    oauthMsalTokenHandler,
-    (req, res, next) => {
-        try {
-            const { 
-                upn:username, 
-                name:nameComplete, 
-                given_name:name, 
-                role  
-            } = req.body;
-            const payload = {
-                username,
-                nameComplete,
-                name, 
-                role
-            };
-            const token = jwt.sign(payload, config.secret)
-            res.cookie("token_jwt", token, {
-                httpOnly: true,
-                secure: false,
-            })
-            res.send({ username, token, name, nameComplete, role });
-        } catch (error) {
-            console.warn("/prueba");
-            next(error);
-        }
-    }
+    [decodeOauthToken, msalTokenVerify, userAllowedHandler],
+    changeTokenUser
 )
 
-router.post("/oauth",
-    passport.authenticate("local", { session: false }),
-    async (req, res, next) => {
-        try {
-            const username = req.body.username;
-            const { id, role } = req.user;
-            const payload = {
-                id: id,
-                role: role,
-                access: true,
-            };
-            const cookieOptions = {
+router.get("/oauth",
+    [decodeOauthToken, msalTokenVerify, userAllowedHandler],
+    changeTokenUser
+)
 
-            }
-            const token = jwt.sign(payload, config.secret)
-            res.cookie("token_jwt", token, {
-                httpOnly: true,
-                secure: false,
-            })
-            res.send({ username, token });
-        } catch (error) {
-            console.warn("/oauth");
-            next(error);
-        }
-    }
+router.put("/updateRole/:id",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    updateRole
+)
+
+router.get("/users",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    getUsers,
+)
+
+router.delete("/user/:id",
+    passport.authenticate("jwt", { session: false }),
+    checkRoleAdmin,
+    deleteUser,
 )
 
 //query parameter "user" para la curp. Example: /listBlobs/comprobantes?CURPSTUDENT

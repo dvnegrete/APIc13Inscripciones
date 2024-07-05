@@ -1,6 +1,6 @@
 import passport from "passport";
 
-export function oauthMsalTokenHandler (req, res, next) {
+export function msalTokenVerify (req, res, next) {
     passport.authenticate('oauth-bearer',
         { session: false },
         (err, user, info) => {

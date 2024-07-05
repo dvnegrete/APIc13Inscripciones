@@ -6,7 +6,7 @@ export const decode = (token) => {
     return jwtDecode(token);
 }
 
-export const jwtDecodeTokenHandler = (req, res, next) => {
+export const decodeOauthToken = (req, res, next) => {
     const token = req.headers.authorization;
     if (token) {
         const { upn, name, given_name, family_name } = decode(token);
@@ -15,7 +15,6 @@ export const jwtDecodeTokenHandler = (req, res, next) => {
             name,
             given_name,
             family_name,
-            role: "user"
         }
     }
     const { upn } = req.body;
