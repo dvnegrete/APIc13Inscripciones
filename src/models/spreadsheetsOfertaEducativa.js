@@ -1,36 +1,6 @@
 import { nameSheet } from "./namesSheet.js";
-//const nameSheet = require("./namesSheet");
-import { coursesModel } from "./sheetGoogle/coursesModel.js";
-//const coursesModel = require("./sheetGoogle/coursesModel");
-import { questionsModel } from "./sheetGoogle/questionsModel.js";
-//const questionsModel = require("./sheetGoogle/questionsModel");
-import { imageModel } from "./sheetGoogle/imageModel.js";
-//const imageModel = require("./sheetGoogle/imageModel");
-import { homePageModel } from "./sheetGoogle/homePageModel.js";
-//const homePageModel = require("./sheetGoogle/homePageModel");
+import { coursesModel, homePageModel, imageModel, questionsModel } from "./sheetGoogle/index.js";
 
-// function selectModel(id, rows, size) {
-//     if (id === 10) {
-//         const data = coursesModel(rows);
-//         return data;
-//     } 
-//     // if (id === 20) {
-//     //     const data = inscriptionModel(rows);
-//     //     return data;
-//     // } 
-//     if (id === 30) {
-//         const data = questionsModel(rows);
-//         return data;
-//     }
-//     if (id === 40) {
-//         const data = imageModel(rows, size);
-//         return data;
-//     }
-//     if (id === 50) {
-//         const data = homePageModel(rows);
-//         return data;
-//     }
-// }
 function selectModel(id, rows, size) {
     switch (id) {
         case 10:
@@ -54,9 +24,6 @@ function selectIdGSheet(id) {
         case 10:
             return nameSheet.sheetCourses;
         //id 20: inscription
-        // case 20:
-        //     sheetName =  nameSheet.sheetLinkInscription;            
-        //     break;
         //id 30: questions
         case 30:
             return nameSheet.sheetQuestions;
@@ -68,5 +35,4 @@ function selectIdGSheet(id) {
     }
 }
 
-//module.exports = spreadsheetsOfertaEducativa;
 export { selectModel, selectIdGSheet }

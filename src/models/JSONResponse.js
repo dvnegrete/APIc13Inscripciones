@@ -1,13 +1,12 @@
 import { hideCharactersEmail, hideCharactersPhone } from "./../utils/hideCharacters.js";
-//const { hideCharactersPhone , hideCharactersEmail } = require("../utils/hideCharacters");
 
-export function JSONResponse(dataArray){
-    let info = {};    
+export function JSONResponse(dataArray) {
+    let info = {};
     const date = dataArray[0].fechaRegistro;
     //Si date es undefined, los datos son previos a este sistema de inscripciones, y obligamos a actualizar info.
     if (date) {
         const telefonoEncrypted = hideCharactersPhone(dataArray[0].telefono);
-        const emailEncrypted =  hideCharactersEmail(dataArray[0].email);
+        const emailEncrypted = hideCharactersEmail(dataArray[0].email);
         info = {
             curp: dataArray[0].curp,
             matricula: dataArray[0].matricula,
@@ -25,14 +24,14 @@ export function JSONResponse(dataArray){
             a_paterno: dataArray[0].a_paterno,
             a_materno: dataArray[0].a_materno,
             nombre: dataArray[0].nombre,
-            updateContact : true,
+            updateContact: true,
             indexR: dataArray[0].rowIndex
         }
     }
     return info;
 }
 
-export function JSONgetDB(dataArray){
+export function JSONgetDB(dataArray) {
     const info = {
         fechaRegistro: dataArray[0].fechaRegistro,
         curp: dataArray[0].curp,
@@ -57,5 +56,3 @@ export function JSONgetDB(dataArray){
     }
     return info;
 }
-
-//module.exports =  { JSONResponse, JSONgetDB } ;

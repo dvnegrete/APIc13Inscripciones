@@ -20,4 +20,14 @@ export const config = {
 
     credentialGoogle: credentialGoogle,
     credentialFirebase: credentialFirebase,
-}
+};
+
+export const configSession = {
+    secret: process.env.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // set this to true on production
+    }
+};

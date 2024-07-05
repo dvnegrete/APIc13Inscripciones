@@ -4,7 +4,7 @@ export const nameSheet = {
     // sheetInscriptions: "pruebaPreinscripciones",
     // sheetDatabase: "databasePruebas",
     //sheets para prueba
-    
+
     sheetInscriptions: "preinscripciones",
     sheetNumberControl: "matricula",
     sheetDatabase: "database",
@@ -15,5 +15,3 @@ export const nameSheet = {
     sheetHomePage: "anunciosHomePage",
     sheet196Courses: "C-196Cursos"
 }
-
-//module.exports = nameSheet;

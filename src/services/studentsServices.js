@@ -1,15 +1,14 @@
 import CURP from "curp";
-import { getSpreedSheet, postSpreedSheet, updateSpreedSheet } from "./../libs/spreedsheet.js";
+import { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } from "./../middlewares/validateCURP.js";
+
 import { nameSheet } from "./../models/namesSheet.js";
 const { sheetDatabase, sheetInscriptions, sheetNumberControl } = nameSheet;
 import { gender } from "./../models/sheetGoogle/databaseModel.js";
 import { JSONResponse, JSONgetDB } from "./../models/JSONResponse.js";
-import { generateCURP, compareDigitVerifyCurp, messageDuplicity, messageErrorCurp } from "./../middlewares/validateCURP.js";
-import { datetime } from "./../utils/date.js";
-import { uploadBlobStorage } from "./../libs/blobsAzure.js";
 
-//Conexion a Firestore
-//const { database } = require("../database/firestore")
+import { datetime } from "./../utils/date.js";
+import { getSpreedSheet, postSpreedSheet, updateSpreedSheet } from "./../libs/spreedsheet.js";
+import { uploadBlobStorage } from "./../libs/blobsAzure.js";
 
 export default class Students {
     constructor() { }

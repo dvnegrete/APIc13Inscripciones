@@ -1,8 +1,6 @@
 import { Router } from "express";
 import Students from "./../services/studentsServices.js";
-//const Students = require("../services/studentsServices.js");
 import { uploadDocs } from "./../middlewares/multer.js";
-//const { uploadDocs } = require("../middlewares/multer");
 
 const router = Router();
 
@@ -66,5 +64,4 @@ router.post("/files", uploadDocs, async (req, res) => {
     }
 });
 
-//module.exports = router;
 export default router;

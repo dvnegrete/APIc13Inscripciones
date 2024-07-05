@@ -8,10 +8,6 @@ import specialitie from "./specialitieRouter.js";
 
 export function routerAPI(app) {
     const router = Router();
-
-    //app.set("trust proxy", true);
-    //app.use("/auth/*", ExpressAuth({ providers: [] }));
-
     app.use("/API/v1", router);
 
     router.get("/", (req, res) => {

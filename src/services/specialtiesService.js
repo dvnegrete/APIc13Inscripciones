@@ -1,5 +1,4 @@
 import { database } from "./../database/firestore.js";
-//const { database } = require("./../database/firestore");
 
 const COLLECTION = "especialidades"
 
@@ -52,5 +51,3 @@ export default class Specialtie {
     return response;
   }
 }
-
-//module.exports = Specialtie;

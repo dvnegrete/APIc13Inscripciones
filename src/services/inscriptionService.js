@@ -1,21 +1,11 @@
-import { getSpreedSheet, postSpreedSheet } from "./../libs/spreedsheet.js";
-//const { postSpreedSheet, getSpreedSheet } = require("../libs/spreedsheet");
 import pkgCurp from "curp";
-//const curp = require("curp");
-import { nameSheet } from "./../models/namesSheet.js";
-//const nameSheet = require("../models/namesSheet");
+import { getSpreedSheet, postSpreedSheet } from "./../libs/spreedsheet.js";
 import { datetime } from "./../utils/date.js";
-//const studentDocument = require("../models/documents/studentDocument")
-//const { monthYear, dateComplete } = require("../utils/date")
+import { nameSheet } from "./../models/namesSheet.js";
 const students = "estudiantes";
 
-
-//servicio conectado con FIREBASE, para retomar en un futuro esta u otra BD
-//Conexion a Firestore
 import { database } from "./../database/firestore.js";
-//const { database } = require("../database/firestore")
 const collection = "";
- 
 export default class Inscriptions {
     
     sheet = nameSheet.sheetInscriptions;
@@ -102,5 +92,3 @@ export default class Inscriptions {
         return CURP
     }  
 }
-
-//module.exports = Inscriptions;

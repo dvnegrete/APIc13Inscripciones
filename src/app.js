@@ -1,25 +1,17 @@
 import express from "express";
-import cookieParser from "cookie-parser";
 import session from "express-session";
+import cookieParser from "cookie-parser";
 import passport from "passport";
 
-import { routerAPI } from "./routes/index.js";
-import { corsHandler } from "./middlewares/corsHandler.js";
-import { boomErrorHandler, errorHandler, logErrors } from "./middlewares/errorHandler.js";
+import { configSession } from "./config/index.js";
 import { authStrategy } from "./utils/auth/index.js";
+import { boomErrorHandler, errorHandler, logErrors, corsHandler } from "./middlewares/index.js";
+import { routerAPI } from "./routes/index.js";
 
 export const app = express();
 
 app.use(corsHandler)
-app.use(session({
-    secret: process.env.EXPRESS_SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        secure: false, // set this to true on production
-    }
-}));
+app.use(session(configSession));
 
 app.use(cookieParser());
 app.use(passport.initialize());

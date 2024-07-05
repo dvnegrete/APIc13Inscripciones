@@ -1,5 +1,4 @@
 import multer, { memoryStorage } from "multer";
-//const multer = require("multer");
 
 const storage = memoryStorage();
 const typeError = new Error("TYPE_FORMAT_INVALID");
@@ -40,9 +39,6 @@ const uploadDocs = upload.fields([
     { name: 'comprobanteEstudios', maxCount: 1 }
 ]);
 
-//const uploadFI = fInformation.single("fileFI");
-
 const uploadFI = fInformation.array("fileFI")
 
-//module.exports = { uploadDocs, uploadFI };
 export { uploadDocs, uploadFI }
