@@ -7,12 +7,12 @@ import {
     decodeOauthToken,
     userAllowedHandler,
     checkRoleAdmin,
-    checkRole
+    checkRole,
+    notTheSameUser
 } from "./../middlewares/index.js";
 
 import { changeTokenUser, deleteUser, getUsers, updateRoleUser } from "../controller/userController.js";
 import { getFile, getListBlobs, postFileInformation } from "../controller/controlStudentsController.js";
-import { notTheSameUser } from "../middlewares/notTheSameUser.js";
 
 const router = Router();
 

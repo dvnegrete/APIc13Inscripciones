@@ -13,7 +13,7 @@ export const passportConfig = {
     settings: {
         validateIssuer: false,
         passReqToCallback: false,
-        loggingLevel: "info",
+        loggingLevel: "error",
         loggingNoPII: true,
     },
     protectedRoutes: {

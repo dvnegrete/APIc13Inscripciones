@@ -1,4 +1,5 @@
 export const roles = {
+    sAdmin: "sAdmin",
     admin: "admin",
     user: "user",
     notFunctions: "notFunctions"

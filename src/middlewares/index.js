@@ -7,3 +7,4 @@ export * from './msalTokenVerify.js';
 export * from './multer.js';
 export * from './userAllowedHandler.js';
 export * from './validateCURP.js';
+export * from './notTheSameUser.js';
