@@ -1,7 +1,8 @@
-const express = require("express");
-const Students = require("../services/studentsServices.js");
-const router = express.Router();
-const { uploadDocs } = require("../middlewares/multer")
+import { Router } from "express";
+import Students from "./../services/studentsServices.js";
+import { uploadDocs } from "./../middlewares/multer.js";
+
+const router = Router();
 
 const service = new Students();
 
@@ -63,4 +64,4 @@ router.post("/files", uploadDocs, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

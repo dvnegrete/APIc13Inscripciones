@@ -20,6 +20,9 @@ Backend para inscripciones en linea del CECATI 13
 
 #### /API/v1/controlStudents
     POST    /API/v1/controlStudents/oauth
+    GET     /API/v1/controlStudents/users
+    PUT     /API/v1/controlStudents/updateRole/:id
+    DELETE  /API/v1/controlStudents/user/:id
     GET     /API/v1/controlStudents/listBlobs/:container
     GET     /API/v1/controlStudents/file/:filename
     POST    /API/v1/controlStudents/fileInformation
@@ -30,9 +33,6 @@ Endpoind en pruebas y mantenimiento:
     POST    /API/v1/specialitie/update
     PATCH   /API/v1/specialitie/:id
 
-### /API/v1/c196
-    GET     /API/v1/c196
-
 #### endpoints NO USADOS:
     /API/v1/inscription 
 Conexion a Firebase preparada y probada.
@@ -41,3 +41,7 @@ Conexion a Firebase preparada y probada.
     POST    /API/v1/inscription//newStudent/dataGeneral
     POST    /API/v1/inscription/dbStudent
     POST    /API/v1/inscription/register
+
+
+Configuración de Oauth 2.0 desde:
+https://github.com/Azure-Samples/ms-identity-javascript-tutorial/tree/main/3-Authorization-II/1-call-api#configure-the-service-app-msal-node-api-to-use-your-app-registration

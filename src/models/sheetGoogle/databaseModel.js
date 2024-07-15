@@ -1,10 +1,10 @@
 //ubicationColum usada cuando se requiere actualizar la información
-function ubicationColumn (key){
+function ubicationColumn(key) {
     let column;
     switch (key) {
         case "discapacidad":
             column = "O";
-            break;            
+            break;
         case "padecimiento":
             column = "P";
             break;
@@ -14,16 +14,16 @@ function ubicationColumn (key){
         case "telefono":
             column = "R";
             break;
-        case "calle": 
+        case "calle":
             column = "S";
             break;
-        case "colonia": 
+        case "colonia":
             column = "T";
             break;
-        case "municipio": 
+        case "municipio":
             column = "U";
             break;
-        case "estado": 
+        case "estado":
             column = "V";
             break;
         case "cp":
@@ -41,27 +41,27 @@ function ubicationColumn (key){
         case "actaNacimiento":
             column = "AA";
             break;
-        default: 
-        //curp
-        column = "B";
+        default:
+            //curp
+            column = "B";
             break;
     };
     return column;
 }
 
-function updateableData (array){
+function updateableData(array) {
     //campos marcados en azul en Spreedsheets database
-    const newArray = array.filter( key =>
+    const newArray = array.filter(key =>
         key === "telefono"
         || key === "email"
         || key === "calle"
-        || key ==="colonia"
+        || key === "colonia"
         || key === "municipio"
         || key === "estado"
         || key === "cp"
         || key === "padecimiento"
         || key === "discapacidad"
-        || key === "escolaridad"            
+        || key === "escolaridad"
         || key === "comprobanteDomicilio"
         || key === "comprobanteEstudios"
         || key === "actaNacimiento"
@@ -71,13 +71,13 @@ function updateableData (array){
 
 const firstComunUpdate = "O";
 const lastColumnUpdate = "AA";
-    //rango de datos en SpreedSheet que se pueden actualizar
+//rango de datos en SpreedSheet que se pueden actualizar
 
 const rangeDateRegister = "A";
 //columna donde se actualiza la fecha de registro
 
-const gender = (param) =>  param === "MASCULINO" ? "HOMBRE" : "MUJER";
+const gender = (param) => param === "MASCULINO" ? "HOMBRE" : "MUJER";
 //Cambiar de MASCULINO/FEMENINO a HOMBRE/MUJER, que es el formato que tiene la hoja de calculo.
 //La forma MASCULINO/FEMENINO es utlizada por la dependencia de la CURP para validar la información.
 
-module.exports = { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister, gender };
+export { ubicationColumn, updateableData, firstComunUpdate, lastColumnUpdate, rangeDateRegister, gender };
