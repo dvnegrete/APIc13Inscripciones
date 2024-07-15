@@ -16,13 +16,6 @@ import { getFile, getListBlobs, postFileInformation } from "../controller/contro
 
 const router = Router();
 
-//eliminar cuando el fronted se actualice
-router.get('/prueba',
-    [decodeOauthToken, msalTokenVerify, userAllowedHandler],
-    changeTokenUser
-);
-//eliminar cuando el fronted se actualice
-
 router.get("/oauth",
     [decodeOauthToken, msalTokenVerify, userAllowedHandler],
     changeTokenUser
