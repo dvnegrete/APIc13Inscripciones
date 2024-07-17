@@ -1,14 +1,12 @@
 import { hideCharactersEmail, hideCharactersPhone } from "./../utils/hideCharacters.js";
 
 export function JSONResponse(dataArray) {
-    console.log(dataArray);
-    let info = {};
     const date = dataArray[0].get('fechaRegistro');
     //Si date es undefined, los datos son previos a este sistema de inscripciones, y obligamos a actualizar info.
     if (date) {
         const telefonoEncrypted = hideCharactersPhone(dataArray[0].get('telefono'));
         const emailEncrypted = hideCharactersEmail(dataArray[0].get('email'));
-        info = {
+        return {
             curp: dataArray[0].get('curp'),
             matricula: dataArray[0].get('matricula'),
             a_paterno: dataArray[0].get('a_paterno'),
@@ -16,20 +14,19 @@ export function JSONResponse(dataArray) {
             nombre: dataArray[0].get('nombre'),
             telefono: telefonoEncrypted,
             email: emailEncrypted,
-            indexR: dataArray[0].get('rowIndex'),
+            indexR: dataArray[0].rowNumber,
         }
     } else {
-        info = {
+       return {
             curp: dataArray[0].get('curp'),
             matricula: dataArray[0].get('matricula'),
             a_paterno: dataArray[0].get('a_paterno'),
             a_materno: dataArray[0].get('a_materno'),
             nombre: dataArray[0].get('nombre'),
             updateContact: true,
-            indexR: dataArray[0].get('rowIndex'),
+            indexR: dataArray[0].rowNumber,
         }
-    }
-    return info;
+    }   
 }
 
 export function JSONgetDB(dataArray) {
