@@ -12,7 +12,7 @@ import {
 } from "./../middlewares/index.js";
 
 import { changeTokenUser, deleteUser, getUsers, updateRoleUser } from "../controller/userController.js";
-import { getFile, getListBlobs, postFileInformation } from "../controller/controlStudentsController.js";
+import { getFile, getListBlobs, deleteFile, getRegistrationRecord, postFileInformation } from "../controller/controlStudentsController.js";
 
 const router = Router();
 
@@ -50,11 +50,23 @@ router.get("/listBlobs/:container",
     getListBlobs
 );
 
+router.get("/registrationRecord", 
+    passport.authenticate("jwt", { session: false }),
+    checkRole,
+    getRegistrationRecord
+);
+
 router.get("/file/:filename",
     passport.authenticate("jwt", { session: false }),
     checkRole,
     getFile
 );
+
+router.delete("/file/:filename",
+    passport.authenticate("jwt", { session: false }),
+    checkRole,
+    deleteFile
+)
 
 router.post("/fileInformation",
     passport.authenticate("jwt", { session: false }), uploadFI,

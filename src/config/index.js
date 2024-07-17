@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import credentialGoogle from "./../../keysGoogle.json" with {type: "json"};
+//import credentialGoogle from "./../../keysGoogle.json" with {type: "json"};
 import credentialFirebase from "./../../keysFirebase.json" with {type: "json"};
 
 export const config = {
@@ -11,6 +11,9 @@ export const config = {
     dateForCurp: process.env.DATE_FOR_CURP,
     // Firebase
     realtimeDB: process.env.REALTIMEDB,
+    //Google
+    client_email: process.env.CLIENT_EMAIL_GOOGLE,
+    private_key: process.env.PRIVATE_KEY_GOOGLE,
     // DB
     hostDB:process.env.HOST_DB,
     userDB:process.env.USER_DB,
@@ -18,7 +21,7 @@ export const config = {
     portDB:process.env.PORT_DB,
     nameDB:process.env.NAME_DB,
 
-    credentialGoogle: credentialGoogle,
+    //credentialGoogle: credentialGoogle,
     credentialFirebase: credentialFirebase,
 };
 

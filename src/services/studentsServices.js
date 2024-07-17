@@ -65,7 +65,7 @@ export default class Students {
     async generateNumberControl() {
         const rows = await getSpreedSheet(sheetNumberControl);
         const countRows = rows.length;
-        const numberControl = rows[countRows - 1].matricula;
+        const numberControl = rows[countRows - 1].get("matricula");
         const numberGenerate = parseInt(numberControl, 10) + 1;
         return numberGenerate;
     }
@@ -73,7 +73,7 @@ export default class Students {
     async findForCurp(stringCURP) {
         const rows = await getSpreedSheet(sheetDatabase);
         const data = rows.filter(column => {
-            const value = column.curp.toUpperCase();
+            const value = column.get('curp').toUpperCase();
             return value.includes(stringCURP)
         })
         let objReturn = {};
@@ -88,7 +88,7 @@ export default class Students {
     async getDataDB(stringCURP) {
         const rows = await getSpreedSheet(sheetDatabase);
         const data = rows.filter(column => {
-            const value = column.curp.toUpperCase();
+            const value = column.get('curp').toUpperCase();
             return value.includes(stringCURP)
         });
         const info = JSONgetDB(data);
@@ -140,7 +140,7 @@ export default class Students {
     async verifyLastRegistration(obj) {
         const rows = await getSpreedSheet(sheetInscriptions);
         const countRows = rows.length;
-        const lastInscriptionCurp = rows[countRows - 1].curp;
+        const lastInscriptionCurp = rows[countRows - 1].get('curp');
         let verify = false;
         if (lastInscriptionCurp === obj.curp) {
             verify = true;

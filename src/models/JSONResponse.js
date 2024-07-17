@@ -1,31 +1,32 @@
 import { hideCharactersEmail, hideCharactersPhone } from "./../utils/hideCharacters.js";
 
 export function JSONResponse(dataArray) {
+    console.log(dataArray);
     let info = {};
-    const date = dataArray[0].fechaRegistro;
+    const date = dataArray[0].get('fechaRegistro');
     //Si date es undefined, los datos son previos a este sistema de inscripciones, y obligamos a actualizar info.
     if (date) {
-        const telefonoEncrypted = hideCharactersPhone(dataArray[0].telefono);
-        const emailEncrypted = hideCharactersEmail(dataArray[0].email);
+        const telefonoEncrypted = hideCharactersPhone(dataArray[0].get('telefono'));
+        const emailEncrypted = hideCharactersEmail(dataArray[0].get('email'));
         info = {
-            curp: dataArray[0].curp,
-            matricula: dataArray[0].matricula,
-            a_paterno: dataArray[0].a_paterno,
-            a_materno: dataArray[0].a_materno,
-            nombre: dataArray[0].nombre,
+            curp: dataArray[0].get('curp'),
+            matricula: dataArray[0].get('matricula'),
+            a_paterno: dataArray[0].get('a_paterno'),
+            a_materno: dataArray[0].get('a_materno'),
+            nombre: dataArray[0].get('nombre'),
             telefono: telefonoEncrypted,
             email: emailEncrypted,
-            indexR: dataArray[0].rowIndex
+            indexR: dataArray[0].get('rowIndex'),
         }
     } else {
         info = {
-            curp: dataArray[0].curp,
-            matricula: dataArray[0].matricula,
-            a_paterno: dataArray[0].a_paterno,
-            a_materno: dataArray[0].a_materno,
-            nombre: dataArray[0].nombre,
+            curp: dataArray[0].get('curp'),
+            matricula: dataArray[0].get('matricula'),
+            a_paterno: dataArray[0].get('a_paterno'),
+            a_materno: dataArray[0].get('a_materno'),
+            nombre: dataArray[0].get('nombre'),
             updateContact: true,
-            indexR: dataArray[0].rowIndex
+            indexR: dataArray[0].get('rowIndex'),
         }
     }
     return info;
@@ -33,26 +34,26 @@ export function JSONResponse(dataArray) {
 
 export function JSONgetDB(dataArray) {
     const info = {
-        fechaRegistro: dataArray[0].fechaRegistro,
-        curp: dataArray[0].curp,
-        matricula: dataArray[0].matricula,
-        a_paterno: dataArray[0].a_paterno,
-        a_materno: dataArray[0].a_materno,
-        nombre: dataArray[0].nombre,
-        genero: dataArray[0].genero,
-        fechaNacimiento: dataArray[0].fechaNacimiento,
-        email: dataArray[0].email,
-        telefono: dataArray[0].telefono,
-        calle: dataArray[0].calle,
-        colonia: dataArray[0].colonia,
-        municipio: dataArray[0].municipio,
-        estado: dataArray[0].estado,
-        cp: dataArray[0].cp,
-        discapacidad: dataArray[0].discapacidad,
-        escolaridad: dataArray[0].escolaridad,
-        comprobanteDomicilio: dataArray[0].comprobanteDomicilio,
-        comprobanteEstudios: dataArray[0].comprobanteEstudios,
-        actaNacimiento: dataArray[0].actaNacimiento
+        fechaRegistro: dataArray[0].get('fechaRegistro'),
+        curp: dataArray[0].get('curp'),
+        matricula: dataArray[0].get('matricula'),
+        a_paterno: dataArray[0].get('a_paterno'),
+        a_materno: dataArray[0].get('a_materno'),
+        nombre: dataArray[0].get('nombre'),
+        genero: dataArray[0].get('genero'),
+        fechaNacimiento: dataArray[0].get('fechaNacimiento'),
+        email: dataArray[0].get('email'),
+        telefono: dataArray[0].get('telefono'),
+        calle: dataArray[0].get('calle'),
+        colonia: dataArray[0].get('colonia'),
+        municipio: dataArray[0].get('municipio'),
+        estado: dataArray[0].get('estado'),
+        cp: dataArray[0].get('cp'),
+        discapacidad: dataArray[0].get('discapacidad'),
+        escolaridad: dataArray[0].get('escolaridad'),
+        comprobanteDomicilio: dataArray[0].get('comprobanteDomicilio'),
+        comprobanteEstudios: dataArray[0].get('comprobanteEstudios'),
+        actaNacimiento: dataArray[0].get('actaNacimiento'),
     }
     return info;
 }
