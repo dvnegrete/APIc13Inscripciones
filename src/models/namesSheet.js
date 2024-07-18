@@ -13,5 +13,4 @@ export const nameSheet = {
     sheetLinkInscription: "inscripcion",
     sheetImage: "imagenes",
     sheetHomePage: "anunciosHomePage",
-    sheet196Courses: "C-196Cursos"
 }

@@ -1,9 +1,9 @@
 const allowedOrigins = [
     'https://cecati13.edu.mx',
     //dev
-    // 'https://dvnegrete.github.io',
-    // 'http://localhost:5501',
-    // undefined,
+    'https://dvnegrete.github.io',
+    'http://localhost:5501',
+    undefined,
 ];
 
 export function corsHandler(req, res, next) {

@@ -1,9 +1,8 @@
 import express from "express";
-import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import morgan from "morgan";
 
-import { configSession } from "./config/index.js";
 import { authStrategy } from "./utils/auth/index.js";
 import { boomErrorHandler, errorHandler, logErrors, corsHandler } from "./middlewares/index.js";
 import { routerAPI } from "./routes/index.js";
@@ -11,9 +10,8 @@ import { routerAPI } from "./routes/index.js";
 export const app = express();
 
 app.use(corsHandler)
-app.use(session(configSession));
-
 app.use(cookieParser());
+app.use(morgan(':date[clf] - :method :url :status :res[content-length] - :response-time ms'))
 app.use(passport.initialize());
 authStrategy();
 app.use(express.json());
