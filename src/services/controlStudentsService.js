@@ -8,10 +8,6 @@ import {
 export default class ControlStudentsService {
   constructor() {}
 
-  // Métodos de Authenticación local
-
-  // Métodos de Authenticación local
-
   async listBlobs(container) {
     const objInformationBlob = {
       container: container,

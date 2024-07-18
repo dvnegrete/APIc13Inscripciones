@@ -1,4 +1,4 @@
-import { jwtDecode, } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { passportConfig } from "../config/authConfig.js";
 import { unauthorized } from "@hapi/boom";
 
