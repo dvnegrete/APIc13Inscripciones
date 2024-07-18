@@ -12,7 +12,9 @@ export function msalTokenVerify(req, res, next) {
                      */
                     return res.status(401).json({ error: err.message });
                 }
-
+                /**
+                 * update for v2
+                 */
                 // if (!user) {
                 //     // If no user object found, send a 401 response.
                 //     return res.status(401).json({ error: 'Unauthorized' });

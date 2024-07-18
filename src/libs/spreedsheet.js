@@ -1,6 +1,6 @@
-import { GoogleSpreadsheet } from "google-spreadsheet";
+import { docGoogleAuth } from "./googleAuthJwt.js";
 import { config } from "./../config/index.js";
-const { idSheetCourses, idGoogleRegisterInscription, credentialGoogle } = config;
+const { idSheetCourses, idGoogleRegisterInscription } = config;
 import { nameSheet } from "./../models/namesSheet.js";
 import {
     ubicationColumn,
@@ -29,8 +29,7 @@ function GSheetID(sheetName) {
 
 async function conexionGoogleSheet(sheetName) {
     const idSheet = GSheetID(sheetName);
-    const doc = new GoogleSpreadsheet(idSheet);
-    await doc.useServiceAccountAuth(credentialGoogle);
+    const doc = docGoogleAuth(idSheet);
     await doc.loadInfo();
 
     const sheet = doc.sheetsByTitle[sheetName];
