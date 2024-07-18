@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/index.js";
 
 const jwtConfig = {
-    expiresIn: '2h'
+    expiresIn: '4h'
 };
 
 export function signToken(payload) {

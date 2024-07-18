@@ -93,7 +93,6 @@ export default class Students {
       const value = column.get("curp").toUpperCase();
       return value.includes(stringCURP);
     });
-    console.log(data);
     let objReturn = {};
     if (data.length > 0) {
       objReturn = JSONResponse(data);
