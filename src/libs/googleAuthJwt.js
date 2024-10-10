@@ -1,16 +1,28 @@
 import { JWT } from "google-auth-library";
 import { GoogleSpreadsheet } from "google-spreadsheet";
-import { config } from "./../config/index.js";
+import { config } from "../config/index.js";
+import { nameSheet } from "../models/namesSheet.js";
 
-const formattedPrivateKey = config.private_key.replace(/\\n/g, '\n');
+const formattedPrivateKey = config.privateKey.replace(/\\n/g, "\n");
 
 const serviceAccountAuth = new JWT({
-  email: config.client_email,
+  email: config.clientEmail,
   key: formattedPrivateKey,
-  scopes: [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive.file",
-  ],
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-export const docGoogleAuth = (idSheet) => new GoogleSpreadsheet(idSheet, serviceAccountAuth);
+function GSheetID(name) {
+  if (
+    name === nameSheet.sheetNumberControl ||
+    name === nameSheet.sheetInscriptions
+  ) {
+    return config.idGoogleRegisterInscription;
+  } else {
+    return config.idSheet;
+  }
+}
+
+export const googleAuth = (name) => {
+  const idSheet = GSheetID(name);
+  return new GoogleSpreadsheet(idSheet, serviceAccountAuth);
+};

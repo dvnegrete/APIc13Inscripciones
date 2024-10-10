@@ -8,7 +8,7 @@ export const roles = {
 const users = {
     name: "users",
     fields: {
-        emial: "",
+        email: "",
         name: "",
         role: roles.notFunctions,
     }

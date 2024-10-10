@@ -1,16 +1,19 @@
 export const nameSheet = {
-    //sheets para prueba
-    // sheetNumberControl: "pruebaMatricula",
-    // sheetInscriptions: "pruebaPreinscripciones",
-    // sheetDatabase: "databasePruebas",
-    //sheets para prueba
-
+    sheetCourses: "Cursos",
+    sheetHomePage: "anunciosHomePage",
+    sheetImage: "imagenes",
+    sheetQuestions: "preguntas",
+  
+    /**
+     * DataBase temp PROD
+     */
     sheetInscriptions: "preinscripciones",
     sheetNumberControl: "matricula",
-    sheetDatabase: "database",
-    sheetCourses: "Cursos",
-    sheetQuestions: "preguntas",
-    sheetLinkInscription: "inscripcion",
-    sheetImage: "imagenes",
-    sheetHomePage: "anunciosHomePage",
-}
+  
+    /**
+     * DataBase temp DEV (Pruebas)
+     */
+    // sheetNumberControl: "pruebaMatricula",
+    // sheetInscriptions: "pruebaPreinscripciones",
+  };
+  
