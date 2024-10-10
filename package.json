@@ -17,6 +17,7 @@
     "busboy": "^1.6.0",
     "cookie-parser": "^1.4.6",
     "curp": "^1.2.3",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "google-auth-library": "^9.14.1",
     "google-spreadsheet": "^4.1.2",
@@ -30,7 +31,6 @@
     "sequelize": "^6.37.4"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
     "nodemon": "^3.1.4"
   }
 }
