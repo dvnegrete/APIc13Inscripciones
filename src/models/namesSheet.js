@@ -1,19 +1,22 @@
+import { config } from "../config/index.js";
+
 export const nameSheet = {
     sheetCourses: "Cursos",
     sheetHomePage: "anunciosHomePage",
     sheetImage: "imagenes",
     sheetQuestions: "preguntas",
+    sheetInscriptions: config.sheetPreinscript,
+    sheetNumberControl: config.sheetMatricula,
   
     /**
-     * DataBase temp PROD
+     * PRODUCTION
+     * sheetInscriptions: "preinscripciones",
+     * sheetNumberControl: "matricula",
+     *
+     * DEVELOPMENT
+     * sheetNumberControl: "pruebaMatricula"
+     * sheetInscriptions: "pruebaPreinscripciones"
      */
-    sheetInscriptions: "preinscripciones",
-    sheetNumberControl: "matricula",
-  
-    /**
-     * DataBase temp DEV (Pruebas)
-     */
-    // sheetNumberControl: "pruebaMatricula",
-    // sheetInscriptions: "pruebaPreinscripciones",
+
   };
   

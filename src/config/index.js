@@ -5,6 +5,8 @@ export const config = {
   clientEmail: process.env.CLIENT_EMAIL_GOOGLE,
   idSheet: process.env.ID_SHEET,
   idGoogleRegisterInscription: process.env.ID_SHEET_REGISTER_INSCRIPTION,
+  sheetPreinscript: process.env.SHEET_PREINSCRIPT,
+  sheetMatricula: process.env.SHEET_MATRICULA,
   azureStorageConnection: process.env.AZURE_STORAGE_CONNECTION,
   dateForCurp: process.env.DATE_FOR_CURP,
   secret: process.env.SECRET,
