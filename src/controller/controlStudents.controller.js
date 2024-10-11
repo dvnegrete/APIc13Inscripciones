@@ -128,6 +128,7 @@ export const deleteFile = async (req = request, res = response, next) => {
   try {
     const { filename } = req.params;
     const file = await deleteFileBlob(filename, nameContainer.proof);
+    //const file = await deleteFileBlob(filename, nameContainer.information);
     res.json({ file });
   } catch (error) {
     next(error);
