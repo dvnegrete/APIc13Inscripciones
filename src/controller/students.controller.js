@@ -16,7 +16,8 @@ export const typeRegister = async (req = request, res = response, next) => {
     if (student === null || student === undefined) {
       res.status(404).json({ message: "notFound" });
     } else {
-      const updateContact = new Date(student.updatedAt) < new Date('2024-09-30');
+      const updateContact =
+        new Date(student.updatedAt) < new Date("2024-09-30");
       const email =
         student.email === null || student.email === undefined
           ? null
@@ -25,12 +26,12 @@ export const typeRegister = async (req = request, res = response, next) => {
         student.telefono === null || student.telefono === undefined
           ? null
           : hideCharactersPhone(student.telefono);
-          delete student.updatedAt;
+      delete student.updatedAt;
       res.json({
         ...student,
         email,
         telefono,
-        updateContact
+        updateContact,
       });
     }
   } catch (error) {
@@ -79,16 +80,6 @@ export const files = async (req = request, res = response, next) => {
   try {
     const URLs = await service.uploadStorageDocs(req.files, req.body.curp);
     res.json(URLs);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const nuevaConexion = async (req = request, res = response, next) => {
-  try {
-    //const query = `SELECT * FROM pruebas`
-    const data = await sequelize.query(query);
-    res.json(data);
   } catch (error) {
     next(error);
   }

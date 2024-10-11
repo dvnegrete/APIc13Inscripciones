@@ -5,10 +5,7 @@ export function generateCURP(obj) {
   const date = new Date(obj.fechaNacimiento);
   const formatDate = (date) => {
     const dateValueCorrection = parseInt(config.dateForCurp, 10);
-    //en App Engine Produccion, no sumar nada en el día valor = 0
-    //en ambiente local sumar 1. para que funcione.
-    //let formatted_date = date.getDate() + "-" + (date.getMonth()+ 1) + "-" + date.getFullYear()
-
+    //Produccion = 0, local = 1
     let formatted_date =
       date.getDate() +
       dateValueCorrection +

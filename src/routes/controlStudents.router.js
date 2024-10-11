@@ -2,13 +2,13 @@ import { Router } from "express";
 import passport from "passport";
 
 import {
-  formDataParser,
-  msalTokenVerify,
-  decodeOauthToken,
-  userAllowedHandler,
-  checkRoleAdmin,
   checkRole,
+  checkRoleAdmin,
+  decodeOauthToken,
+  msalTokenVerify,
+  uploadDocs,
   notTheSameUser,
+  userAllowedHandler,
 } from "../middlewares/index.js";
 
 import {
@@ -107,7 +107,7 @@ router.delete(
 router.post(
   "/fileInformation",
   passport.authenticate("jwt", { session: false }),
-  formDataParser,
+  uploadDocs,
   checkRole,
   postFileInf
 );
