@@ -35,11 +35,4 @@ export class Matriculas extends Model {
       timezone: '-06:00'
     };
   }
-
-  static conexionFields(obj){
-    return {
-      numero_matricula: obj.matricula,
-      annio: obj.annio,
-    }
-  }
 }
