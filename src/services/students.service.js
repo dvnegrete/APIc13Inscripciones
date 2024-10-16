@@ -110,7 +110,11 @@ export default class Students {
       acta_nacimiento: estudiante.acta_nacimiento,
     };
     this.inscription(objUpdate);
-    return objUpdate;
+    return {
+      status: true,
+      matricula: matricula,
+      fechaRegistro: objUpdate.fechaRegistro,
+    };
   }
 
   async spreedSheetSaveNumberControl(obj) {
