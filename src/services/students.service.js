@@ -167,13 +167,15 @@ export default class Students {
       body.update = updated;
     }
     const data = await this.getDataDB(body.curp);
-    const newObj = { ...body, ...data };
-    const sucessfullyRegister = await this.inscription(newObj);
+    const fechaRegistro = datetime();
+    const newObj = { ...body, ...data, fechaRegistro };
+    this.inscription(newObj);
     return {
-      ...sucessfullyRegister,
       //temporal. Hasta el uso de la Tabla Inscripciones
-      fechaRegistro: datetime(),
-      update: newObj.update,
+      status: true,
+      update: newObj.update.updated,
+      matricula: newObj.matricula,
+      fechaRegistro
     };
   }
 
