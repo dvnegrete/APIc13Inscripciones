@@ -1,6 +1,5 @@
 export function logErrors(err, req, res, next) {
   console.log(err);
-  console.log("!!!!!!!>>>>==>>>>>!!!");
   next(err);
 }
 
@@ -18,4 +17,3 @@ export function errorHandler(err, req, res, next) {
     message: err.message,
   });
 }
-
