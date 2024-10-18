@@ -9,7 +9,6 @@ import {
 import { datetime } from "../utils/date.js";
 
 import { nameSheet } from "../models/namesSheet.js";
-const { sheetInscriptions, sheetNumberControl } = nameSheet;
 import { nameContainer } from "../models/containerAzure.js";
 
 import { database } from "../database/mysql.js";
@@ -78,21 +77,6 @@ export default class Students {
   }
 
   async addInscriptionNewStudent(infoInscription) {
-    // const [results] = await database.query(
-    //   getExistStudentQuery(body.curp.toUpperCase())
-    // );
-    // if (results.length === 0) {
-    //   console.log("Asignar matricula");
-    //   const [lastResult] = await database.query(
-    //     lastNumberControlQuery(Number(body.annio_course))
-    //   );
-    //   const { last_matricula } = lastResult[0];
-    //   console.log(typeof last_matricula);
-    //   return { msg: last_matricula + 1 };
-    // } else {
-    //   console.log("Inscribir con matricula en la base de datos");
-    //   //en results[0] tengo matricula_id y id de estudiantes
-    // }
     const { matricula, domicilio, estudiante } = await this.dbSaveRegister(
       infoInscription
     );
@@ -117,11 +101,6 @@ export default class Students {
     };
   }
 
-  async spreedSheetSaveNumberControl(obj) {
-    const newObj = await this.insertSheet(obj, sheetNumberControl);
-    await postSpreedSheet(newObj);
-  }
-
   async dbSaveRegister(obj) {
     const [objMatricula] = await database.query(
       generateNumberControlQuery(Number(obj.annio_course))
@@ -139,7 +118,7 @@ export default class Students {
   }
 
   async inscription(obj) {
-    const newObj = this.insertSheet(obj, sheetInscriptions);
+    const newObj = this.insertSheet(obj, nameSheet.sheetInscriptions);
     postSpreedSheet(newObj);
     //mandar correo electronico de confirmación de inscripcion.
   }
@@ -175,7 +154,7 @@ export default class Students {
       status: true,
       update: newObj.update.updated,
       matricula: newObj.matricula,
-      fechaRegistro
+      fechaRegistro,
     };
   }
 

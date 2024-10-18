@@ -12,14 +12,9 @@ const serviceAccountAuth = new JWT({
 });
 
 function GSheetID(name) {
-  if (
-    name === nameSheet.sheetNumberControl ||
-    name === nameSheet.sheetInscriptions
-  ) {
-    return config.idGoogleRegisterInscription;
-  } else {
-    return config.idSheet;
-  }
+  return name === nameSheet.sheetInscriptions
+    ? config.idGoogleRegisterInscription
+    : config.idSheet;
 }
 
 export const googleAuth = (name) => {
