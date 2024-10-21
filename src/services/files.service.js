@@ -23,7 +23,7 @@ export const findBlobUser = (arrayList, user) => {
     }
   });
   if (arrayFilesforUser.length === 0) {
-    throw new Error(notFound);
+    throw new Error(notFound());
   }
   return arrayFilesforUser;
 };

@@ -160,7 +160,7 @@ export class Estudiantes extends Model {
   static conexionFields(obj, matricula, domicilio){
     //Create Empleos, Medio-Informacion and Socioeconomico before Estudiantes.
     return {
-      matricula_id: matricula.id,
+      matricula_id: matricula,
       curp: obj.curp,
       apellido_paterno: obj.a_paterno,
       apellido_materno: obj.a_materno,

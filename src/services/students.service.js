@@ -9,25 +9,25 @@ import {
 import { datetime } from "../utils/date.js";
 
 import { nameSheet } from "../models/namesSheet.js";
-const { sheetInscriptions, sheetNumberControl } = nameSheet;
 import { nameContainer } from "../models/containerAzure.js";
 
 import { database } from "../database/mysql.js";
 import { Estudiantes } from "../database/models/estudiantes.model.js";
 import { Domicilios } from "../database/models/domicilios.model.js";
 import {
+  getExistStudentQuery,
   getStudentNumberControlQuery,
   getStudentQuery,
   getVoucherAddress,
   getVoucherStudent,
+  generateNumberControlQuery,
   typeRegisterQuery,
+  getNumberControlQuery,
 } from "../queries/students.queries.js";
 
-import { getSpreedSheet, postSpreedSheet } from "../libs/spreedsheet.js";
+import { postSpreedSheet } from "../libs/spreedsheet.js";
 import { uploadBlobStorage } from "../libs/blobsAzure.js";
 import { areHideCharacters } from "../utils/hideCharacters.js";
-import { Matriculas } from "../database/models/matriculas.model.js";
-import { getAnnio } from "../utils/getAnnioControlNumber.js";
 
 export default class Students {
   constructor() {}
@@ -62,27 +62,10 @@ export default class Students {
     }
   }
 
-  async toCompleteInformationBody(body) {
-    const { controlNumber, controlNumberAnnio } =
-      await this.generateNumberControl();
-    // Conexión futura a Tabla de matriculas.
-    const dataCompleted = {
+  async addRegisterDate(body) {
+    return {
       ...body,
       fechaRegistro: datetime(),
-      matricula: controlNumber,
-      annio: controlNumberAnnio,
-    };
-    return dataCompleted;
-  }
-
-  async generateNumberControl() {
-    const rows = await getSpreedSheet(sheetNumberControl);
-    const countRows = rows.length;
-    const numberControl = rows[countRows - 1].get("matricula");
-    const numberGenerate = parseInt(numberControl, 10) + 1;
-    return {
-      controlNumber: numberGenerate,
-      controlNumberAnnio: getAnnio(numberGenerate),
     };
   }
 
@@ -94,65 +77,54 @@ export default class Students {
   }
 
   async addInscriptionNewStudent(infoInscription) {
-    await this.spreedSheetSaveNumberControl(infoInscription);
-    const resSave = await this.dbSaveRegister(infoInscription);
+    const { matricula, domicilio, estudiante } = await this.dbSaveRegister(
+      infoInscription
+    );
+
     const objUpdate = {
       ...infoInscription,
-      numero_matricula: resSave.matricula.numero_matricula,
-      fecha_nacimiento: resSave.estudiante.fecha_nacimiento,
-      apellido_paterno: resSave.estudiante.apellido_paterno,
-      apellido_materno: resSave.estudiante.apellido_materno,
-      sexo: resSave.estudiante.sexo,
-      municipio_alcaldia: resSave.domicilio.municipio_alcaldia,
-      comprobante_domicilio: resSave.domicilio.comprobante_domicilio,
-      escolaridad_comprobante: resSave.estudiante.escolaridad_comprobante,
-      acta_nacimiento: resSave.estudiante.acta_nacimiento,
+      matricula,
+      fecha_nacimiento: estudiante.fecha_nacimiento,
+      apellido_paterno: estudiante.apellido_paterno,
+      apellido_materno: estudiante.apellido_materno,
+      sexo: estudiante.sexo,
+      municipio_alcaldia: domicilio.municipio_alcaldia,
+      comprobante_domicilio: domicilio.comprobante_domicilio,
+      escolaridad_comprobante: estudiante.escolaridad_comprobante,
+      acta_nacimiento: estudiante.acta_nacimiento,
     };
-    const sucessfullyRegister = this.inscription(objUpdate);
-    return sucessfullyRegister;
-  }
-
-  async spreedSheetSaveNumberControl(obj) {
-    const newObj = await this.insertSheet(obj, sheetNumberControl);
-    await postSpreedSheet(newObj);
+    this.inscription(objUpdate);
+    return {
+      status: true,
+      matricula: matricula,
+      fechaRegistro: objUpdate.fechaRegistro,
+    };
   }
 
   async dbSaveRegister(obj) {
-    const matricula = await Matriculas.create(Matriculas.conexionFields(obj));
-    const domicilio = await Domicilios.create(Domicilios.conexionFields(obj));
-    //Create Empleos, Medio-Informacion and Socioeconomico before Estudiantes.
-    const estudiante = await Estudiantes.create(
-      Estudiantes.conexionFields(obj, matricula, domicilio)
+    const [objMatricula] = await database.query(
+      generateNumberControlQuery(Number(obj.annio_course))
     );
+    const domicilio = await Domicilios.create(Domicilios.conexionFields(obj));
+    // Create Empleos, Medio-Informacion and Socioeconomico before Estudiantes.
+    const estudiante = await Estudiantes.create(
+      Estudiantes.conexionFields(obj, objMatricula.insertId, domicilio)
+    );
+    const [resNumberControl] = await database.query(
+      getNumberControlQuery(objMatricula.insertId)
+    );
+    const { matricula } = resNumberControl[0];
     return { matricula, domicilio, estudiante };
   }
 
   async inscription(obj) {
-    const newObj = this.insertSheet(
-      { ...obj, fechaRegistro: datetime() },
-      sheetInscriptions
-    );
-    await postSpreedSheet(newObj);
-    //sucessfulyRegister indica si se hizo el registro en SpreedSheet
-    const sucessfullyRegister = await this.verifyLastRegistration(obj);
+    const newObj = this.insertSheet(obj, nameSheet.sheetInscriptions);
+    postSpreedSheet(newObj);
     //mandar correo electronico de confirmación de inscripcion.
-    return sucessfullyRegister;
   }
 
   insertSheet(obj, nameSheet) {
     return { ...obj, sheet: nameSheet };
-  }
-
-  //consultar que ultimo registro en Spreedsheets sea el mismo que registramos
-  async verifyLastRegistration(infoInscription) {
-    const rows = await getSpreedSheet(sheetInscriptions);
-    const countRows = rows.length;
-    const lastInscriptionCurp = rows[countRows - 1].get("curp");
-    const res = {
-      status: lastInscriptionCurp === infoInscription.curp,
-      matricula: infoInscription.numero_matricula,
-    };
-    return res;
   }
 
   /**
@@ -174,13 +146,15 @@ export default class Students {
       body.update = updated;
     }
     const data = await this.getDataDB(body.curp);
-    const newObj = { ...body, ...data };
-    const sucessfullyRegister = await this.inscription(newObj);
+    const fechaRegistro = datetime();
+    const newObj = { ...body, ...data, fechaRegistro };
+    this.inscription(newObj);
     return {
-      ...sucessfullyRegister,
       //temporal. Hasta el uso de la Tabla Inscripciones
-      fechaRegistro: datetime(),
-      update: newObj.update,
+      status: true,
+      update: newObj.update.updated,
+      matricula: newObj.matricula,
+      fechaRegistro,
     };
   }
 

@@ -21,6 +21,9 @@ export function cors(req, res, next) {
       "GET, POST, OPTIONS, PUT, DELETE"
     );
     res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(204);
+    }
     next();
   }
 }

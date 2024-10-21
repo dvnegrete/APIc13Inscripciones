@@ -53,7 +53,9 @@ export const getStudentNumberControlQuery = (numberControl) => {
 
 export const getVoucherStudent = (curp, kind) => {
   return `
-    SELECT ${kind === 'estudios' ? 'escolaridad_comprobante' : 'acta_nacimiento'} AS name
+    SELECT ${
+      kind === "estudios" ? "escolaridad_comprobante" : "acta_nacimiento"
+    } AS name
     FROM estudiantes WHERE curp = '${curp}';
   `;
 };
@@ -65,4 +67,32 @@ export const getVoucherAddress = (curp) => {
     JOIN domicilios ON domicilios.id = estudiantes.domicilio_id
     WHERE curp = '${curp}';
   `;
+};
+
+export const getExistStudentQuery = (curp) => {
+  return `
+  SELECT id, matricula_id 
+  FROM estudiantes 
+  WHERE curp = "${curp}";
+  `;
+};
+
+export const generateNumberControlQuery = (annio) => {
+  return `
+  INSERT INTO matriculas (numero_matricula, annio, createdAt, updatedAt)
+  SELECT COALESCE(MAX(numero_matricula), CONCAT(${annio}, '0901300000')) + 1 AS next_matricula,
+  ${annio}, 
+  NOW(), 
+  NOW() 
+  FROM matriculas 
+  WHERE annio = ${annio};
+  `;
+};
+
+export const getNumberControlQuery = (id) => {
+  return `
+  SELECT numero_matricula AS matricula
+  FROM matriculas
+  WHERE id = ${id};
+ `;
 };

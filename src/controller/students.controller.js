@@ -1,7 +1,6 @@
 import { request, response } from "express";
 import Students from "../services/students.service.js";
 import { mergeUrlsAndBody } from "../utils/mergeUrlsAndBody.js";
-import { sequelize } from "../libs/sequelize.js";
 import {
   hideCharactersEmail,
   hideCharactersPhone,
@@ -53,7 +52,7 @@ export const inscription = async (req = request, res = response, next) => {
   try {
     const URLs = await service.uploadStorageDocs(req.files, req.body.curp);
     req.body = mergeUrlsAndBody(URLs, req.body);
-    const dataCompleted = await service.toCompleteInformationBody(req.body);
+    const dataCompleted = await service.addRegisterDate(req.body);
     const inscriptionData = await service.addInscriptionNewStudent(
       dataCompleted
     );
