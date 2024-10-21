@@ -144,6 +144,8 @@ export default class Students {
       const updated = await this.updateDBStudent(body);
       //confirmamos que se actualizo la informacion
       body.update = updated;
+    } else {
+      body.update = false;
     }
     const data = await this.getDataDB(body.curp);
     const fechaRegistro = datetime();
