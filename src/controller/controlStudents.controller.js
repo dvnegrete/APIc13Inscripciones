@@ -5,6 +5,7 @@ import {
   getFileBlob,
   deleteFileBlob,
   uploadFiPdf,
+  deleteAllBlobsInContainerService,
 } from "../services/files.service.js";
 import Students from "../services/students.service.js";
 import ControlStudents from "../services/controlStudents.service.js";
@@ -152,6 +153,29 @@ export const deleteFiPdf = async (req = request, res = response, next) => {
     const { filename } = req.params;
     const file = await deleteFileBlob(filename, nameContainer.information);
     res.json({ file });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Elimina todos los blobs de un contenedor sin eliminar el contenedor
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next middleware function
+ */
+export const deleteAllBlobsInContainer = async (req = request, res = response, next) => {
+  try {
+    const { container } = req.params;
+    const result = await deleteAllBlobsInContainerService(container);
+    res.json({ 
+      success: result.success,
+      message: result.message,
+      deletedCount: result.deletedCount,
+      failedCount: result.failedCount,
+      deletedBlobs: result.deletedBlobs,
+      failedDeletions: result.failedDeletions
+    });
   } catch (error) {
     next(error);
   }

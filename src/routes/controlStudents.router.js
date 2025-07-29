@@ -26,6 +26,7 @@ import {
   deleteFiPdf,
   deleteTableId,
   getInfoSISAE,
+  deleteAllBlobsInContainer,
 } from "../controller/controlStudents.controller.js";
 
 const router = Router();
@@ -117,6 +118,13 @@ router.delete(
   passport.authenticate("jwt", { session: false }),
   checkRole,
   deleteFiPdf
+);
+
+router.delete(
+  "/deleteAllBlobs/:container",
+  passport.authenticate("jwt", { session: false }),
+  checkRole,
+  deleteAllBlobsInContainer
 );
 //control Escolar
 
