@@ -4,6 +4,7 @@ import {
   getBlobStorage,
   uploadBlobStorage,
   deleteBlob,
+  deleteAllBlobsInContainer,
 } from "../libs/blobsAzure.js";
 
 export const listBlobsService = async (container) => {
@@ -77,4 +78,17 @@ export const uploadFiPdf = async (arrayFiles, containerName) => {
     arrayURLs.push(azureUpload);
   }
   return arrayURLs;
+};
+
+/**
+ * Elimina todos los blobs de un contenedor sin eliminar el contenedor
+ * @param {string} containerName - Nombre del contenedor
+ * @returns {Object} - Resultado de la operación de eliminación
+ */
+export const deleteAllBlobsInContainerService = async (containerName) => {
+  const objInformationBlob = {
+    container: containerName,
+  };
+  const result = await deleteAllBlobsInContainer(objInformationBlob);
+  return result;
 };

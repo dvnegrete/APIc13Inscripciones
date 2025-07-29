@@ -69,6 +69,59 @@ export async function deleteBlob(blob) {
   return fileBlob;
 }
 
+/**
+ * Elimina todos los blobs de un contenedor sin eliminar el contenedor
+ * @param {Object} obj - Configuration for container deletion
+ * @param {String} obj.container - Name of container
+ * @returns {Object} - Result of deletion operation
+ */
+export async function deleteAllBlobsInContainer(obj) {
+  try {
+    const containerClient = blobServices.getContainerClient(obj.container);
+    const deletedBlobs = [];
+    const failedDeletions = [];
+    
+    // Listar todos los blobs en el contenedor
+    for await (const blob of containerClient.listBlobsFlat()) {
+      try {
+        const blockBlobClient = containerClient.getBlockBlobClient(blob.name);
+        const options = {
+          deleteSnapshots: "include",
+        };
+        
+        const deleteResult = await blockBlobClient.deleteIfExists(options);
+        if (deleteResult.succeeded) {
+          deletedBlobs.push(blob.name);
+        } else {
+          failedDeletions.push(blob.name);
+        }
+      } catch (error) {
+        console.error(`Error eliminando blob ${blob.name}:`, error.message);
+        failedDeletions.push(blob.name);
+      }
+    }
+    
+    return {
+      success: true,
+      deletedCount: deletedBlobs.length,
+      failedCount: failedDeletions.length,
+      deletedBlobs,
+      failedDeletions,
+      message: `Eliminados ${deletedBlobs.length} blobs, ${failedDeletions.length} fallidos`
+    };
+  } catch (error) {
+    console.error("Error eliminando todos los blobs:", error.message);
+    return {
+      success: false,
+      message: error.message,
+      deletedCount: 0,
+      failedCount: 0,
+      deletedBlobs: [],
+      failedDeletions: []
+    };
+  }
+}
+
 async function streamToBuffer(readable) {
   readable.setEncoding("base64");
   let data = "";
